@@ -35,7 +35,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.2">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.3"><link rel="stylesheet" href="/smart_fourgon/hero-day.css?v=0.2.3"><link rel="stylesheet" href="/smart_fourgon/hero-night.css?v=0.2.3">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -91,7 +91,7 @@ return mk(this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:lightnin
 }
 _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
-const img=(night?g.night_image:g.day_image)||"https://images.unsplash.com/photo-1764116697811-f0c5174899fd?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=72&w=3000";
+const img=(night?g.night_image:g.day_image)||"";
 const callouts=[
   this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[
     [this._t("voltage"),o.solar&&o.solar.voltage],
@@ -132,7 +132,7 @@ const bottom=this._bottomPanels(o);
 
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
   +'<div class="dash-center">'
-    +'<section class="hero-photo '+(night?"night-scene":"")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
+    +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" '+(img?'style="background-image:url(&quot;'+this._ea(img)+'&quot;)"':"")+'>>'
       +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
     +'</section>'
     +bottom
