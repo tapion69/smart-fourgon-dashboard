@@ -35,7 +35,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -91,9 +91,30 @@ return mk(this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:lightnin
 }
 _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
-const img=(night?g.night_image:g.day_image)||"https://images.unsplash.com/photo-1688576238868-e9f7d1a957c3?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000";
+const img=(night?g.night_image:g.day_image)||"https://images.unsplash.com/photo-1764116697811-f0c5174899fd?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=72&w=3000";
 const callouts=[
  this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[[this._t("voltage"),o.solar&&o.solar.voltage],[this._t("current"),o.solar&&o.solar.current]],"solar"),
+ this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[[this._t("state"),o.water_heater&&o.water_heater.status]],"waterheater"),
+ this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp],[this._t("state"),o.heating&&o.heating.status]],"heating"),
+ this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp]],"temp"),
+ this._callout("inverter",this._t("inverter"),o.inverter&&o.inverter.icon,o.inverter&&o.inverter.power,[[this._t("voltage"),o.inverter&&o.inverter.voltage],[this._t("frequency"),o.inverter&&o.inverter.frequency]],"inverter"),
+ this._callout("water",this._t("water"),o.water&&o.water.icon,o.water&&o.water.liters,[["%",o.water&&o.water.percent]],"water"),
+ this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[[this._t("voltage"),o.battery&&o.battery.voltage],[this._t("power"),o.battery&&o.battery.power]],"battery"),
+ this._callout("vent",this._t("ventilation"),o.ventilation&&o.ventilation.icon,o.ventilation&&o.ventilation.speed,[[this._t("power"),o.ventilation&&o.ventilation.power],[this._t("currentTemp"),o.ventilation&&o.ventilation.current_temp]],"vent")
+].filter(Boolean);
+const counters=(this._config.daily_counters||[]).filter(x=>x.entity);
+const cat=this._categoryTabs();
+const right=this._rightSummary(o,counters)+this._detailPanel();
+const rightContent=cat+right;
+const bottom=this._bottomPanels(o);
+return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
++'<div class="dash-center">'
++'<section class="hero-photo '+(night?"night-scene":"")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
++(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
++'</section>'+bottom+'</div>'
++(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
++'</div>'}
+_callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[[this._t("voltage"),o.solar&&o.solar.voltage],[this._t("current"),o.solar&&o.solar.current]],"solar"),
  this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[[this._t("state"),o.water_heater&&o.water_heater.status]],"waterheater"),
  this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp],[this._t("state"),o.heating&&o.heating.status]],"heating"),
  this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp]],"temp"),
@@ -121,7 +142,33 @@ const active=key==="heating"||key==="waterheater"||key==="vent"?this._active((th
 return '<article class="callout '+cls+' '+(active?"on":"")+'"><div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'+p+r+'<div class="call-link">'+this._icon("mdi:link-variant")+'<small>'+this._e(primary||rows.find(x=>x[1])?.[1]||"")+'</small></div></article>'
 }
 _categoryTabs(){
-const cats=[["energy",this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:white-balance-sunny"],["water",this._config.general.language==="en"?"WATER":"EAU","mdi:water"],["heating",this._config.general.language==="en"?"HEATING":"CHAUFFAGE","mdi:radiator"],["climate",this._config.general.language==="en"?"CLIMATE":"CLIMAT","mdi:fan"],["equipment",this._config.general.language==="en"?"EQUIPMENT":"ÉQUIPEMENTS","mdi:cog"]];
+const o=this._config.overview||{};
+const hasEnergy=this._has(
+  o.solar&&(o.solar.power||o.solar.voltage||o.solar.current||o.solar.energy_today||o.solar.energy_month||o.solar.energy_year),
+  o.battery&&(o.battery.soc||o.battery.power||o.battery.voltage||o.battery.current),
+  o.inverter&&(o.inverter.status||o.inverter.power||o.inverter.voltage||o.inverter.frequency||o.inverter.current)
+);
+const hasWater=this._has(
+  o.water&&(o.water.percent||o.water.liters)
+);
+const hasHeating=this._has(
+  o.heating&&(o.heating.status||o.heating.target_temp||o.heating.current_temp),
+  o.water_heater&&(o.water_heater.status||o.water_heater.temperature)
+);
+const hasClimate=this._has(
+  o.ventilation&&(o.ventilation.status||o.ventilation.current_temp||o.ventilation.target_temp||o.ventilation.power||o.ventilation.speed)
+);
+const hasEquipment=(this._config.tabs||[]).some(t=>(t.items||[]).some(i=>i.entity));
+const all=[
+ ["energy",this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:white-balance-sunny",hasEnergy],
+ ["water",this._config.general.language==="en"?"WATER":"EAU","mdi:water",hasWater],
+ ["heating",this._config.general.language==="en"?"HEATING":"CHAUFFAGE","mdi:radiator",hasHeating],
+ ["climate",this._config.general.language==="en"?"CLIMATE":"CLIMAT","mdi:fan",hasClimate],
+ ["equipment",this._config.general.language==="en"?"EQUIPMENT":"ÉQUIPEMENTS","mdi:cog",hasEquipment]
+];
+const cats=all.filter(x=>x[3]);
+if(!cats.length)return "";
+if(!cats.some(x=>x[0]===this._category))this._category=cats[0][0];
 return '<div class="category-tabs">'+cats.map(x=>'<button data-category="'+x[0]+'" class="'+(this._category===x[0]?"active":"")+'">'+this._icon(x[2])+'<span>'+x[1]+'</span></button>').join("")+'</div>'
 }
 _detailPanel(){
