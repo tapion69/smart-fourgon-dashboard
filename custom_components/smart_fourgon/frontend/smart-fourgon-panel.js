@@ -35,7 +35,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.1">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.2">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -93,53 +93,71 @@ _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
 const img=(night?g.night_image:g.day_image)||"https://images.unsplash.com/photo-1764116697811-f0c5174899fd?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=72&w=3000";
 const callouts=[
- this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[[this._t("voltage"),o.solar&&o.solar.voltage],[this._t("current"),o.solar&&o.solar.current]],"solar"),
- this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[[this._t("state"),o.water_heater&&o.water_heater.status]],"waterheater"),
- this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp],[this._t("state"),o.heating&&o.heating.status]],"heating"),
- this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp]],"temp"),
- this._callout("inverter",this._t("inverter"),o.inverter&&o.inverter.icon,o.inverter&&o.inverter.power,[[this._t("voltage"),o.inverter&&o.inverter.voltage],[this._t("frequency"),o.inverter&&o.inverter.frequency]],"inverter"),
- this._callout("water",this._t("water"),o.water&&o.water.icon,o.water&&o.water.liters,[["%",o.water&&o.water.percent]],"water"),
- this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[[this._t("voltage"),o.battery&&o.battery.voltage],[this._t("power"),o.battery&&o.battery.power]],"battery"),
- this._callout("vent",this._t("ventilation"),o.ventilation&&o.ventilation.icon,o.ventilation&&o.ventilation.speed,[[this._t("power"),o.ventilation&&o.ventilation.power],[this._t("currentTemp"),o.ventilation&&o.ventilation.current_temp]],"vent")
+  this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[
+    [this._t("voltage"),o.solar&&o.solar.voltage],
+    [this._t("current"),o.solar&&o.solar.current]
+  ],"solar"),
+  this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[
+    [this._t("state"),o.water_heater&&o.water_heater.status]
+  ],"waterheater"),
+  this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[
+    [this._t("target"),o.heating&&o.heating.target_temp],
+    [this._t("state"),o.heating&&o.heating.status]
+  ],"heating"),
+  this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[
+    [this._t("target"),o.heating&&o.heating.target_temp]
+  ],"temp"),
+  this._callout("inverter",this._t("inverter"),o.inverter&&o.inverter.icon,o.inverter&&o.inverter.power,[
+    [this._t("voltage"),o.inverter&&o.inverter.voltage],
+    [this._t("frequency"),o.inverter&&o.inverter.frequency]
+  ],"inverter"),
+  this._callout("water",this._t("water"),o.water&&o.water.icon,o.water&&o.water.liters,[
+    ["%",o.water&&o.water.percent]
+  ],"water"),
+  this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[
+    [this._t("voltage"),o.battery&&o.battery.voltage],
+    [this._t("power"),o.battery&&o.battery.power]
+  ],"battery"),
+  this._callout("vent",this._t("ventilation"),o.ventilation&&o.ventilation.icon,o.ventilation&&o.ventilation.speed,[
+    [this._t("power"),o.ventilation&&o.ventilation.power],
+    [this._t("currentTemp"),o.ventilation&&o.ventilation.current_temp]
+  ],"vent")
 ].filter(Boolean);
+
 const counters=(this._config.daily_counters||[]).filter(x=>x.entity);
 const cat=this._categoryTabs();
 const right=this._rightSummary(o,counters)+this._detailPanel();
 const rightContent=cat+right;
 const bottom=this._bottomPanels(o);
+
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
-+'<div class="dash-center">'
-+'<section class="hero-photo '+(night?"night-scene":"")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
-+(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
-+'</section>'+bottom+'</div>'
-+(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
-+'</div>'}
-_callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[[this._t("voltage"),o.solar&&o.solar.voltage],[this._t("current"),o.solar&&o.solar.current]],"solar"),
- this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[[this._t("state"),o.water_heater&&o.water_heater.status]],"waterheater"),
- this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp],[this._t("state"),o.heating&&o.heating.status]],"heating"),
- this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[[this._t("target"),o.heating&&o.heating.target_temp]],"temp"),
- this._callout("inverter",this._t("inverter"),o.inverter&&o.inverter.icon,o.inverter&&o.inverter.power,[[this._t("voltage"),o.inverter&&o.inverter.voltage],[this._t("frequency"),o.inverter&&o.inverter.frequency]],"inverter"),
- this._callout("water",this._t("water"),o.water&&o.water.icon,o.water&&o.water.liters,[[ "%",o.water&&o.water.percent]],"water"),
- this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[[this._t("voltage"),o.battery&&o.battery.voltage],[this._t("power"),o.battery&&o.battery.power]],"battery"),
- this._callout("vent",this._t("ventilation"),o.ventilation&&o.ventilation.icon,o.ventilation&&o.ventilation.speed,[[this._t("power"),o.ventilation&&o.ventilation.power],[this._t("currentTemp"),o.ventilation&&o.ventilation.current_temp]],"vent")
-].filter(Boolean);
-const counters=(this._config.daily_counters||[]).filter(x=>x.entity);
-const cat=this._categoryTabs();
-const right=this._rightSummary(o,counters)+this._detailPanel();
-const bottom=this._bottomPanels(o);
-return '<div class="dash-layout">'
-+'<div class="dash-center">'
-+'<section class="hero-photo" style="background-image:linear-gradient(rgba(0,20,38,.05),rgba(0,12,24,.13)),url(&quot;'+this._ea(img)+'&quot;)">'
-+(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
-+'</section>'+bottom+'</div>'
-+'<aside class="dash-right">'+cat+right+'</aside>'
-+'</div>'}
+  +'<div class="dash-center">'
+    +'<section class="hero-photo '+(night?"night-scene":"")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
+      +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
+    +'</section>'
+    +bottom
+  +'</div>'
+  +(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
++'</div>'
+}
 _callout(cls,title,icon,primary,rows,key){
 if(!primary&&!rows.some(x=>x[1]))return "";
-const p=primary?'<button class="call-primary" data-history="'+this._ea(primary)+'">'+this._e(this._fmt(primary))+'</button>':"";
-const r=rows.filter(x=>x[1]).map(x=>'<button class="call-row" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b>'+this._e(this._fmt(x[1]))+'</b></button>').join("");
-const active=key==="heating"||key==="waterheater"||key==="vent"?this._active((this._config.overview[key==="waterheater"?"water_heater":key]||{}).status):false;
-return '<article class="callout '+cls+' '+(active?"on":"")+'"><div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'+p+r+'<div class="call-link">'+this._icon("mdi:link-variant")+'<small>'+this._e(primary||rows.find(x=>x[1])?.[1]||"")+'</small></div></article>'
+const p=primary
+  ?'<button class="call-primary" data-history="'+this._ea(primary)+'">'+this._e(this._fmt(primary))+'</button>'
+  :"";
+const r=rows.filter(x=>x[1]).map(x=>
+  '<button class="call-row" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b>'+this._e(this._fmt(x[1]))+'</b></button>'
+).join("");
+const cfgKey=key==="waterheater"?"water_heater":key;
+const active=(key==="heating"||key==="waterheater"||key==="vent")
+  ?this._active((this._config.overview[cfgKey]||{}).status)
+  :false;
+const ref=primary||(rows.find(x=>x[1])||[])[1]||"";
+return '<article class="callout '+cls+' '+(active?"on":"")+'">'
+  +'<div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'
+  +p+r
+  +'<div class="call-link">'+this._icon("mdi:link-variant")+'<small>'+this._e(ref)+'</small></div>'
++'</article>'
 }
 _categoryTabs(){
 const o=this._config.overview||{};
