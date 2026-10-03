@@ -1,0 +1,14 @@
+{
+  "title": "Smart Fourgon Dashboard",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Installer Smart Fourgon",
+        "description": "Ajoute le tableau de bord Smart Fourgon dans la barre latérale de Home Assistant."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Smart Fourgon est déjà configuré."
+    }
+  }
+}
