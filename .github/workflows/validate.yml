@@ -1,0 +1,23 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON
+        run: |
+          python -m json.tool hacs.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/manifest.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/strings.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/translations/fr.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/translations/en.json >/dev/null
+      - name: Validate Python syntax
+        run: python -m compileall -q custom_components/smart_fourgon
+      - name: Validate frontend JavaScript
+        run: node --check custom_components/smart_fourgon/frontend/smart-fourgon-panel.js
