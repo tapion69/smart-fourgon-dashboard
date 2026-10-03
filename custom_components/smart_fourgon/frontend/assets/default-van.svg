@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#102d49"/><stop offset=".55" stop-color="#2e6782"/><stop offset="1" stop-color="#ec985b"/></linearGradient>
+<linearGradient id="van" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#b9c7d1"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/><circle cx="1270" cy="245" r="75" fill="#ffd06a"/>
+<path d="M0 480L210 310l175 135 210-190 190 190 220-210 245 210 180-125 170 160v190H0z" fill="#17313f"/>
+<path d="M0 590c350-55 660 35 1000-20 250-40 430-15 600-10v340H0z" fill="#0a171e"/>
+<g transform="translate(370 365)">
+<path d="M70 185Q90 85 175 72h455q78 5 125 64l72 95v140H42V235q0-35 28-50z" fill="url(#van)" stroke="#e2edf4" stroke-width="8"/>
+<path d="M570 88h80q58 8 94 58l35 55H570z" fill="#213c4d"/><path d="M108 110h420v82H92z" fill="#243f52"/>
+<rect x="268" y="217" width="245" height="135" rx="12" fill="#173543"/><rect x="295" y="235" width="90" height="97" rx="6" fill="#f4b663"/><rect x="400" y="235" width="90" height="97" rx="6" fill="#eed4a8"/>
+<g fill="#213748" stroke="#4da6c4" stroke-width="4"><rect x="145" y="58" width="145" height="18" rx="5"/><rect x="305" y="58" width="145" height="18" rx="5"/><rect x="465" y="58" width="88" height="18" rx="5"/></g>
+<circle cx="180" cy="370" r="61" fill="#0a1015"/><circle cx="180" cy="370" r="31" fill="#64717a"/><circle cx="660" cy="370" r="61" fill="#0a1015"/><circle cx="660" cy="370" r="31" fill="#64717a"/>
+</g><text x="70" y="825" fill="#dff7ff" font-size="44" font-family="Segoe UI,Arial" font-weight="700">SMART FOURGON</text>
+</svg>
