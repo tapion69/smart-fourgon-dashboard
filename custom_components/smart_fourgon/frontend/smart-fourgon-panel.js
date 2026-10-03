@@ -6,7 +6,7 @@ const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select
 const ACTIVE=new Set(["on","open","opening","active","heat","heating","cool","cooling","fan_only","dry","true","home"]);
 
 class SmartFourgonPanel extends HTMLElement{
-constructor(){super();this.attachShadow({mode:"open"});this._hass=null;this._config=null;this._page="overview";this._category="energy";this._loaded=false;this._editing=false;this._hist=null;this._hours=24;}
+constructor(){super();this.attachShadow({mode:"open"});this._hass=null;this._config=null;this._page="overview";this._category="energy";this._loaded=false;this._editing=false;this._hist=null;this._hours=24;this._heroDay="";this._heroNight="";}
 set hass(v){this._hass=v;if(!this._loaded)this._load();else if(!this._editing)this._render();}
 get hass(){return this._hass}
 set panel(v){this._panel=v}
@@ -25,7 +25,21 @@ _e(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&
 _ea(v){return this._e(v).replace(/\n/g," ")}
 _uid(){return Math.random().toString(36).slice(2,10)}
 async _ws(m){if(this._hass.callWS)return this._hass.callWS(m);const r=await this._hass.connection.sendMessagePromise(m);return r&&r.result!==undefined?r.result:r}
-async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"});this._loaded=true;this._render()}catch(e){this.shadowRoot.innerHTML='<div style="padding:30px;background:#30151a;color:#fff">Smart Fourgon: '+this._e(e.message||e)+'</div>'}}
+async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"});await this._loadHeroAssets();this._loaded=true;this._render()}catch(e){this.shadowRoot.innerHTML='<div style="padding:30px;background:#30151a;color:#fff">Smart Fourgon: '+this._e(e.message||e)+'</div>'}}
+async _loadHeroAssets(){
+const load=async(path)=>{
+  try{
+    const r=await fetch(path+"?v=0.2.3",{cache:"no-store"});
+    if(!r.ok)return "";
+    const b64=(await r.text()).replace(/\s+/g,"");
+    return b64?"data:image/webp;base64,"+b64:"";
+  }catch(e){return ""}
+};
+[this._heroDay,this._heroNight]=await Promise.all([
+  load("/smart_fourgon/assets/hero-day.b64"),
+  load("/smart_fourgon/assets/hero-night.b64")
+]);
+}
 _night(){const m=(this._config.general||{}).theme_mode||"auto";if(m==="night")return true;if(m==="day")return false;return (this._state("sun.sun")||{}).state==="below_horizon"}
 _pageTitle(){if(this._page==="overview")return this._t("overview");if(this._page==="settings")return this._t("settings");const id=this._page.replace("tab:","");const t=(this._config.tabs||[]).find(x=>x.id===id);return t?t.name:""}
 _render(){
@@ -35,7 +49,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.3"><link rel="stylesheet" href="/smart_fourgon/hero-day.css?v=0.2.3"><link rel="stylesheet" href="/smart_fourgon/hero-night.css?v=0.2.3">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.3">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -91,7 +105,7 @@ return mk(this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:lightnin
 }
 _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
-const img=(night?g.night_image:g.day_image)||"";
+const customImg=(night?g.night_image:g.day_image)||"";const img=customImg||(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
 const callouts=[
   this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[
     [this._t("voltage"),o.solar&&o.solar.voltage],
@@ -132,7 +146,7 @@ const bottom=this._bottomPanels(o);
 
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
   +'<div class="dash-center">'
-    +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" '+(img?'style="background-image:url(&quot;'+this._ea(img)+'&quot;)"':"")+'>>'
+    +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
       +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
     +'</section>'
     +bottom
