@@ -109,7 +109,7 @@ const bottom=this._bottomPanels(o);
 return '<div class="dash-layout">'
 +'<div class="dash-center">'
 +'<section class="hero-photo" style="background-image:linear-gradient(rgba(0,20,38,.05),rgba(0,12,24,.13)),url(&quot;'+this._ea(img)+'&quot;)">'
-+(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'<div class="empty-hero"><div>'+this._icon("mdi:van-utility")+'<b>'+this._t("noConfig")+'</b><small>'+this._t("hint")+'</small></div></div>')
++(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
 +'</section>'+bottom+'</div>'
 +'<aside class="dash-right">'+cat+right+'</aside>'
 +'</div>'}
