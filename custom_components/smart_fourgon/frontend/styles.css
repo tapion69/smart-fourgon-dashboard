@@ -22,6 +22,6 @@
 /* 0.2.1 conditional layout */
 .dash-layout.no-right{grid-template-columns:1fr}
 .dash-layout.no-right .hero-photo{height:min(76vh,760px)}
-.hero-photo.night-scene{filter:brightness(.72) saturate(.92)}
+.hero-photo.night-scene{filter:none}
 @media(max-width:1180px){.dash-layout.no-right .hero-photo{height:560px}}
 @media(max-width:760px){.dash-layout.no-right .hero-photo{height:720px}}
