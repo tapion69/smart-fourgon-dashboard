@@ -1,0 +1,14 @@
+{
+  "title": "Smart Fourgon Dashboard",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Install Smart Fourgon",
+        "description": "Adds the Smart Fourgon dashboard to the Home Assistant sidebar."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Smart Fourgon is already configured."
+    }
+  }
+}
