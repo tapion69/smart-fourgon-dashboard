@@ -192,6 +192,15 @@ button{cursor:pointer}
   overflow:hidden;
   overflow-anchor:none;
 }
+.page.scroll-page{
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.page.overview-page{
+  overflow:hidden;
+}
 
 /* =========================
    OVERVIEW LAYOUT
@@ -212,9 +221,7 @@ button{cursor:pointer}
   min-width:0;
   min-height:0;
   height:100%;
-  display:grid;
-  grid-template-rows:minmax(0,1fr) 184px;
-  gap:6px;
+  display:block;
   overflow:hidden;
 }
 .dash-right{
@@ -839,4 +846,24 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   width:20px;
   height:20px;
   accent-color:#73ff2b;
+}
+
+.scroll-page .settings,
+.scroll-page .entity-grid,
+.scroll-page .tab-head{
+  max-width:100%;
+}
+.scroll-page .settings{
+  padding-bottom:90px;
+}
+.custom-tabs-settings{
+  border-color:rgba(115,255,43,.28);
+}
+.custom-tabs-settings>h2{
+  color:#dfffd0;
+}
+@media(min-width:1021px){
+  .scroll-page{
+    padding-right:12px;
+  }
 }
