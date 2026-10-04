@@ -428,6 +428,7 @@ _tabEditor(t,ti){
 const items=(t.items||[]).map((it,ii)=>this._itemEditor(ti,ii,it)).join("");
 return '<details class="tab-editor" open><summary>'+this._icon(t.icon||"mdi:folder-outline")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'
   +'<label class="field check-field"><span>'+this._t("section")+'</span><input type="checkbox" id="tab-'+ti+'-enabled" '+(t.enabled!==false?"checked":"")+'></label>'
+  +'<label class="field check-field"><span>'+this._t("showRight")+'</span><input type="checkbox" id="tab-'+ti+'-right" '+(t.show_right===true?"checked":"")+'></label>'
   +this._field("tab-"+ti+"-name",this._t("tabName"),t.name)
   +this._iconSelect("tab-"+ti+"-icon",this._t("icon"),t.icon)
   +'</div>'+items+'<p><button class="btn" data-add-item="'+ti+'">'+this._t("addEntity")+'</button> <button class="btn danger" data-del-tab="'+ti+'">'+this._t("del")+'</button></p></div></details>'
@@ -442,6 +443,15 @@ return '<div class="item-editor"><div class="item-top"><b>#'+(ii+1)+'</b><button
   +this._iconSelect("it-"+ti+"-"+ii+"-icon",this._t("icon"),it.icon||this._attr(it.entity,"icon")||"mdi:circle")
   +'</div></div>'
 }
+_quickEditor(x,qi){
+return '<div class="item-editor quick-editor"><div class="item-top"><b>#'+(qi+1)+'</b><button class="btn tiny danger" data-del-quick="'+qi+'">×</button></div><div class="grid">'
+  +'<label class="field check-field"><span>'+this._t("section")+'</span><input type="checkbox" id="quick-'+qi+'-enabled" '+(x.enabled!==false?"checked":"")+'></label>'
+  +this._field("quick-"+qi+"-label",this._t("label"),x.label||"")
+  +'<label class="field"><span>'+this._t("entity")+'</span><input list="sf-entities" id="quick-'+qi+'-entity" value="'+this._ea(x.entity||"")+'"></label>'
+  +this._iconSelect("quick-"+qi+"-icon",this._t("icon"),x.icon||this._attr(x.entity,"icon")||"mdi:circle")
+  +'</div></div>'
+}
+
 _typeLabel(x){const m={auto:"auto",read:"read",sensor:"sensor",binary_sensor:"binary",switch:"switch",number:"number",select:"select",button:"button",climate:"climate",light:"light",fan:"Ventilateur",visual:"Visuel / couleur"};return this._t(m[x]||x)}
 _datalist(){return '<datalist id="sf-entities">'+Object.keys((this._hass&&this._hass.states)||{}).sort().map(x=>'<option value="'+this._ea(x)+'"></option>').join("")+'</datalist>'}
 _sync(){
