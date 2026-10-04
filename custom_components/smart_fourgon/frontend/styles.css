@@ -2,6 +2,8 @@
   display:block;
   width:100%;
   height:100%;
+  min-height:0;
+  overflow:hidden;
   --bg:#06111f;
   --nav:#031728;
   --nav2:#020b14;
@@ -22,8 +24,8 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 .app{
   width:100%;
-  height:100vh;
-  min-height:640px;
+  height:100%;
+  min-height:0;
   display:grid;
   grid-template-columns:220px minmax(0,1fr);
   background:var(--bg);
@@ -208,13 +210,13 @@ button{cursor:pointer}
   overflow:hidden;
   border:1px solid rgba(80,190,250,.34);
   background-repeat:no-repeat;
-  background-size:cover;
-  background-position:center center;
+  background-size:145% auto;
+  background-position:29% center;
 }
 .callout-layer{position:absolute;inset:0}
 .callout{
   position:absolute;
-  width:clamp(155px,18.2%,185px);
+  width:205px;
   padding:7px 9px;
   border:1px solid #139ad8;
   border-radius:8px;
@@ -286,19 +288,19 @@ button{cursor:pointer}
 }
 
 /* Card positions matched to the reference composition */
-.callout.solar{left:22%;top:5%}
-.callout.mppt{left:50%;top:5%}
-.callout.waterheater{left:3.8%;top:29%}
-.callout.heating{left:3.8%;top:48%}
-.callout.temp{right:1.3%;top:31%}
-.callout.inverter{right:1.3%;top:58%}
-.callout.water{left:5.2%;bottom:6.5%}
-.callout.battery{left:59%;bottom:6.5%}
+.callout.solar{left:22.5%;top:6.3%}
+.callout.mppt{left:49%;top:6.3%}
+.callout.waterheater{left:3.8%;top:28.5%}
+.callout.heating{left:3.8%;top:47.2%}
+.callout.temp{right:3.3%;top:34.8%}
+.callout.inverter{right:6.0%;top:60.5%}
+.callout.water{left:4.8%;bottom:2.2%}
+.callout.battery{left:59.5%;bottom:2.2%}
 
-.callout.solar:after{left:78%;top:100%;width:2px;height:40px}
-.callout.solar:before{left:calc(78% - 2px);top:calc(100% + 37px)}
-.callout.mppt:after{left:50%;top:100%;width:2px;height:42px}
-.callout.mppt:before{left:calc(50% - 2px);top:calc(100% + 39px)}
+.callout.solar:after{left:79%;top:100%;width:2px;height:42px}
+.callout.solar:before{left:calc(79% - 2px);top:calc(100% + 39px)}
+.callout.mppt:after{left:50%;top:100%;width:2px;height:44px}
+.callout.mppt:before{left:calc(50% - 2px);top:calc(100% + 41px)}
 .callout.waterheater:after{right:-32px;top:24px;width:32px;height:2px}
 .callout.waterheater:before{right:-36px;top:21px}
 .callout.heating:after{right:-39px;top:22px;width:39px;height:2px}
@@ -307,10 +309,10 @@ button{cursor:pointer}
 .callout.temp:before{left:-43px;top:34px}
 .callout.inverter:after{left:-38px;top:34px;width:38px;height:2px}
 .callout.inverter:before{left:-42px;top:31px}
-.callout.water:after{left:72%;bottom:100%;width:2px;height:38px}
-.callout.water:before{left:calc(72% - 2px);bottom:calc(100% + 35px)}
-.callout.battery:after{left:21%;bottom:100%;width:2px;height:38px}
-.callout.battery:before{left:calc(21% - 2px);bottom:calc(100% + 35px)}
+.callout.water:after{left:72%;bottom:100%;width:2px;height:34px}
+.callout.water:before{left:calc(72% - 2px);bottom:calc(100% + 31px)}
+.callout.battery:after{left:21%;bottom:100%;width:2px;height:34px}
+.callout.battery:before{left:calc(21% - 2px);bottom:calc(100% + 31px)}
 .mobile-callouts{display:none}
 
 /* Right column */
@@ -609,7 +611,7 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   .nav-group-title>ha-icon:last-child{display:none}
   .weather-box,.location-box{display:none}
   .dash-layout{grid-template-columns:minmax(0,1.55fr) minmax(350px,1fr)}
-  .callout{width:clamp(145px,18%,170px)}
+  .callout{width:185px}
   .counter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:1020px){
@@ -683,7 +685,7 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     height:auto;
     min-height:0;
     background-size:cover;
-    background-position:center;
+    background-position:center center;
   }
   .hero-photo .callout-layer{display:none!important}
   .mobile-callouts{
