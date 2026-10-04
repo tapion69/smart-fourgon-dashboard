@@ -1,6 +1,6 @@
 const SF_T={
-fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode",locationEntity:"Entité localisation"},
-en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode",locationEntity:"Location entity"}
+fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode",locationEntity:"Entité localisation",fanMode:"Mode de ventilation",preset:"Préréglage",swing:"Oscillation",swingHorizontal:"Oscillation horizontale",lowTarget:"Consigne basse",highTarget:"Consigne haute"},
+en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode",locationEntity:"Location entity",fanMode:"Fan mode",preset:"Preset",swing:"Swing",swingHorizontal:"Horizontal swing",lowTarget:"Low target",highTarget:"High target"}
 };
 const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
@@ -65,7 +65,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=1.0.2",{cache:"no-store"});
+    const r=await fetch(path+"?v=1.0.3",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -121,20 +121,33 @@ this.shadowRoot.querySelectorAll("[data-seg-gauge]").forEach(el=>{
 });
 
 this.shadowRoot.querySelectorAll("[data-climate-current]").forEach(el=>{
-  const ent=el.dataset.climateCurrent,at=(this._state(ent)||{}).attributes||{},v=at.current_temperature;
-  el.textContent=v!=null?v+" °C":"—"
+  const ent=el.dataset.climateCurrent,at=(this._state(ent)||{}).attributes||{},v=at.current_temperature,u=at.temperature_unit||"°C";
+  el.textContent=v!=null?v+" "+u:"—"
 });
 this.shadowRoot.querySelectorAll("[data-climate-target-value]").forEach(el=>{
-  const ent=el.dataset.climateTargetValue,at=(this._state(ent)||{}).attributes||{},v=at.temperature;
-  el.textContent=v!=null?v+" °C":"—"
+  const ent=el.dataset.climateTargetValue,at=(this._state(ent)||{}).attributes||{},v=at.temperature,u=at.temperature_unit||"°C";
+  el.textContent=v!=null?v+" "+u:"—"
+});
+this.shadowRoot.querySelectorAll("[data-climate-low]").forEach(el=>{
+  const ent=el.dataset.climateLow,at=(this._state(ent)||{}).attributes||{},v=at.target_temp_low,u=at.temperature_unit||"°C";
+  el.textContent=v!=null?v+" "+u:"—"
+});
+this.shadowRoot.querySelectorAll("[data-climate-high]").forEach(el=>{
+  const ent=el.dataset.climateHigh,at=(this._state(ent)||{}).attributes||{},v=at.target_temp_high,u=at.temperature_unit||"°C";
+  el.textContent=v!=null?v+" "+u:"—"
 });
 this.shadowRoot.querySelectorAll("[data-climate-state]").forEach(el=>{
   const ent=el.dataset.climateState,s=this._state(ent);
-  el.textContent=s?String(s.state):"—"
+  el.textContent=s?this._climateLabel("hvac",s.state):"—"
 });
-this.shadowRoot.querySelectorAll("[data-climate-mode]").forEach(el=>{
-  const ent=el.dataset.climateMode,s=this._state(ent);
-  if(s&&el.value!==String(s.state))el.value=String(s.state)
+this.shadowRoot.querySelectorAll("[data-climate-action]").forEach(el=>{
+  const ent=el.dataset.climateAction,at=(this._state(ent)||{}).attributes||{};
+  el.textContent=at.hvac_action?this._climateLabel("hvac",at.hvac_action):""
+});
+this.shadowRoot.querySelectorAll("[data-climate-option]").forEach(el=>{
+  const ent=el.dataset.entity,attr=el.dataset.attr,s=this._state(ent),at=s&&s.attributes?s.attributes:{};
+  const v=attr==="hvac_mode"?(s?s.state:""):at[attr];
+  if(v!=null&&el.value!==String(v))el.value=String(v)
 });
 
 this.shadowRoot.querySelectorAll("[data-location-live]").forEach(el=>{
@@ -167,7 +180,7 @@ const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.2">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.3">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -390,6 +403,26 @@ _kv(l,e){return e?'<button class="metric" data-history="'+this._ea(e)+'"><span>'
 _quick(o){const a=[];const p=(l,i,e,ac)=>{if(e)a.push('<button data-history="'+this._ea(e)+'">'+this._icon(i)+'<span>'+this._e(l)+'</span><b>'+this._e(this._fmt(e))+'</b></button>')};p(this._t("battery"),o.battery&&o.battery.icon,o.battery&&(o.battery.soc||o.battery.voltage));p(this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power);p(this._t("water"),o.water&&o.water.icon,o.water&&(o.water.percent||o.water.liters));p(this._t("heating"),o.heating&&o.heating.icon,o.heating&&(o.heating.current_temp||o.heating.target_temp));p(this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature);return a.length?'<section class="card quick"><h3>'+this._t("quick")+'</h3><div class="quick-grid">'+a.join("")+'</div></section>':""}
 _tab(id){const t=(this._config.tabs||[]).find(x=>x.id===id&&x.enabled!==false);if(!t)return '<div class="empty">'+this._t("noConfig")+'</div>';const items=(t.items||[]).filter(i=>i.enabled!==false&&i.entity);return '<div><div class="tab-head">'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+'<h2>'+this._e(t.name)+'</h2></div>'+(items.length?'<div class="entity-grid">'+items.map(i=>this._entityCard(i)).join("")+'</div>':'<div class="empty">'+this._t("noConfig")+'</div>')+'</div>'}
 _type(i){if(i.type&&i.type!=="auto")return i.type;const d=String(i.entity||"").split(".")[0];return SF_TYPES.includes(d)?d:"read"}
+_climateLabel(kind,value){
+const raw=String(value??"");
+const v=raw.toLowerCase();
+const fr=this._config&&this._config.general&&this._config.general.language!=="en";
+const maps={
+  hvac:{
+    off:["Arrêt","Off"],heat:["Chauffage","Heat"],cool:["Climatisation","Cool"],
+    auto:["Automatique","Auto"],fan_only:["Ventilation","Fan only"],dry:["Déshumidification","Dry"],
+    heat_cool:["Auto chaud/froid","Heat/Cool"]
+  },
+  fan:{
+    low:["Faible","Low"],medium:["Moyen","Medium"],high:["Fort","High"],
+    auto:["Auto","Auto"],eco:["Eco","Eco"],quiet:["Silencieux","Quiet"],
+    boost:["Boost","Boost"],night:["Nuit","Night"]
+  }
+};
+const pair=(maps[kind]||{})[v];
+if(pair)return pair[fr?0:1];
+return raw.replace(/_/g," ").replace(/\b\w/g,m=>m.toUpperCase())
+}
 _entityCard(i){
 const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity);
 const label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity);
@@ -399,25 +432,70 @@ const status=i.status_entity?'<div class="metric"><span>'+this._t("state")+'</sp
 
 if(type==="climate"){
   const at=s&&s.attributes?s.attributes:{};
+  const unit=at.temperature_unit||this._attr(i.entity,"unit_of_measurement")||"°C";
   const min=Number(at.min_temp??5),max=Number(at.max_temp??35),step=Number(at.target_temp_step??0.5);
-  const current=at.current_temperature,target=at.temperature;
+  const current=at.current_temperature;
+  const target=at.temperature;
+  const targetLow=at.target_temp_low;
+  const targetHigh=at.target_temp_high;
   const modes=Array.isArray(at.hvac_modes)?at.hvac_modes:[];
+  const fanModes=Array.isArray(at.fan_modes)?at.fan_modes:[];
+  const presetModes=Array.isArray(at.preset_modes)?at.preset_modes:[];
+  const swingModes=Array.isArray(at.swing_modes)?at.swing_modes:[];
+  const swingHModes=Array.isArray(at.swing_horizontal_modes)?at.swing_horizontal_modes:[];
   const state=s?s.state:"—";
-  const modeSelect=modes.length
-    ?'<select data-climate-mode="'+this._ea(i.entity)+'">'+modes.map(m=>'<option value="'+this._ea(m)+'" '+(String(m)===String(state)?"selected":"")+'>'+this._e(m)+'</option>').join("")+'</select>'
-    :"";
-  return '<article class="entity-card thermostat-card '+(active?"active":"")+'">'
-    +'<div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b><small data-climate-state="'+this._ea(i.entity)+'">'+this._e(state)+'</small></div></div>'
-    +'<div class="thermostat-display">'
-      +'<div><span>'+this._t("currentTemp")+'</span><b data-climate-current="'+this._ea(i.entity)+'">'+this._e(current!=null?current+" °C":"—")+'</b></div>'
-      +'<div><span>'+this._t("target")+'</span><b data-climate-target-value="'+this._ea(i.entity)+'">'+this._e(target!=null?target+" °C":"—")+'</b></div>'
+  const hvacAction=String(at.hvac_action||"");
+  const fmtTemp=v=>v!=null?this._e(v+" "+unit):"—";
+
+  const selector=(label,attr,values,currentValue,kind,service)=>
+    values.length
+      ?'<div class="climate-option"><span>'+this._e(label)+'</span><select data-climate-option="'+service+'" data-entity="'+this._ea(i.entity)+'" data-attr="'+attr+'">'
+        +values.map(v=>'<option value="'+this._ea(v)+'" '+(String(v)===String(currentValue)?"selected":"")+'>'+this._e(this._climateLabel(kind,v))+'</option>').join("")
+        +'</select></div>'
+      :"";
+
+  let targetControl="";
+  if(targetLow!=null||targetHigh!=null){
+    targetControl='<div class="climate-range">'
+      +'<div class="climate-range-item"><span>'+this._t("lowTarget")+'</span>'
+        +'<div class="thermostat-controls compact">'
+          +'<button data-climate-range-step="'+this._ea(i.entity)+'" data-range="low" data-delta="'+(-step)+'" data-min="'+min+'" data-max="'+max+'">−</button>'
+          +'<strong data-climate-low="'+this._ea(i.entity)+'">'+fmtTemp(targetLow)+'</strong>'
+          +'<button data-climate-range-step="'+this._ea(i.entity)+'" data-range="low" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
+        +'</div></div>'
+      +'<div class="climate-range-item"><span>'+this._t("highTarget")+'</span>'
+        +'<div class="thermostat-controls compact">'
+          +'<button data-climate-range-step="'+this._ea(i.entity)+'" data-range="high" data-delta="'+(-step)+'" data-min="'+min+'" data-max="'+max+'">−</button>'
+          +'<strong data-climate-high="'+this._ea(i.entity)+'">'+fmtTemp(targetHigh)+'</strong>'
+          +'<button data-climate-range-step="'+this._ea(i.entity)+'" data-range="high" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
+        +'</div></div>'
     +'</div>'
-    +'<div class="thermostat-controls">'
-      +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+(-step)+'" data-min="'+min+'" data-max="'+max+'">−</button>'
-      +'<strong data-climate-target-value="'+this._ea(i.entity)+'">'+this._e(target!=null?target+" °C":"—")+'</strong>'
-      +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
+  }else{
+    targetControl='<div class="ha-thermostat-dial">'
+      +'<div class="dial-ring">'
+        +'<div class="dial-current"><span>'+this._t("currentTemp")+'</span><b data-climate-current="'+this._ea(i.entity)+'">'+fmtTemp(current)+'</b></div>'
+        +'<div class="dial-target"><span>'+this._t("target")+'</span><strong data-climate-target-value="'+this._ea(i.entity)+'">'+fmtTemp(target)+'</strong></div>'
+      +'</div>'
+      +'<div class="dial-buttons">'
+        +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+(-step)+'" data-min="'+min+'" data-max="'+max+'">−</button>'
+        +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
+      +'</div>'
     +'</div>'
-    +(modeSelect?'<div class="climate-mode"><span>'+this._t("mode")+'</span>'+modeSelect+'</div>':"")
+  }
+
+  return '<article class="entity-card thermostat-card ha-climate-card '+(active?"active":"")+'">'
+    +'<div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b>'
+      +'<small data-climate-state="'+this._ea(i.entity)+'">'+this._e(this._climateLabel("hvac",state))+'</small>'
+      +(hvacAction?'<em data-climate-action="'+this._ea(i.entity)+'">'+this._e(this._climateLabel("hvac",hvacAction))+'</em>':"")
+    +'</div></div>'
+    +targetControl
+    +'<div class="climate-options">'
+      +selector(this._t("mode"),"hvac_mode",modes,state,"hvac","set_hvac_mode")
+      +selector(this._t("fanMode"),"fan_mode",fanModes,at.fan_mode,"fan","set_fan_mode")
+      +selector(this._t("preset"),"preset_mode",presetModes,at.preset_mode,"preset","set_preset_mode")
+      +selector(this._t("swing"),"swing_mode",swingModes,at.swing_mode,"swing","set_swing_mode")
+      +selector(this._t("swingHorizontal"),"swing_horizontal_mode",swingHModes,at.swing_horizontal_mode,"swing","set_swing_horizontal_mode")
+    +'</div>'
     +status+'</article>'
 }
 
@@ -795,8 +873,25 @@ this.shadowRoot.querySelectorAll("[data-climate-step]").forEach(b=>b.onclick=()=
   this._service("climate","set_temperature",ent,{temperature:next})
 });
 
-this.shadowRoot.querySelectorAll("[data-climate-mode]").forEach(s=>s.onchange=()=>{
-  this._service("climate","set_hvac_mode",s.dataset.climateMode,{hvac_mode:s.value})
+this.shadowRoot.querySelectorAll("[data-climate-range-step]").forEach(b=>b.onclick=()=>{
+  const ent=b.dataset.climateRangeStep,s=this._state(ent),at=s&&s.attributes?s.attributes:{};
+  const which=b.dataset.range;
+  const current=Number(which==="low"?at.target_temp_low:at.target_temp_high);
+  const delta=Number(b.dataset.delta||0),min=Number(b.dataset.min||5),max=Number(b.dataset.max||35);
+  if(!Number.isFinite(current))return;
+  const next=Math.max(min,Math.min(max,Math.round((current+delta)*100)/100));
+  const data={
+    target_temp_low:Number(at.target_temp_low),
+    target_temp_high:Number(at.target_temp_high)
+  };
+  if(which==="low")data.target_temp_low=next;else data.target_temp_high=next;
+  this._service("climate","set_temperature",ent,data)
+});
+
+this.shadowRoot.querySelectorAll("[data-climate-option]").forEach(s=>s.onchange=()=>{
+  const ent=s.dataset.entity,service=s.dataset.climateOption,attr=s.dataset.attr;
+  const data={};data[attr]=s.value;
+  this._service("climate",service,ent,data)
 });
 
 if(this._page==="settings")this._bindSettings()
