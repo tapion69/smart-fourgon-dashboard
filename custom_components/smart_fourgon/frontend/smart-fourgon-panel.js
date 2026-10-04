@@ -68,19 +68,56 @@ if(db)db.textContent=now.toLocaleDateString(this._lang(),{weekday:"short",day:"2
 }
 _refreshLive(){
 if(!this._loaded||this._editing)return;
+
 this.shadowRoot.querySelectorAll("[data-live]").forEach(el=>{
   const ent=el.dataset.live;
   if(ent)el.textContent=this._fmt(ent,el.dataset.unit||"")
 });
+
 this.shadowRoot.querySelectorAll("[data-live-active]").forEach(el=>{
   const ent=el.dataset.liveActive;
   el.classList.toggle("on",!!ent&&this._active(ent))
 });
+
 this.shadowRoot.querySelectorAll("[data-live-toggle]").forEach(el=>{
   const ent=el.dataset.liveToggle,active=!!ent&&this._active(ent);
   el.textContent=active?"ON":"OFF";
   el.classList.toggle("on",active)
 });
+
+this.shadowRoot.querySelectorAll("[data-switch-control]").forEach(el=>{
+  const ent=el.dataset.switchControl,active=!!ent&&this._active(ent);
+  el.classList.toggle("on",active);
+  const label=el.querySelector("span");
+  if(label)label.textContent=active?"ON":"OFF"
+});
+
+this.shadowRoot.querySelectorAll("[data-seg-gauge]").forEach(el=>{
+  const ent=el.dataset.segGauge;
+  const raw=this._num(ent),pct=Math.max(0,Math.min(100,raw===null?0:raw)),filled=Math.ceil(pct/20);
+  el.setAttribute("aria-label",Math.round(pct)+"%");
+  el.querySelectorAll("[data-seg]").forEach(seg=>{
+    seg.classList.toggle("filled",Number(seg.dataset.seg)<=filled)
+  })
+});
+
+this.shadowRoot.querySelectorAll("[data-climate-current]").forEach(el=>{
+  const ent=el.dataset.climateCurrent,at=(this._state(ent)||{}).attributes||{},v=at.current_temperature;
+  el.textContent=v!=null?v+" °C":"—"
+});
+this.shadowRoot.querySelectorAll("[data-climate-target-value]").forEach(el=>{
+  const ent=el.dataset.climateTargetValue,at=(this._state(ent)||{}).attributes||{},v=at.temperature;
+  el.textContent=v!=null?v+" °C":"—"
+});
+this.shadowRoot.querySelectorAll("[data-climate-state]").forEach(el=>{
+  const ent=el.dataset.climateState,s=this._state(ent);
+  el.textContent=s?String(s.state):"—"
+});
+this.shadowRoot.querySelectorAll("[data-climate-mode]").forEach(el=>{
+  const ent=el.dataset.climateMode,s=this._state(ent);
+  if(s&&el.value!==String(s.state))el.value=String(s.state)
+});
+
 this.shadowRoot.querySelectorAll("[data-status-dot]").forEach(el=>{
   const ent=el.dataset.statusDot;
   el.classList.toggle("off",!this._state(ent))
@@ -681,6 +718,7 @@ this.shadowRoot.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{
   this._editing=false;this._page=b.dataset.page;this._render()
 });
 this.shadowRoot.querySelectorAll("[data-history]").forEach(b=>b.onclick=()=>this._openHistory(b.dataset.history));
+
 const tc=this.shadowRoot.getElementById("theme-cycle");
 if(tc)tc.onclick=async()=>{
   const g=this._config.general,m=g.theme_mode||"auto";
@@ -688,18 +726,33 @@ if(tc)tc.onclick=async()=>{
   try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config})}catch(x){}
   this._render()
 };
+
 this._bindHistoryControls();
-this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle));
+
+this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>{
+  this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle)
+});
 this.shadowRoot.querySelectorAll("[data-press]").forEach(b=>b.onclick=()=>this._service("button","press",b.dataset.press));
 this.shadowRoot.querySelectorAll("[data-select]").forEach(s=>s.onchange=()=>this._service("select","select_option",s.dataset.select,{option:s.value}));
+
 this.shadowRoot.querySelectorAll("[data-number-set]").forEach(b=>b.onclick=()=>{
   const i=this.shadowRoot.querySelector('[data-number="'+CSS.escape(b.dataset.numberSet)+'"]');
   this._service("number","set_value",b.dataset.numberSet,{value:Number(i.value)})
 });
-this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>{
-  const i=this.shadowRoot.querySelector('[data-climate="'+CSS.escape(b.dataset.climateSet)+'"]');
-  this._service("climate","set_temperature",b.dataset.climateSet,{temperature:Number(i.value)})
+
+this.shadowRoot.querySelectorAll("[data-climate-step]").forEach(b=>b.onclick=()=>{
+  const ent=b.dataset.climateStep,s=this._state(ent),at=s&&s.attributes?s.attributes:{};
+  const current=Number(at.temperature);
+  const delta=Number(b.dataset.delta||0),min=Number(b.dataset.min||5),max=Number(b.dataset.max||35);
+  if(!Number.isFinite(current))return;
+  const next=Math.max(min,Math.min(max,Math.round((current+delta)*100)/100));
+  this._service("climate","set_temperature",ent,{temperature:next})
 });
+
+this.shadowRoot.querySelectorAll("[data-climate-mode]").forEach(s=>s.onchange=()=>{
+  this._service("climate","set_hvac_mode",s.dataset.climateMode,{hvac_mode:s.value})
+});
+
 if(this._page==="settings")this._bindSettings()
 }
 _bindSettings(){
