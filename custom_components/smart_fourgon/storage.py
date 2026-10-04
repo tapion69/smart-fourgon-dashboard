@@ -24,6 +24,16 @@ def default_config() -> dict:
                 "power": "", "voltage": "", "current": "",
                 "energy_today": "", "energy_month": "", "energy_year": "",
             },
+            "mppt": {
+                "enabled": True,
+                "icon": "mdi:battery-charging",
+                "power": "", "voltage": "", "current": "",
+            },
+            "consumption": {
+                "enabled": True,
+                "icon": "mdi:van-utility",
+                "power": "", "energy_today": "",
+            },
             "battery": {
                 "enabled": True,
                 "icon": "mdi:battery-high",
@@ -38,6 +48,11 @@ def default_config() -> dict:
                 "enabled": True,
                 "icon": "mdi:radiator",
                 "status": "", "target_temp": "", "current_temp": "",
+            },
+            "temperature": {
+                "enabled": True,
+                "icon": "mdi:thermometer",
+                "current_temp": "", "target_temp": "",
             },
             "water_heater": {
                 "enabled": True,
@@ -56,12 +71,12 @@ def default_config() -> dict:
             },
         },
         "daily_counters": [
-            {"id":"solar_day","label_fr":"Solaire","label_en":"Solar","icon":"mdi:white-balance-sunny","entity":""},
-            {"id":"consumption_day","label_fr":"Conso fourgon","label_en":"Van consumption","icon":"mdi:van-utility","entity":""},
-            {"id":"battery_charge_day","label_fr":"Charge batt.","label_en":"Battery charge","icon":"mdi:battery-plus","entity":""},
-            {"id":"battery_discharge_day","label_fr":"Décharge batt.","label_en":"Battery discharge","icon":"mdi:battery-minus","entity":""},
-            {"id":"alternator_day","label_fr":"Alternateur","label_en":"Alternator","icon":"mdi:engine","entity":""},
-            {"id":"water_day","label_fr":"Eau consommée","label_en":"Water used","icon":"mdi:water-minus","entity":""}
+            {"id":"solar_day","label_fr":"Solaire","label_en":"Solar","icon":"mdi:white-balance-sunny","entity":"","enabled":True},
+            {"id":"consumption_day","label_fr":"Conso fourgon","label_en":"Van consumption","icon":"mdi:van-utility","entity":"","enabled":True},
+            {"id":"battery_charge_day","label_fr":"Charge batt.","label_en":"Battery charge","icon":"mdi:battery-plus","entity":"","enabled":True},
+            {"id":"battery_discharge_day","label_fr":"Décharge batt.","label_en":"Battery discharge","icon":"mdi:battery-minus","entity":"","enabled":True},
+            {"id":"alternator_day","label_fr":"Alternateur","label_en":"Alternator","icon":"mdi:engine","entity":"","enabled":True},
+            {"id":"water_day","label_fr":"Eau consommée","label_en":"Water used","icon":"mdi:water-minus","entity":"","enabled":True}
         ],
         "tabs": [],
     }
