@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.2.4",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.4.1",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.4.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.4.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -216,48 +216,6 @@ return '<article class="callout '+cls+' '+(active?"on":"")+'" '+(activeEnt?'data
   +p+r
 +'</article>'
 }
-_categoryTabs(){
-const o=this._config.overview||{};
-const hasEnergy=this._has(
-  o.solar&&(o.solar.power||o.solar.voltage||o.solar.current||o.solar.energy_today||o.solar.energy_month||o.solar.energy_year),
-  o.battery&&(o.battery.soc||o.battery.power||o.battery.voltage||o.battery.current),
-  o.inverter&&(o.inverter.status||o.inverter.power||o.inverter.voltage||o.inverter.frequency||o.inverter.current)
-);
-const hasWater=this._has(
-  o.water&&(o.water.percent||o.water.liters)
-);
-const hasHeating=this._has(
-  o.heating&&(o.heating.status||o.heating.target_temp||o.heating.current_temp),
-  o.water_heater&&(o.water_heater.status||o.water_heater.temperature)
-);
-const hasClimate=this._has(
-  o.ventilation&&(o.ventilation.status||o.ventilation.current_temp||o.ventilation.target_temp||o.ventilation.power||o.ventilation.speed)
-);
-const hasEquipment=(this._config.tabs||[]).some(t=>(t.items||[]).some(i=>i.entity));
-const all=[
- ["energy",this._config.general.language==="en"?"ENERGY":"ÉNERGIE","mdi:white-balance-sunny",hasEnergy],
- ["water",this._config.general.language==="en"?"WATER":"EAU","mdi:water",hasWater],
- ["heating",this._config.general.language==="en"?"HEATING":"CHAUFFAGE","mdi:radiator",hasHeating],
- ["climate",this._config.general.language==="en"?"CLIMATE":"CLIMAT","mdi:fan",hasClimate],
- ["equipment",this._config.general.language==="en"?"EQUIPMENT":"ÉQUIPEMENTS","mdi:cog",hasEquipment]
-];
-const cats=all.filter(x=>x[3]);
-if(!cats.length)return "";
-if(!cats.some(x=>x[0]===this._category))this._category=cats[0][0];
-return '<div class="category-tabs">'+cats.map(x=>'<button data-category="'+x[0]+'" class="'+(this._category===x[0]?"active":"")+'">'+this._icon(x[2])+'<span>'+x[1]+'</span></button>').join("")+'</div>'
-}
-_detailPanel(){
-const o=this._config.overview||{},rows=[];
-const add=(label,entity,icon)=>{if(entity)rows.push({label,entity,icon})};
-if(this._category==="energy"){add(this._t("solar"),o.solar&&(o.solar.power||o.solar.voltage),o.solar&&o.solar.icon);add(this._t("battery"),o.battery&&(o.battery.soc||o.battery.voltage),o.battery&&o.battery.icon);add(this._t("inverter"),o.inverter&&(o.inverter.power||o.inverter.voltage),o.inverter&&o.inverter.icon)}
-if(this._category==="water"){add(this._t("water"),o.water&&(o.water.liters||o.water.percent),o.water&&o.water.icon);add(this._t("waterHeater"),o.water_heater&&(o.water_heater.temperature||o.water_heater.status),o.water_heater&&o.water_heater.icon)}
-if(this._category==="heating"){add(this._t("heating"),o.heating&&(o.heating.current_temp||o.heating.target_temp||o.heating.status),o.heating&&o.heating.icon);add(this._t("waterHeater"),o.water_heater&&(o.water_heater.temperature||o.water_heater.status),o.water_heater&&o.water_heater.icon)}
-if(this._category==="climate"){add(this._t("ventilation"),o.ventilation&&(o.ventilation.current_temp||o.ventilation.speed||o.ventilation.power),o.ventilation&&o.ventilation.icon)}
-if(this._category==="equipment"){(this._config.tabs||[]).flatMap(t=>(t.items||[]).map(i=>({t,i}))).filter(x=>x.i.entity).slice(0,8).forEach(x=>add(x.i.label||x.t.name,x.i.entity,x.i.icon||x.t.icon))}
-if(!rows.length)return "";
-const label=this._category==="heating"?(this._config.general.language==="en"?"HEATING PAGE":"PAGE CHAUFFAGE"):(this._config.general.language==="en"?"DETAIL PAGE":"PAGE DÉTAIL");
-return '<section class="detail-panel"><div class="detail-title">'+this._icon(this._category==="heating"?"mdi:radiator":"mdi:format-list-bulleted")+'<b>'+label+'</b><span>‹ &nbsp; '+(this._config.general.language==="en"?"Back":"Retour")+'</span></div>'+rows.map(x=>'<button class="detail-row" data-history="'+this._ea(x.entity)+'">'+this._icon(x.icon||"mdi:circle")+'<span>'+this._e(x.label)+'</span><b>'+this._e(this._fmt(x.entity))+'</b><ha-icon icon="mdi:chevron-right"></ha-icon></button>').join("")+'</section>'
-}
 _dailyCounters(counters){
 if(!counters.length)return "";
 return '<section class="side-card counters-card daily-only"><h3>'+this._icon("mdi:counter")+'<span>'+this._t("daily")+'</span></h3>'
@@ -268,61 +226,6 @@ return '<section class="side-card counters-card daily-only"><h3>'+this._icon("md
     +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
   +'</button>').join("")
   +'</div></section>'
-}
-_rightSummary(o,counters){
-let h="";
-const solar=o.solar||{},bat=o.battery||{},water=o.water||{},inv=o.inverter||{},heat=o.heating||{},wh=o.water_heater||{},vent=o.ventilation||{};
-
-if(this._has(solar.energy_today,solar.energy_month,solar.energy_year,solar.power)){
-  h+='<section class="side-card solar-card"><h3>'+this._icon(solar.icon||"mdi:white-balance-sunny")+'<span>'+this._t("solar")+'</span></h3>'
-  +(solar.power?'<div class="side-primary">'+this._e(this._fmt(solar.power))+'</div>':"")
-  +this._kv(this._t("today"),solar.energy_today)
-  +this._kv(this._t("month"),solar.energy_month)
-  +this._kv(this._t("year"),solar.energy_year)
-  +'</section>';
-}
-if(this._has(bat.soc,bat.power,bat.voltage,bat.current)){
-  h+='<section class="side-card battery-card"><h3>'+this._icon(bat.icon||"mdi:battery-high")+'<span>'+this._t("battery")+'</span></h3>'
-  +'<div class="side-primary">'+this._e(this._fmt(bat.soc||bat.voltage))+'</div>'
-  +this._kv(this._t("voltage"),bat.voltage)
-  +this._kv(this._t("current"),bat.current)
-  +this._kv(this._t("power"),bat.power)
-  +'</section>';
-}
-if(this._has(water.percent,water.liters)){
-  h+='<section class="side-card water-card"><h3>'+this._icon(water.icon||"mdi:water")+'<span>'+this._t("water")+'</span></h3><div class="dual-stat">'
-  +(water.liters?'<button data-history="'+this._ea(water.liters)+'"><span>'+this._t("liters")+'</span><b>'+this._e(this._fmt(water.liters))+'</b></button>':"")
-  +(water.percent?'<button data-history="'+this._ea(water.percent)+'"><span>%</span><b>'+this._e(this._fmt(water.percent))+'</b></button>':"")
-  +'</div></section>';
-}
-if(this._has(inv.power,inv.voltage,inv.frequency,inv.current)){
-  h+='<section class="side-card inverter-card"><h3>'+this._icon(inv.icon||"mdi:power-plug")+'<span>'+this._t("inverter")+'</span></h3>'
-  +(inv.power?'<div class="side-primary">'+this._e(this._fmt(inv.power))+'</div>':"")
-  +this._kv(this._t("voltage"),inv.voltage)
-  +this._kv(this._t("frequency"),inv.frequency)
-  +this._kv(this._t("current"),inv.current)
-  +'</section>';
-}
-if(this._has(heat.current_temp,heat.target_temp,wh.temperature)){
-  h+='<section class="side-card heat-card"><h3>'+this._icon(heat.icon||"mdi:radiator")+'<span>'+this._t("heating")+' / '+this._t("waterHeater")+'</span></h3><div class="dual-stat">'
-  +(heat.current_temp?'<button data-history="'+this._ea(heat.current_temp)+'"><span>'+this._t("heating")+'</span><b>'+this._e(this._fmt(heat.current_temp))+'</b></button>':"")
-  +(wh.temperature?'<button data-history="'+this._ea(wh.temperature)+'"><span>'+this._t("waterHeater")+'</span><b>'+this._e(this._fmt(wh.temperature))+'</b></button>':"")
-  +'</div></section>';
-}
-if(this._has(vent.current_temp,vent.target_temp,vent.power,vent.speed)){
-  h+='<section class="side-card vent-card"><h3>'+this._icon(vent.icon||"mdi:fan")+'<span>'+this._t("ventilation")+'</span></h3>'
-  +this._kv(this._t("currentTemp"),vent.current_temp)
-  +this._kv(this._t("target"),vent.target_temp)
-  +this._kv(this._t("power"),vent.power)
-  +this._kv(this._t("speed"),vent.speed)
-  +'</section>';
-}
-if(counters.length){
-  h+='<section class="side-card counters-card"><h3>'+this._icon("mdi:counter")+'<span>'+this._t("daily")+'</span></h3><div class="counter-grid">'
-  +counters.map(x=>'<button class="counter" data-history="'+this._ea(x.entity)+'">'+this._icon(x.icon||"mdi:counter")+'<span>'+this._e(this._config.general.language==="en"?(x.label_en||x.label_fr):(x.label_fr||x.label_en))+'</span><b>'+this._e(this._fmt(x.entity))+'</b></button>').join("")
-  +'</div></section>';
-}
-return h
 }
 _bottomPanels(o){
 const items=[];
@@ -483,7 +386,7 @@ const xTicks=6;
 for(let i=0;i<xTicks;i++){
   const frac=i/(xTicks-1),ts=t0+frac*(t1-t0),x=pl+frac*(w-pl-pr),d=new Date(ts);
   const lbl=this._hours<=24?d.toLocaleTimeString(this._lang(),{hour:"2-digit",minute:"2-digit"}):
-    this._hours<=168?d.toLocaleDateString(this._lang(),{weekday:"short",hour:"2-digit"}):
+    this._hours<=168?d.toLocaleString(this._lang(),{weekday:"short",hour:"2-digit"}):
     d.toLocaleDateString(this._lang(),{day:"2-digit",month:"2-digit"});
   grid+='<line x1="'+x.toFixed(1)+'" y1="'+pt+'" x2="'+x.toFixed(1)+'" y2="'+(h-pb)+'" class="chart-grid chart-grid-x"/>'
     +'<text x="'+x.toFixed(1)+'" y="'+(h-22)+'" text-anchor="middle" class="chart-axis">'+this._e(lbl)+'</text>'
@@ -503,7 +406,7 @@ return '<div class="history-name">'+this._e(friendly)+'</div>'
 }
 async _service(domain,service,e,data){const d=Object.assign({},data||{}, {entity_id:e});try{await this._hass.callService(domain,service,d)}catch(x){this._toast(String(x),true)}}
 _bind(){this.shadowRoot.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{this._editing=false;this._page=b.dataset.page;this._render()});this.shadowRoot.querySelectorAll("[data-category]").forEach(b=>b.onclick=()=>{this._category=b.dataset.category;this._render()});this.shadowRoot.querySelectorAll("[data-history]").forEach(b=>b.onclick=()=>this._openHistory(b.dataset.history));const tc=this.shadowRoot.getElementById("theme-cycle");if(tc)tc.onclick=async()=>{const g=this._config.general,m=g.theme_mode||"auto";g.theme_mode=m==="auto"?"day":m==="day"?"night":"auto";try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config})}catch(x){}this._render()};const hc=this.shadowRoot.getElementById("hist-close");if(hc)hc.onclick=()=>{this._hist=null;this._render(true)};const hm=this.shadowRoot.getElementById("hist");if(hm)hm.onclick=e=>{if(e.target===hm){this._hist=null;this._render(true)}};this.shadowRoot.querySelectorAll("[data-hours]").forEach(b=>b.onclick=()=>{this._hours=Number(b.dataset.hours);if(this._hist)this._loadHistory(this._hist.entity,this._hours)});this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle));this.shadowRoot.querySelectorAll("[data-press]").forEach(b=>b.onclick=()=>this._service("button","press",b.dataset.press));this.shadowRoot.querySelectorAll("[data-select]").forEach(s=>s.onchange=()=>this._service("select","select_option",s.dataset.select,{option:s.value}));this.shadowRoot.querySelectorAll("[data-number-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-number="'+CSS.escape(b.dataset.numberSet)+'"]');this._service("number","set_value",b.dataset.numberSet,{value:Number(i.value)})});this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-climate="'+CSS.escape(b.dataset.climateSet)+'"]');this._service("climate","set_temperature",b.dataset.climateSet,{temperature:Number(i.value)})});if(this._page==="settings")this._bindSettings()}
-_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render()});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render()});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render()});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
+_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
 _toast(m,err){const t=this.shadowRoot.getElementById("toast");if(!t)return;t.textContent=m;t.style.background=err?"#672834":"#154e37";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 }
 if(!customElements.get("smart-fourgon-panel"))customElements.define("smart-fourgon-panel",SmartFourgonPanel);
