@@ -211,7 +211,7 @@ button{cursor:pointer}
   border:1px solid rgba(80,190,250,.34);
   background-repeat:no-repeat;
   background-size:145% auto;
-  background-position:29% center;
+  background-position:29% 100%;
 }
 .callout-layer{position:absolute;inset:0}
 .callout{
@@ -297,10 +297,10 @@ button{cursor:pointer}
 .callout.water{left:4.8%;bottom:2.2%}
 .callout.battery{left:59.5%;bottom:2.2%}
 
-.callout.solar:after{left:79%;top:100%;width:2px;height:42px}
-.callout.solar:before{left:calc(79% - 2px);top:calc(100% + 39px)}
-.callout.mppt:after{left:50%;top:100%;width:2px;height:44px}
-.callout.mppt:before{left:calc(50% - 2px);top:calc(100% + 41px)}
+.callout.solar:after{left:79%;top:100%;width:2px;height:86px}
+.callout.solar:before{left:calc(79% - 2px);top:calc(100% + 83px)}
+.callout.mppt:after{left:50%;top:100%;width:2px;height:82px}
+.callout.mppt:before{left:calc(50% - 2px);top:calc(100% + 79px)}
 .callout.waterheater:after{right:-32px;top:24px;width:32px;height:2px}
 .callout.waterheater:before{right:-36px;top:21px}
 .callout.heating:after{right:-39px;top:22px;width:39px;height:2px}
@@ -852,4 +852,11 @@ html,body{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
   .chart svg{min-width:620px}
+}
+
+/* 0.4.1 scene alignment */
+.dash-right{align-self:start}
+.daily-only{margin:0}
+@media(min-width:1021px){
+  .hero-photo{background-position:29% 100%}
 }
