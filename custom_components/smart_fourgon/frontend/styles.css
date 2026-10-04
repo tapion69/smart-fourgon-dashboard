@@ -1615,3 +1615,178 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     top:81px;
   }
 }
+
+/* =========================================================
+   1.0.4 - right category summaries + compact entity cards
+   ========================================================= */
+
+/* Right column may contain several category cards: scroll only this column if needed */
+.dash-right{
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding-right:2px;
+  scrollbar-width:thin;
+}
+
+/* Production / consumption / battery / water category cards */
+.energy-summary{
+  width:100%;
+  margin-bottom:7px;
+  padding:9px 10px;
+  border:1px solid rgba(80,190,250,.30);
+  border-radius:7px;
+  background:linear-gradient(180deg,rgba(8,43,68,.98),rgba(3,25,42,.98));
+}
+.energy-summary h3{
+  margin:0 0 7px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:10px;
+  font-weight:1000;
+  text-transform:uppercase;
+}
+.energy-summary h3 ha-icon{
+  --mdc-icon-size:19px;
+}
+.energy-summary-body{
+  display:grid;
+  grid-template-columns:minmax(76px,.82fr) minmax(0,1.18fr);
+  align-items:center;
+  gap:8px;
+}
+.summary-primary{
+  min-width:0;
+  border:0;
+  background:transparent;
+  padding:0;
+  text-align:left;
+  font-size:23px;
+  line-height:1;
+  font-weight:500;
+  color:inherit;
+}
+.summary-rows{
+  min-width:0;
+  display:grid;
+  gap:0;
+}
+.summary-rows button{
+  min-width:0;
+  width:100%;
+  min-height:25px;
+  border:0;
+  border-bottom:1px solid rgba(124,190,226,.11);
+  background:transparent;
+  color:#fff;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+  padding:3px 0;
+  text-align:left;
+}
+.summary-rows button:last-child{
+  border-bottom:0;
+}
+.summary-rows span{
+  min-width:0;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#d5e4ec;
+  font-size:8px;
+}
+.summary-rows b{
+  white-space:nowrap;
+  font-size:9px;
+}
+
+/* Same semantic colours as the main picture */
+.summary-solar{
+  color:var(--yellow);
+}
+.summary-solar h3,
+.summary-solar h3 ha-icon,
+.summary-solar .summary-primary,
+.summary-solar .summary-rows b{
+  color:var(--yellow);
+}
+.summary-consumption{
+  color:var(--cyan);
+}
+.summary-consumption h3,
+.summary-consumption h3 ha-icon,
+.summary-consumption .summary-primary,
+.summary-consumption .summary-rows b{
+  color:var(--cyan);
+}
+.summary-charge{
+  color:var(--green);
+}
+.summary-charge h3,
+.summary-charge h3 ha-icon,
+.summary-charge .summary-primary,
+.summary-charge .summary-rows b{
+  color:var(--green);
+}
+.summary-discharge{
+  color:#ff654c;
+}
+.summary-discharge h3,
+.summary-discharge h3 ha-icon,
+.summary-discharge .summary-primary,
+.summary-discharge .summary-rows b{
+  color:#ff654c;
+}
+.summary-water{
+  color:#25d8ff;
+}
+.summary-water h3,
+.summary-water h3 ha-icon,
+.summary-water .summary-primary,
+.summary-water .summary-rows b{
+  color:#25d8ff;
+}
+
+/* Custom entity pages: each card keeps only the height it actually needs.
+   A simple select must not stretch to the thermostat height next to it. */
+.entity-grid{
+  grid-template-columns:repeat(auto-fit,minmax(280px,430px))!important;
+  grid-auto-rows:max-content!important;
+  align-items:start!important;
+  align-content:start!important;
+  justify-content:start!important;
+}
+.entity-card{
+  width:100%;
+  max-width:430px;
+  height:auto!important;
+  min-height:0!important;
+  align-self:start!important;
+}
+.switch-card,
+.action-card{
+  min-height:0!important;
+}
+.entity-card .control{
+  align-items:center;
+}
+
+/* Tablet / phone right summaries */
+@media(max-width:1020px){
+  .dash-right{
+    overflow:visible!important;
+  }
+}
+@media(max-width:760px){
+  .energy-summary-body{
+    grid-template-columns:84px minmax(0,1fr);
+  }
+  .entity-grid{
+    grid-template-columns:1fr!important;
+  }
+  .entity-card{
+    max-width:none;
+  }
+}
