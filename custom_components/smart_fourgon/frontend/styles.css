@@ -213,7 +213,7 @@ button{cursor:pointer}
   min-height:0;
   height:100%;
   display:grid;
-  grid-template-rows:minmax(0,1fr) auto;
+  grid-template-rows:minmax(0,1fr) 184px;
   gap:6px;
   overflow:hidden;
 }
@@ -252,7 +252,12 @@ button{cursor:pointer}
   background:transparent;
   box-shadow:none;
   color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 6px rgba(0,0,0,.70);
+  text-shadow:
+    -2px -2px 2px rgba(0,0,0,.95),
+     2px -2px 2px rgba(0,0,0,.95),
+    -2px  2px 2px rgba(0,0,0,.95),
+     2px  2px 2px rgba(0,0,0,.95),
+     0 0 8px rgba(0,0,0,.95);
 }
 .call-head{
   display:flex;
@@ -288,7 +293,12 @@ button{cursor:pointer}
   line-height:1;
   font-weight:1000;
   text-align:left;
-  text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 9px rgba(0,0,0,.65);
+  text-shadow:
+    -2px -2px 2px #000,
+     2px -2px 2px #000,
+    -2px  2px 2px #000,
+     2px  2px 2px #000,
+     0 0 9px rgba(0,0,0,.95);
 }
 .callout.solar .call-primary,.callout.mppt .call-primary{color:var(--yellow)}
 .callout.battery .call-primary{color:var(--green)}
@@ -305,21 +315,29 @@ button{cursor:pointer}
   justify-content:space-between;
   gap:8px;
   font-size:9px;
-  text-shadow:0 1px 3px rgba(0,0,0,.95);
+  text-shadow:-1px -1px 2px #000,1px -1px 2px #000,-1px 1px 2px #000,1px 1px 2px #000;
 }
 .call-row span{color:#fff}
 .call-row b{white-space:nowrap;color:#fff}
 .callout:before,.callout:after{display:none}
 
-/* Positions around the van, not over its body */
-.callout.solar{right:8%;top:11%}
-.callout.mppt{left:43%;top:10%}
-.callout.waterheater{left:2.5%;top:31%}
-.callout.heating{left:2.5%;top:48%}
-.callout.temp{right:3.5%;top:34%}
-.callout.inverter{right:4%;top:57%}
-.callout.water{left:3%;bottom:7%}
-.callout.battery{left:48%;bottom:6%}
+/* Four hero values only */
+.callout.solar{
+  left:24%;
+  top:31%;
+}
+.callout.consumption{
+  left:49%;
+  top:31%;
+}
+.callout.inverter{
+  right:13%;
+  top:57%;
+}
+.callout.battery{
+  left:48%;
+  bottom:6%;
+}
 .mobile-callouts{display:none}
 
 /* =========================
@@ -381,18 +399,25 @@ button{cursor:pointer}
    ========================= */
 .bottom-strip{
   min-width:0;
-  height:108px;
+  height:184px;
   display:grid;
-  grid-template-columns:1.15fr 1fr 1fr;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
   gap:6px;
 }
 .bottom-card{
   min-width:0;
-  height:108px;
-  min-height:108px;
-  max-height:108px;
-  padding:7px;
+  min-height:0;
+  height:auto;
+  max-height:none;
+  padding:7px 8px;
   overflow:hidden;
+  border:1px solid rgba(80,190,250,.28);
+  border-radius:7px;
+  background:linear-gradient(180deg,rgba(8,43,68,.97),rgba(3,25,42,.97));
+}
+.bottom-card.active{
+  border-color:rgba(255,99,61,.55);
 }
 .bottom-card h3{
   margin:0 0 6px;
@@ -405,18 +430,20 @@ button{cursor:pointer}
   text-overflow:ellipsis;
 }
 .bottom-card h3 ha-icon{--mdc-icon-size:18px;color:var(--cyan)}
+.bottom-card.active h3 ha-icon{color:var(--red)}
 .bottom-values{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(62px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
   gap:4px;
 }
 .bottom-values button{
   min-width:0;
+  min-height:43px;
   border:1px solid rgba(120,200,255,.12);
   border-radius:6px;
   background:rgba(3,18,29,.42);
   color:#fff;
-  padding:5px;
+  padding:5px 6px;
   text-align:left;
 }
 .bottom-values span{
@@ -430,8 +457,10 @@ button{cursor:pointer}
 .bottom-values b{
   display:block;
   margin-top:3px;
-  font-size:10px;
+  font-size:11px;
   white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 /* =========================
@@ -667,7 +696,13 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   }
   .dash-right{height:auto;margin-top:6px}
   .counter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .bottom-strip{margin-top:6px;grid-template-columns:1fr 1fr}
+  .dash-center{grid-template-rows:auto auto}
+  .bottom-strip{
+    height:auto;
+    margin-top:6px;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto;
+  }
 }
 
 /* =========================
@@ -778,11 +813,30 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     margin-top:6px;
   }
   .counter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .bottom-strip{grid-template-columns:1fr}
+  .bottom-strip{
+    height:auto;
+    grid-template-columns:1fr;
+    grid-template-rows:auto;
+  }
   .entity-grid,.grid{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr}
   .chart svg{min-width:700px}
 }
 @media(max-width:480px){
   .mobile-callouts{grid-template-columns:1fr}
+}
+
+.check-field{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center;
+  min-height:38px;
+  padding:0 8px;
+  border:1px solid rgba(120,200,255,.14);
+  border-radius:7px;
+  background:rgba(3,18,29,.28);
+}
+.check-field input[type="checkbox"]{
+  width:20px;
+  height:20px;
+  accent-color:#73ff2b;
 }
