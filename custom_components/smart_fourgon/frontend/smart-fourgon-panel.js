@@ -6,8 +6,8 @@ const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select
 const ACTIVE=new Set(["on","open","opening","active","heat","heating","cool","cooling","fan_only","dry","true","home"]);
 
 class SmartFourgonPanel extends HTMLElement{
-constructor(){super();this.attachShadow({mode:"open"});this._hass=null;this._config=null;this._page="overview";this._category="energy";this._loaded=false;this._editing=false;this._hist=null;this._hours=24;this._heroDay="";this._heroNight="";}
-set hass(v){this._hass=v;if(!this._loaded)this._load();else if(!this._editing)this._render();}
+constructor(){super();this.attachShadow({mode:"open"});this._hass=null;this._config=null;this._page="overview";this._category="energy";this._loaded=false;this._editing=false;this._hist=null;this._hours=24;this._heroDay="";this._heroNight="";this._renderQueued=false;}
+set hass(v){this._hass=v;if(!this._loaded)this._load();else if(!this._editing)this._scheduleRender();}
 get hass(){return this._hass}
 set panel(v){this._panel=v}
 set narrow(v){this._narrow=!!v}
@@ -42,14 +42,25 @@ const load=async(path)=>{
 }
 _night(){const m=(this._config.general||{}).theme_mode||"auto";if(m==="night")return true;if(m==="day")return false;return (this._state("sun.sun")||{}).state==="below_horizon"}
 _pageTitle(){if(this._page==="overview")return this._t("overview");if(this._page==="settings")return this._t("settings");const id=this._page.replace("tab:","");const t=(this._config.tabs||[]).find(x=>x.id===id);return t?t.name:""}
-_render(){
+_scheduleRender(){
+if(this._renderQueued)return;
+this._renderQueued=true;
+requestAnimationFrame(()=>{
+  this._renderQueued=false;
+  this._render(true)
+})
+}
+_render(preserveScroll=false){
 if(!this._loaded)return;
+const oldPage=this.shadowRoot.querySelector(".page");
+const oldTop=preserveScroll&&oldPage?oldPage.scrollTop:0;
+const oldLeft=preserveScroll&&oldPage?oldPage.scrollLeft:0;
 const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMART FOURGON");
 const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._ea(t.id)+'" class="nav-main '+(this._page==="tab:"+t.id?"active":"")+'">'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+'<span>'+this._e(t.name)+'</span></button>').join("");
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.3.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.3.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -76,7 +87,13 @@ this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.cs
 +'</div></header>'
 +'<section class="page">'+body+'</section>'
 +'</main>'+this._historyModal()+'<div id="toast" class="toast"></div></div>';
-this._bind()
+this._bind();
+if(preserveScroll){
+  requestAnimationFrame(()=>{
+    const p=this.shadowRoot.querySelector(".page");
+    if(p){p.scrollTop=oldTop;p.scrollLeft=oldLeft}
+  })
+}
 }
 _sidebarGroups(){
 const o=this._config.overview||{};
