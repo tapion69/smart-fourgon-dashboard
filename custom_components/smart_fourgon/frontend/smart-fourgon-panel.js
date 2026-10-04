@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.6.1",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.7.0",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.6.1">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.7.0">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -372,12 +372,62 @@ return '<div class="item-editor"><div class="item-top"><b>#'+(ii+1)+'</b><button
 }
 _typeLabel(x){const m={auto:"auto",read:"read",sensor:"sensor",binary_sensor:"binary",switch:"switch",number:"number",select:"select",button:"button",climate:"climate",light:"light",fan:"Ventilateur",visual:"Visuel / couleur"};return this._t(m[x]||x)}
 _datalist(){return '<datalist id="sf-entities">'+Object.keys((this._hass&&this._hass.states)||{}).sort().map(x=>'<option value="'+this._ea(x)+'"></option>').join("")+'</datalist>'}
-_sync(){const q=id=>this.shadowRoot.getElementById(id),g=this._config.general||{};g.title=(q("sf-title")||{}).value||"SMART FOURGON";g.language=(q("sf-lang")||{}).value||"fr";g.theme_mode=(q("sf-theme")||{}).value||"auto";g.day_image=(q("sf-day")||{}).value||"";g.night_image=(q("sf-night")||{}).value||"";this._config.general=g;const defs={solar:["power","voltage","current","energy_today","energy_month","energy_year"],battery:["soc","power","voltage","current"],water:["percent","liters"],heating:["status","target_temp","current_temp"],water_heater:["status","temperature"],inverter:["status","power","voltage","frequency","current"],ventilation:["status","current_temp","target_temp","power","speed"]};Object.entries(defs).forEach(([k,fs])=>{const c=this._config.overview[k];c.enabled=!!(q("base-"+k+"-enabled")||{}).checked;c.icon=(q("base-"+k+"-icon")||{}).value||c.icon;fs.forEach(f=>c[f]=(q("base-"+k+"-"+f)||{}).value||"")});(this._config.daily_counters||[]).forEach((x,i)=>{
-x.entity=(q("counter-"+i)||{}).value||"";
-x.label_fr=(q("counter-"+i+"-fr")||{}).value||x.label_fr||x.id;
-x.label_en=(q("counter-"+i+"-en")||{}).value||x.label_en||x.label_fr||x.id;
-x.icon=(q("counter-"+i+"-icon")||{}).value||x.icon||"mdi:counter"
-});(this._config.tabs||[]).forEach((t,ti)=>{t.name=(q("tab-"+ti+"-name")||{}).value||t.name;t.icon=(q("tab-"+ti+"-icon")||{}).value||"mdi:folder-outline";t.image=(q("tab-"+ti+"-image")||{}).value||"";(t.items||[]).forEach((it,ii)=>{it.label=(q("it-"+ti+"-"+ii+"-label")||{}).value||"";it.entity=(q("it-"+ti+"-"+ii+"-entity")||{}).value||"";it.status_entity=(q("it-"+ti+"-"+ii+"-status")||{}).value||"";it.type=(q("it-"+ti+"-"+ii+"-type")||{}).value||"auto";it.icon=(q("it-"+ti+"-"+ii+"-icon")||{}).value||"";it.image=(q("it-"+ti+"-"+ii+"-image")||{}).value||"";it.unit_override=(q("it-"+ti+"-"+ii+"-unit")||{}).value||"";it.color_on=(q("it-"+ti+"-"+ii+"-on")||{}).value||"#ff654c";it.color_off=(q("it-"+ti+"-"+ii+"-off")||{}).value||"#26d8ff"})})}
+_sync(){
+const q=id=>this.shadowRoot.getElementById(id),g=this._config.general||{};
+g.title=(q("sf-title")||{}).value||"SMART FOURGON";
+g.language=(q("sf-lang")||{}).value||"fr";
+g.theme_mode=(q("sf-theme")||{}).value||"auto";
+g.day_image=(q("sf-day")||{}).value||"";
+g.night_image=(q("sf-night")||{}).value||"";
+this._config.general=g;
+
+const defs={
+  solar:["power","energy_today","energy_month","energy_year"],
+  consumption:["power","energy_today"],
+  battery:["soc","power","voltage","current"],
+  inverter:["status","power","voltage","frequency","current"],
+  mppt:["power","voltage","current"],
+  water:["percent","liters"],
+  heating:["status","target_temp","current_temp"],
+  water_heater:["status","temperature"],
+  temperature:["current_temp","target_temp"],
+  ventilation:["status","current_temp","target_temp","power","speed"]
+};
+this._config.overview=this._config.overview||{};
+Object.entries(defs).forEach(([k,fs])=>{
+  const sec=this._config.overview[k]||(this._config.overview[k]={});
+  sec.enabled=!!(q("base-"+k+"-enabled")||{}).checked;
+  sec.icon=(q("base-"+k+"-icon")||{}).value||sec.icon||"mdi:circle";
+  fs.forEach(name=>sec[name]=(q("base-"+k+"-"+name)||{}).value||"")
+});
+
+(this._config.daily_counters||[]).forEach((x,i)=>{
+  x.enabled=!!(q("counter-"+i+"-enabled")||{}).checked;
+  x.entity=(q("counter-"+i)||{}).value||"";
+  x.label_fr=(q("counter-"+i+"-fr")||{}).value||x.label_fr||x.id;
+  x.label_en=(q("counter-"+i+"-en")||{}).value||x.label_en||x.label_fr||x.id;
+  x.icon=(q("counter-"+i+"-icon")||{}).value||x.icon||"mdi:counter"
+});
+
+(this._config.tabs||[]).forEach((t,ti)=>{
+  t.enabled=!!(q("tab-"+ti+"-enabled")||{}).checked;
+  t.name=(q("tab-"+ti+"-name")||{}).value||t.name;
+  t.icon=(q("tab-"+ti+"-icon")||{}).value||"mdi:folder-outline";
+  t.image=(q("tab-"+ti+"-image")||{}).value||"";
+  (t.items||[]).forEach((it,ii)=>{
+    it.enabled=!!(q("it-"+ti+"-"+ii+"-enabled")||{}).checked;
+    it.label=(q("it-"+ti+"-"+ii+"-label")||{}).value||"";
+    it.entity=(q("it-"+ti+"-"+ii+"-entity")||{}).value||"";
+    it.status_entity=(q("it-"+ti+"-"+ii+"-status")||{}).value||"";
+    it.type=(q("it-"+ti+"-"+ii+"-type")||{}).value||"auto";
+    it.icon=(q("it-"+ti+"-"+ii+"-icon")||{}).value||"";
+    it.image=(q("it-"+ti+"-"+ii+"-image")||{}).value||"";
+    it.unit_override=(q("it-"+ti+"-"+ii+"-unit")||{}).value||"";
+    it.color_on=(q("it-"+ti+"-"+ii+"-on")||{}).value||"#ff654c";
+    it.color_off=(q("it-"+ti+"-"+ii+"-off")||{}).value||"#26d8ff"
+  })
+})
+}
 _historyModal(){if(!this._hist)return '<div class="modal" id="hist"></div>';return '<div class="modal open" id="hist"><div class="modal-card"><div class="modal-head"><div><h2>'+this._t("history")+'</h2><small>'+this._e(this._attr(this._hist.entity,"friendly_name")||this._hist.entity)+'</small></div><button id="hist-close">×</button></div><div class="periods">'+[6,24,168,720].map(h=>'<button data-hours="'+h+'" class="'+(this._hours===h?"active":"")+'">'+(h===168?"7j":h===720?"30j":h+"h")+'</button>').join("")+'</div><div id="hist-body">'+(this._hist.html||'<div class="empty">'+this._t("loading")+'</div>')+'</div></div></div>'}
 _openMoreInfo(e){
 if(!e)return;
@@ -559,7 +609,7 @@ this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>
 });
 if(this._page==="settings")this._bindSettings()
 }
-_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
+_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),enabled:true,name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),enabled:true,label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
 _toast(m,err){const t=this.shadowRoot.getElementById("toast");if(!t)return;t.textContent=m;t.style.background=err?"#672834":"#154e37";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 }
 if(!customElements.get("smart-fourgon-panel"))customElements.define("smart-fourgon-panel",SmartFourgonPanel);
