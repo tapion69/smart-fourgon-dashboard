@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.9.0",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.9.1",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.9.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.9.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -622,7 +622,7 @@ this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>
 });
 if(this._page==="settings")this._bindSettings()
 }
-_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),enabled:true,name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),enabled:true,label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
+_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),enabled:true,name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),enabled:true,label:"",entity:"",status_entity:"",type:"auto",icon:""});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
 _toast(m,err){const t=this.shadowRoot.getElementById("toast");if(!t)return;t.textContent=m;t.style.background=err?"#672834":"#154e37";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 }
 if(!customElements.get("smart-fourgon-panel"))customElements.define("smart-fourgon-panel",SmartFourgonPanel);
