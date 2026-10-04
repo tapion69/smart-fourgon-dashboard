@@ -2,7 +2,7 @@ const SF_T={
 fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État"},
 en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State"}
 };
-const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light"];
+const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
 ["mdi:folder-outline","📁 Dossier"],["mdi:home","🏠 Maison"],["mdi:lightning-bolt","⚡ Énergie"],
 ["mdi:solar-panel-large","☀️ Panneaux solaires"],["mdi:battery-charging","⚡ MPPT"],["mdi:battery-high","🔋 Batterie"],
@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.4.1",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.5.0",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.4.1">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.5.0">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -278,7 +278,7 @@ _settings(){this._editing=true;const g=this._config.general||{},o=this._config.o
   +this._iconSelect("counter-"+i+"-icon",this._t("icon"),x.icon||"mdi:counter")
   +'<label class="field"><span>'+this._t("entity")+'</span><input list="sf-entities" id="counter-'+i+'" value="'+this._ea(x.entity||"")+'" placeholder="sensor..."></label>'
   +'</div></div>'
-).join("");const tabs=(this._config.tabs||[]).map((t,i)=>this._tabEditor(t,i)).join("");return '<div class="settings"><section class="settings-card"><h2>'+this._t("general")+'</h2><div class="grid">'+this._field("sf-title",this._t("title"),g.title)+this._select("sf-lang",this._t("language"),[["fr","Français"],["en","English"]],g.language||"fr")+this._select("sf-theme",this._t("theme"),[["auto",this._t("auto")],["day",this._t("day")],["night",this._t("night")]],g.theme_mode||"auto")+this._field("sf-day",this._t("dayImage"),g.day_image,"/local/...")+this._field("sf-night",this._t("nightImage"),g.night_image,"/local/...")+'</div><p class="hint">'+this._t("hint")+'</p></section><section class="settings-card"><h2>'+this._t("base")+'</h2>'+sections+'</section><section class="settings-card"><h2>'+this._t("daily")+'</h2><div class="grid">'+counters+'</div></section><section class="settings-card"><h2>'+this._t("tabs")+'</h2><div class="grid">'+this._field("new-tab-name",this._t("tabName"),"")+this._iconSelect("new-tab-icon",this._t("icon"),"mdi:radiator")+'</div><p><button class="btn" id="add-tab">'+this._t("addTab")+'</button></p>'+tabs+'</section><div class="actions"><button class="btn danger" id="reset">'+this._t("reset")+'</button><button class="btn" id="save">'+this._t("save")+'</button></div>'+this._datalist()+'</div>'}
+).join("");const tabs=(this._config.tabs||[]).map((t,i)=>this._tabEditor(t,i)).join("");return '<div class="settings"><section class="settings-card"><h2>'+this._t("general")+'</h2><div class="grid">'+this._field("sf-title",this._t("title"),g.title)+this._select("sf-lang",this._t("language"),[["fr","Français"],["en","English"]],g.language||"fr")+this._select("sf-theme",this._t("theme"),[["auto",this._t("auto")],["day",this._t("day")],["night",this._t("night")]],g.theme_mode||"auto")+this._field("sf-day",this._t("dayImage"),g.day_image,"/local/...")+this._field("sf-night",this._t("nightImage"),g.night_image,"/local/...")+'</div><p class="hint">'+this._t("hint")+'</p></section><section class="settings-card"><h2>'+this._t("base")+'</h2>'+sections+'</section><section class="settings-card"><h2>'+this._t("daily")+'</h2><div class="grid">'+counters+'</div></section><section class="settings-card"><h2>'+this._t("tabs")+'</h2><p class="hint">'+this._e(this._config.general.language==="en"?"Create the menus displayed directly under Overview. Each menu can contain any Home Assistant entities. Choose the entity type, icon, label, optional status entity and colours for each item.":"Crée ici les menus affichés directement sous Vue générale. Chaque menu peut contenir les entités Home Assistant de ton choix. Pour chaque élément, choisis le type d’entité, l’icône, le nom, une entité d’état optionnelle et les couleurs.")+'</p><div class="grid">'+this._field("new-tab-name",this._t("tabName"),"")+this._iconSelect("new-tab-icon",this._t("icon"),"mdi:radiator")+'</div><p><button class="btn" id="add-tab">'+this._t("addTab")+'</button></p>'+tabs+'</section><div class="actions"><button class="btn danger" id="reset">'+this._t("reset")+'</button><button class="btn" id="save">'+this._t("save")+'</button></div>'+this._datalist()+'</div>'}
 _select(id,l,opts,v){return '<label class="field"><span>'+this._e(l)+'</span><select id="'+id+'">'+opts.map(o=>'<option value="'+this._ea(o[0])+'" '+(String(o[0])===String(v)?"selected":"")+'>'+this._e(o[1])+'</option>').join("")+'</select></label>'}
 _iconSelect(id,l,v){
 const value=v||"mdi:folder-outline";
@@ -289,7 +289,7 @@ return this._select(id,l,opts,value)
 _sectionEditor(k,title,c,fields){const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year")};return '<details class="section-editor" open><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
 _tabEditor(t,ti){const items=(t.items||[]).map((it,ii)=>this._itemEditor(ti,ii,it)).join("");return '<details class="tab-editor" open><summary>'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'+this._field("tab-"+ti+"-name",this._t("tabName"),t.name)+this._iconSelect("tab-"+ti+"-icon",this._t("icon"),t.icon)+this._field("tab-"+ti+"-image",this._t("image"),t.image)+'</div>'+items+'<p><button class="btn" data-add-item="'+ti+'">'+this._t("addEntity")+'</button> <button class="btn danger" data-del-tab="'+ti+'">'+this._t("del")+'</button></p></div></details>'}
 _itemEditor(ti,ii,it){return '<div class="item-editor"><div class="item-top"><b>#'+(ii+1)+'</b><button class="btn tiny danger" data-del-item="'+ti+":"+ii+'">×</button></div><div class="grid">'+this._field("it-"+ti+"-"+ii+"-label",this._t("label"),it.label)+'<label class="field"><span>'+this._t("entity")+'</span><input list="sf-entities" id="it-'+ti+'-'+ii+'-entity" value="'+this._ea(it.entity||"")+'"></label><label class="field"><span>'+this._t("statusEntity")+'</span><input list="sf-entities" id="it-'+ti+'-'+ii+'-status" value="'+this._ea(it.status_entity||"")+'"></label>'+this._select("it-"+ti+"-"+ii+"-type",this._t("type"),SF_TYPES.map(x=>[x,this._typeLabel(x)]),it.type||"auto")+this._iconSelect("it-"+ti+"-"+ii+"-icon",this._t("icon"),it.icon||this._attr(it.entity,"icon")||"mdi:circle")+this._field("it-"+ti+"-"+ii+"-image",this._t("image"),it.image)+this._field("it-"+ti+"-"+ii+"-unit",this._t("unit"),it.unit_override)+this._field("it-"+ti+"-"+ii+"-on",this._t("activeColor"),it.color_on||"#ff654c")+this._field("it-"+ti+"-"+ii+"-off",this._t("inactiveColor"),it.color_off||"#26d8ff")+'</div></div>'}
-_typeLabel(x){const m={auto:"auto",read:"read",sensor:"sensor",binary_sensor:"binary",switch:"switch",number:"number",select:"select",button:"button",climate:"climate",light:"light"};return this._t(m[x]||x)}
+_typeLabel(x){const m={auto:"auto",read:"read",sensor:"sensor",binary_sensor:"binary",switch:"switch",number:"number",select:"select",button:"button",climate:"climate",light:"light",fan:"Ventilateur",visual:"Visuel / couleur"};return this._t(m[x]||x)}
 _datalist(){return '<datalist id="sf-entities">'+Object.keys((this._hass&&this._hass.states)||{}).sort().map(x=>'<option value="'+this._ea(x)+'"></option>').join("")+'</datalist>'}
 _sync(){const q=id=>this.shadowRoot.getElementById(id),g=this._config.general||{};g.title=(q("sf-title")||{}).value||"SMART FOURGON";g.language=(q("sf-lang")||{}).value||"fr";g.theme_mode=(q("sf-theme")||{}).value||"auto";g.day_image=(q("sf-day")||{}).value||"";g.night_image=(q("sf-night")||{}).value||"";this._config.general=g;const defs={solar:["power","voltage","current","energy_today","energy_month","energy_year"],battery:["soc","power","voltage","current"],water:["percent","liters"],heating:["status","target_temp","current_temp"],water_heater:["status","temperature"],inverter:["status","power","voltage","frequency","current"],ventilation:["status","current_temp","target_temp","power","speed"]};Object.entries(defs).forEach(([k,fs])=>{const c=this._config.overview[k];c.enabled=!!(q("base-"+k+"-enabled")||{}).checked;c.icon=(q("base-"+k+"-icon")||{}).value||c.icon;fs.forEach(f=>c[f]=(q("base-"+k+"-"+f)||{}).value||"")});(this._config.daily_counters||[]).forEach((x,i)=>{
 x.entity=(q("counter-"+i)||{}).value||"";
@@ -302,11 +302,35 @@ _openMoreInfo(e){
 if(!e)return;
 this.dispatchEvent(new CustomEvent("hass-more-info",{detail:{entityId:e},bubbles:true,composed:true}))
 }
+_mountHistory(){
+const current=this.shadowRoot.getElementById("hist");
+if(!current)return;
+const box=document.createElement("div");
+box.innerHTML=this._historyModal();
+const fresh=box.firstElementChild;
+if(!fresh)return;
+current.replaceWith(fresh);
+this._bindHistoryControls()
+}
+_bindHistoryControls(){
+const hc=this.shadowRoot.getElementById("hist-close");
+if(hc)hc.onclick=()=>{this._hist=null;this._mountHistory()};
+const hm=this.shadowRoot.getElementById("hist");
+if(hm)hm.onclick=e=>{if(e.target===hm){this._hist=null;this._mountHistory()}};
+this.shadowRoot.querySelectorAll("[data-hours]").forEach(b=>b.onclick=()=>{
+  this._hours=Number(b.dataset.hours);
+  if(this._hist){
+    this._hist.html='<div class="empty">'+this._t("loading")+'</div>';
+    this._mountHistory();
+    this._loadHistory(this._hist.entity,this._hours)
+  }
+})
+}
 async _openHistory(e){
 if(!e)return;
 if(this._num(e)===null){this._openMoreInfo(e);return}
 this._hist={entity:e,html:'<div class="empty">'+this._t("loading")+'</div>'};
-this._render(true);
+this._mountHistory();
 await this._loadHistory(e,this._hours)
 }
 async _loadHistory(e,h){
@@ -325,87 +349,135 @@ try{
 }catch(x){
   if(this._hist&&this._hist.entity===e){
     this._hist.html='<div class="empty">'+this._e(String(x&&x.message?x.message:x))+'</div>';
-    this._render(true)
+    this._mountHistory()
   }
   return
 }
 const raw=Array.isArray(d)
   ?(Array.isArray(d[0])?d[0]:d)
   :((d&&Array.isArray(d[e]))?d[e]:[]);
-const s=raw.map(x=>{
+let s=raw.map(x=>{
   const v=x&&("state" in x)?x.state:(x&&(x.s??x.value));
   const tr=x&&(x.last_changed||x.last_updated||x.lc||x.lu);
   const ts=typeof tr==="number"?(tr<1e12?tr*1000:tr):new Date(tr).getTime();
   return[ts,Number(String(v).replace(",", "."))]
 }).filter(x=>Number.isFinite(x[0])&&Number.isFinite(x[1])).sort((a,b)=>a[0]-b[0]);
+
+const dedup=[];
+for(const p of s){
+  if(dedup.length&&dedup[dedup.length-1][0]===p[0])dedup[dedup.length-1]=p;
+  else dedup.push(p)
+}
+s=dedup;
+
 if(!this._hist||this._hist.entity!==e)return;
 this._hist.html=s.length>1?this._chart(e,s):'<div class="empty">'+this._t("noData")+'</div>';
-this._render(true)
+this._mountHistory()
 }
 _chart(e,s){
 const vals=s.map(x=>x[1]);
 const attrs=(this._state(e)||{}).attributes||{};
 const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
 const dataMin=Math.min(...vals),dataMax=Math.max(...vals);
-let axisMin=num(attrs.min)??num(attrs.min_value)??num(attrs.native_min_value);
-let axisMax=num(attrs.max)??num(attrs.max_value)??num(attrs.native_max_value);
-if(axisMin===null)axisMin=dataMin;
-if(axisMax===null)axisMax=dataMax;
-if(axisMin===axisMax){const pad=Math.max(Math.abs(axisMax)*.1,1);axisMin-=pad;axisMax+=pad}
-if(num(attrs.min)===null&&num(attrs.min_value)===null&&num(attrs.native_min_value)===null){
-  const p=(axisMax-axisMin)*.08;axisMin-=p
+const sensorMin=num(attrs.min)??num(attrs.min_value)??num(attrs.native_min_value);
+const sensorMax=num(attrs.max)??num(attrs.max_value)??num(attrs.native_max_value);
+
+let axisMin=sensorMin!==null?sensorMin:dataMin;
+let axisMax=sensorMax!==null?sensorMax:dataMax;
+if(axisMin===axisMax){
+  const pad=Math.max(Math.abs(axisMax)*.1,1);
+  axisMin-=pad;axisMax+=pad
 }
-if(num(attrs.max)===null&&num(attrs.max_value)===null&&num(attrs.native_max_value)===null){
-  const p=(axisMax-axisMin)*.08;axisMax+=p
-}
-const maxPts=700;
-let ptsSrc=s;
+if(sensorMin===null)axisMin-=Math.max((axisMax-axisMin)*.08,.1);
+if(sensorMax===null)axisMax+=Math.max((axisMax-axisMin)*.08,.1);
+
+const maxPts=900;
+let src=s;
 if(s.length>maxPts){
   const step=Math.ceil(s.length/maxPts);
-  ptsSrc=s.filter((_,i)=>i%step===0||i===s.length-1)
+  src=s.filter((_,i)=>i%step===0||i===s.length-1)
 }
-const w=980,h=400,pl=82,pr=24,pt=22,pb=56;
+
+const w=1040,h=430,pl=92,pr=28,pt=28,pb=66;
 const span=Math.max(.000001,axisMax-axisMin);
-const t0=ptsSrc[0][0],t1=ptsSrc[ptsSrc.length-1][0],tspan=Math.max(1,t1-t0);
-const xy=ptsSrc.map(x=>[
+const t0=src[0][0],t1=src[src.length-1][0],tspan=Math.max(1,t1-t0);
+const pts=src.map(x=>[
   pl+(x[0]-t0)/tspan*(w-pl-pr),
   pt+(axisMax-x[1])/span*(h-pt-pb)
 ]);
-const path=xy.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+const path=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+
 const unit=this._attr(e,"unit_of_measurement")||"";
+const friendly=this._attr(e,"friendly_name")||e;
 const valFmt=v=>Number(v).toLocaleString(this._lang(),{maximumFractionDigits:2})+(unit?" "+unit:"");
-const axisFmt=v=>Number(v).toLocaleString(this._lang(),{maximumFractionDigits:Math.abs(v)<10?2:1});
+const tickFmt=v=>Number(v).toLocaleString(this._lang(),{maximumFractionDigits:Math.abs(v)<10?2:1});
+
 let grid="";
-const yTicks=5;
+const yTicks=6;
 for(let i=0;i<yTicks;i++){
   const frac=i/(yTicks-1),v=axisMax-frac*(axisMax-axisMin),y=pt+frac*(h-pt-pb);
   grid+='<line x1="'+pl+'" y1="'+y.toFixed(1)+'" x2="'+(w-pr)+'" y2="'+y.toFixed(1)+'" class="chart-grid"/>'
-    +'<text x="'+(pl-10)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" class="chart-axis">'+this._e(axisFmt(v))+'</text>'
+    +'<text x="'+(pl-12)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" class="chart-axis">'+this._e(tickFmt(v))+'</text>'
 }
-const xTicks=6;
+const xTicks=7;
 for(let i=0;i<xTicks;i++){
   const frac=i/(xTicks-1),ts=t0+frac*(t1-t0),x=pl+frac*(w-pl-pr),d=new Date(ts);
-  const lbl=this._hours<=24?d.toLocaleTimeString(this._lang(),{hour:"2-digit",minute:"2-digit"}):
-    this._hours<=168?d.toLocaleString(this._lang(),{weekday:"short",hour:"2-digit"}):
-    d.toLocaleDateString(this._lang(),{day:"2-digit",month:"2-digit"});
+  const lbl=this._hours<=24
+    ?d.toLocaleTimeString(this._lang(),{hour:"2-digit",minute:"2-digit"})
+    :this._hours<=168
+      ?d.toLocaleString(this._lang(),{weekday:"short",hour:"2-digit"})
+      :d.toLocaleDateString(this._lang(),{day:"2-digit",month:"2-digit"});
   grid+='<line x1="'+x.toFixed(1)+'" y1="'+pt+'" x2="'+x.toFixed(1)+'" y2="'+(h-pb)+'" class="chart-grid chart-grid-x"/>'
-    +'<text x="'+x.toFixed(1)+'" y="'+(h-22)+'" text-anchor="middle" class="chart-axis">'+this._e(lbl)+'</text>'
+    +'<text x="'+x.toFixed(1)+'" y="'+(h-26)+'" text-anchor="middle" class="chart-axis">'+this._e(lbl)+'</text>'
 }
-const friendly=this._attr(e,"friendly_name")||e;
+
+const scale=(sensorMin!==null||sensorMax!==null)
+  ?'<div class="history-scale">'+this._e(this._config.general.language==="en"?"Sensor scale":"Échelle capteur")
+    +' : '+this._e(tickFmt(axisMin))+(unit?" "+this._e(unit):"")
+    +' → '+this._e(tickFmt(axisMax))+(unit?" "+this._e(unit):"")+'</div>'
+  :"";
+
 return '<div class="history-name">'+this._e(friendly)+'</div>'
-+'<div class="stats"><div><span>'+this._t("now")+'</span><b>'+valFmt(vals[vals.length-1])+'</b></div>'
-+'<div><span>'+this._t("min")+'</span><b>'+valFmt(dataMin)+'</b></div>'
-+'<div><span>'+this._t("max")+'</span><b>'+valFmt(dataMax)+'</b></div></div>'
-+'<div class="chart"><svg viewBox="0 0 '+w+' '+h+'" role="img">'
-+grid
-+'<line x1="'+pl+'" y1="'+(h-pb)+'" x2="'+(w-pr)+'" y2="'+(h-pb)+'" class="chart-axis-line"/>'
-+'<line x1="'+pl+'" y1="'+pt+'" x2="'+pl+'" y2="'+(h-pb)+'" class="chart-axis-line"/>'
-+'<path d="'+path+'" class="chart-line"/>'
-+'<text x="20" y="'+((pt+h-pb)/2)+'" transform="rotate(-90 20 '+((pt+h-pb)/2)+')" text-anchor="middle" class="chart-unit">'+this._e(unit)+'</text>'
-+'</svg></div>'
+  +'<div class="stats">'
+    +'<div><span>'+this._t("now")+'</span><b>'+valFmt(vals[vals.length-1])+'</b></div>'
+    +'<div><span>'+this._t("min")+'</span><b>'+valFmt(dataMin)+'</b></div>'
+    +'<div><span>'+this._t("max")+'</span><b>'+valFmt(dataMax)+'</b></div>'
+  +'</div>'+scale
+  +'<div class="chart"><svg viewBox="0 0 '+w+' '+h+'" role="img">'
+    +grid
+    +'<line x1="'+pl+'" y1="'+(h-pb)+'" x2="'+(w-pr)+'" y2="'+(h-pb)+'" class="chart-axis-line"/>'
+    +'<line x1="'+pl+'" y1="'+pt+'" x2="'+pl+'" y2="'+(h-pb)+'" class="chart-axis-line"/>'
+    +'<path d="'+path+'" class="chart-line"/>'
+    +'<text x="25" y="'+((pt+h-pb)/2)+'" transform="rotate(-90 25 '+((pt+h-pb)/2)+')" text-anchor="middle" class="chart-unit">'+this._e(unit||this._t("state"))+'</text>'
+  +'</svg></div>'
 }
 async _service(domain,service,e,data){const d=Object.assign({},data||{}, {entity_id:e});try{await this._hass.callService(domain,service,d)}catch(x){this._toast(String(x),true)}}
-_bind(){this.shadowRoot.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{this._editing=false;this._page=b.dataset.page;this._render()});this.shadowRoot.querySelectorAll("[data-category]").forEach(b=>b.onclick=()=>{this._category=b.dataset.category;this._render()});this.shadowRoot.querySelectorAll("[data-history]").forEach(b=>b.onclick=()=>this._openHistory(b.dataset.history));const tc=this.shadowRoot.getElementById("theme-cycle");if(tc)tc.onclick=async()=>{const g=this._config.general,m=g.theme_mode||"auto";g.theme_mode=m==="auto"?"day":m==="day"?"night":"auto";try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config})}catch(x){}this._render()};const hc=this.shadowRoot.getElementById("hist-close");if(hc)hc.onclick=()=>{this._hist=null;this._render(true)};const hm=this.shadowRoot.getElementById("hist");if(hm)hm.onclick=e=>{if(e.target===hm){this._hist=null;this._render(true)}};this.shadowRoot.querySelectorAll("[data-hours]").forEach(b=>b.onclick=()=>{this._hours=Number(b.dataset.hours);if(this._hist)this._loadHistory(this._hist.entity,this._hours)});this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle));this.shadowRoot.querySelectorAll("[data-press]").forEach(b=>b.onclick=()=>this._service("button","press",b.dataset.press));this.shadowRoot.querySelectorAll("[data-select]").forEach(s=>s.onchange=()=>this._service("select","select_option",s.dataset.select,{option:s.value}));this.shadowRoot.querySelectorAll("[data-number-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-number="'+CSS.escape(b.dataset.numberSet)+'"]');this._service("number","set_value",b.dataset.numberSet,{value:Number(i.value)})});this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-climate="'+CSS.escape(b.dataset.climateSet)+'"]');this._service("climate","set_temperature",b.dataset.climateSet,{temperature:Number(i.value)})});if(this._page==="settings")this._bindSettings()}
+_bind(){
+this.shadowRoot.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{
+  this._editing=false;this._page=b.dataset.page;this._render()
+});
+this.shadowRoot.querySelectorAll("[data-history]").forEach(b=>b.onclick=()=>this._openHistory(b.dataset.history));
+const tc=this.shadowRoot.getElementById("theme-cycle");
+if(tc)tc.onclick=async()=>{
+  const g=this._config.general,m=g.theme_mode||"auto";
+  g.theme_mode=m==="auto"?"day":m==="day"?"night":"auto";
+  try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config})}catch(x){}
+  this._render()
+};
+this._bindHistoryControls();
+this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle));
+this.shadowRoot.querySelectorAll("[data-press]").forEach(b=>b.onclick=()=>this._service("button","press",b.dataset.press));
+this.shadowRoot.querySelectorAll("[data-select]").forEach(s=>s.onchange=()=>this._service("select","select_option",s.dataset.select,{option:s.value}));
+this.shadowRoot.querySelectorAll("[data-number-set]").forEach(b=>b.onclick=()=>{
+  const i=this.shadowRoot.querySelector('[data-number="'+CSS.escape(b.dataset.numberSet)+'"]');
+  this._service("number","set_value",b.dataset.numberSet,{value:Number(i.value)})
+});
+this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>{
+  const i=this.shadowRoot.querySelector('[data-climate="'+CSS.escape(b.dataset.climateSet)+'"]');
+  this._service("climate","set_temperature",b.dataset.climateSet,{temperature:Number(i.value)})
+});
+if(this._page==="settings")this._bindSettings()
+}
 _bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
 _toast(m,err){const t=this.shadowRoot.getElementById("toast");if(!t)return;t.textContent=m;t.style.background=err?"#672834":"#154e37";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 }
