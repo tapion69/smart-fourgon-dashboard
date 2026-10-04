@@ -221,7 +221,9 @@ button{cursor:pointer}
   min-width:0;
   min-height:0;
   height:100%;
-  display:block;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:6px;
   overflow:hidden;
 }
 .dash-right{
@@ -310,18 +312,19 @@ button{cursor:pointer}
 .call-row{
   width:100%;
   border:0;
-  padding:1px 0;
+  padding:2px 0;
   background:transparent;
   color:inherit;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  font-size:9px;
+  gap:9px;
+  font-size:10px;
+  font-weight:800;
   text-shadow:-1px -1px 2px #000,1px -1px 2px #000,-1px 1px 2px #000,1px 1px 2px #000;
 }
-.call-row span{color:inherit}
-.call-row b{white-space:nowrap;color:inherit}
+.call-row span{color:inherit;font-weight:800}
+.call-row b{white-space:nowrap;color:inherit;font-weight:1000}
 .callout:before,.callout:after{display:none}
 
 /* Main picture values: section colour applies to all text */
@@ -337,8 +340,8 @@ button{cursor:pointer}
 }
 .callout.inverter{
   --call-color:#25d8ff;
-  right:12%;
-  top:58%;
+  left:4%;
+  bottom:8%;
 }
 .callout.battery{
   --call-color:var(--green);
@@ -347,8 +350,8 @@ button{cursor:pointer}
 }
 .callout.water{
   --call-color:#25d8ff;
-  left:4%;
-  bottom:8%;
+  right:12%;
+  top:58%;
 }
 .mobile-callouts{display:none}
 
@@ -883,4 +886,298 @@ summary{cursor:pointer;padding:9px;font-weight:800}
 .entity-card .entity-head ha-icon,
 .entity-card .entity-value{
   color:var(--cyan)!important;
+}
+
+/* =========================================================
+   1.0.0 - segmented gauges, right menu, quick status,
+   entity-specific controls
+   ========================================================= */
+.seg-gauge{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  margin:4px 0 5px;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.9));
+}
+.seg-gauge .seg-body{
+  display:flex;
+  gap:3px;
+}
+.seg-gauge .seg-body i{
+  display:block;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:inset 0 0 3px rgba(0,0,0,.55);
+}
+.battery-gauge .seg-body{
+  padding:3px;
+  border:2px solid currentColor;
+  border-radius:5px;
+}
+.battery-gauge .seg-body i{
+  width:18px;
+  height:16px;
+  border-radius:2px;
+}
+.battery-gauge .seg-body i.filled{
+  background:var(--green);
+  border-color:#d8ffb7;
+  box-shadow:0 0 7px rgba(130,255,40,.55),inset 0 0 3px rgba(255,255,255,.6);
+}
+.battery-gauge .seg-cap{
+  width:5px;
+  height:18px;
+  border-radius:0 3px 3px 0;
+  background:currentColor;
+}
+.water-gauge{
+  margin-top:5px;
+}
+.water-gauge .seg-body{
+  width:38px;
+  height:58px;
+  padding:4px;
+  border:2px solid currentColor;
+  border-radius:6px 6px 9px 9px;
+  display:flex;
+  flex-direction:column-reverse;
+  gap:2px;
+  position:relative;
+}
+.water-gauge .seg-body:before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  left:10px;
+  width:14px;
+  height:5px;
+  border:2px solid currentColor;
+  border-bottom:0;
+  border-radius:3px 3px 0 0;
+}
+.water-gauge .seg-body i{
+  width:100%;
+  flex:1 1 0;
+  min-height:5px;
+  border-radius:2px;
+}
+.water-gauge .seg-body i.filled{
+  background:#27d9ff;
+  border-color:#c9f8ff;
+  box-shadow:0 0 6px rgba(39,217,255,.45);
+}
+
+/* Optional custom tabs in the menu at the right of the main image */
+.right-tab-menu{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-bottom:7px;
+}
+.right-tab-menu button{
+  min-width:0;
+  min-height:46px;
+  border:1px solid rgba(72,190,250,.32);
+  border-radius:7px;
+  background:linear-gradient(180deg,#07375a,#05253e);
+  color:#f4fbff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:6px;
+  font-size:9px;
+  font-weight:900;
+}
+.right-tab-menu button ha-icon{
+  --mdc-icon-size:19px;
+  color:var(--cyan);
+}
+.right-tab-menu button.active{
+  border-color:#7cff2b;
+  box-shadow:inset 0 0 0 1px rgba(124,255,43,.18);
+}
+
+/* Fully configurable Quick status under the picture */
+.quick-status{
+  min-width:0;
+  padding:7px 9px;
+  border:1px solid rgba(80,190,250,.28);
+  border-radius:7px;
+  background:linear-gradient(180deg,rgba(8,43,68,.97),rgba(3,25,42,.97));
+}
+.quick-status h3{
+  margin:0 0 6px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:9px;
+  text-transform:uppercase;
+}
+.quick-status h3 ha-icon{
+  --mdc-icon-size:18px;
+  color:var(--cyan);
+}
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+  gap:5px;
+}
+.quick-grid button{
+  min-width:0;
+  min-height:56px;
+  border:1px solid rgba(120,200,255,.13);
+  border-radius:6px;
+  background:rgba(3,18,29,.45);
+  color:#fff;
+  padding:5px 6px;
+  display:grid;
+  grid-template-columns:20px minmax(0,1fr);
+  grid-template-areas:"icon label" "icon value";
+  align-items:center;
+  column-gap:5px;
+  text-align:left;
+}
+.quick-grid button ha-icon{
+  grid-area:icon;
+  --mdc-icon-size:18px;
+  color:var(--cyan);
+}
+.quick-grid button span{
+  grid-area:label;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#a9bfcc;
+  font-size:7.5px;
+}
+.quick-grid button b{
+  grid-area:value;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:11px;
+}
+
+/* Thermostat card */
+.thermostat-card{
+  min-width:300px;
+  max-width:460px;
+}
+.thermostat-card .entity-head small{
+  color:#ff9367;
+  text-transform:uppercase;
+}
+.thermostat-display{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin:12px 0 9px;
+}
+.thermostat-display>div{
+  padding:9px;
+  border:1px solid rgba(120,200,255,.13);
+  border-radius:7px;
+  background:rgba(2,19,31,.48);
+}
+.thermostat-display span{
+  display:block;
+  color:#9eb5c3;
+  font-size:8px;
+}
+.thermostat-display b{
+  display:block;
+  margin-top:3px;
+  color:#24d8ff;
+  font-size:21px;
+}
+.thermostat-controls{
+  display:grid;
+  grid-template-columns:44px minmax(90px,1fr) 44px;
+  gap:7px;
+  align-items:center;
+}
+.thermostat-controls button{
+  height:42px;
+  border:1px solid rgba(120,200,255,.24);
+  border-radius:8px;
+  background:#0a3656;
+  color:#fff;
+  font-size:24px;
+  font-weight:900;
+}
+.thermostat-controls strong{
+  display:grid;
+  place-items:center;
+  height:42px;
+  border:1px solid rgba(255,118,62,.30);
+  border-radius:8px;
+  background:#142d3c;
+  color:#ff8b58;
+  font-size:20px;
+}
+.climate-mode{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  margin-top:8px;
+  color:#a9bfcc;
+  font-size:9px;
+}
+.climate-mode select{
+  min-width:0;
+  height:36px;
+  border:1px solid rgba(120,200,255,.22);
+  border-radius:7px;
+  background:#08263d;
+  color:#fff;
+  padding:0 8px;
+}
+
+/* Toggle / button controls must visually match their HA type */
+.toggle-switch{
+  position:relative;
+  width:92px;
+  height:38px!important;
+  border:1px solid rgba(120,200,255,.24)!important;
+  border-radius:20px!important;
+  background:#2b3c49!important;
+  color:#d4e2ea!important;
+  padding:0 34px 0 12px!important;
+  font-weight:900;
+}
+.toggle-switch i{
+  position:absolute;
+  right:5px;
+  top:5px;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#cad5dc;
+  transition:.16s ease;
+}
+.toggle-switch.on{
+  background:#c8582e!important;
+  color:#fff!important;
+}
+.toggle-switch.on i{
+  background:#fff;
+}
+.action-button{
+  min-width:130px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  font-weight:900;
+}
+.action-button ha-icon{--mdc-icon-size:19px}
+
+/* Quick-status editor is intentionally simple */
+.quick-editor{
+  border-color:rgba(37,216,255,.20);
 }
