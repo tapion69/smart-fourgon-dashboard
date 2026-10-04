@@ -2001,3 +2001,101 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     top:51%!important;
   }
 }
+
+/* =========================================================
+   1.0.6 - reliable smartphone navigation / settings scroll
+   ========================================================= */
+@media(max-width:760px){
+  /* The Home Assistant panel itself does not always let a shadow-DOM
+     child expand the document. Keep the dashboard inside the viewport
+     and make the page area the touch-scroll container. */
+  :host{
+    display:block!important;
+    height:100dvh!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  .app{
+    width:100%!important;
+    height:100dvh!important;
+    min-height:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+  .sidebar{
+    flex:0 0 auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  .main{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    height:auto!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+  .topbar{
+    flex:0 0 58px!important;
+    min-height:58px!important;
+  }
+
+  /* All pages can be navigated vertically by touch.
+     This fixes Settings while preserving the Overview layout. */
+  .page,
+  .page.scroll-page,
+  .page.overview-page{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    height:auto!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    scrollbar-gutter:auto!important;
+    padding:5px 5px 88px!important;
+  }
+
+  /* Settings specifically: never trap scrolling in nested cards. */
+  .scroll-page .settings{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding-bottom:110px!important;
+    overflow:visible!important;
+  }
+  .settings-card,
+  .section-editor,
+  .tab-editor,
+  .item-editor,
+  .editor-body{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  /* Keep save/reset reachable while moving through a long settings page. */
+  .settings .actions{
+    position:sticky!important;
+    left:0!important;
+    right:0!important;
+    bottom:4px!important;
+    z-index:50!important;
+    margin-top:8px!important;
+    padding:7px!important;
+    backdrop-filter:blur(8px);
+  }
+
+  /* Horizontal top navigation remains swipeable. */
+  .nav{
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+    scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar{
+    display:none;
+  }
+}
