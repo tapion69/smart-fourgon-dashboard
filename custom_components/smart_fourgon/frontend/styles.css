@@ -1313,3 +1313,114 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   white-space:nowrap;
   text-overflow:ellipsis;
 }
+
+/* =========================================================
+   1.0.2 - water droplets, daily colours, settings cleanup
+   ========================================================= */
+
+/* Fresh water: five drops, one per 20% */
+.water-gauge{
+  width:auto;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  margin:5px 0 2px;
+}
+.water-gauge ha-icon{
+  --mdc-icon-size:21px;
+  color:rgba(39,217,255,.20);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.9));
+}
+.water-gauge ha-icon.filled{
+  color:#27d9ff;
+  filter:drop-shadow(0 0 4px rgba(39,217,255,.60)) drop-shadow(0 1px 2px #000);
+}
+.water-percent-value{
+  display:block;
+  border:0;
+  padding:0;
+  margin:0 0 2px;
+  background:transparent;
+  color:inherit;
+  font-size:11px;
+  line-height:1;
+  font-weight:1000;
+  text-shadow:-1px -1px 2px #000,1px -1px 2px #000,-1px 1px 2px #000,1px 1px 2px #000;
+}
+
+/* Daily counters reuse the same semantic colours as the main overview */
+.counter ha-icon,
+.counter b{
+  color:#fff;
+}
+.counter-solar ha-icon,
+.counter-solar b{
+  color:var(--yellow);
+}
+.counter-consumption ha-icon,
+.counter-consumption b{
+  color:var(--cyan);
+}
+.counter-charge ha-icon,
+.counter-charge b{
+  color:var(--green);
+}
+.counter-discharge ha-icon,
+.counter-discharge b{
+  color:#ff654c;
+}
+.counter-alternator ha-icon,
+.counter-alternator b{
+  color:#25d8ff;
+}
+.counter-water ha-icon,
+.counter-water b{
+  color:#25d8ff;
+}
+
+/* Daily counter settings: cards must never overlap */
+.daily-settings-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+  gap:10px;
+  align-items:start;
+}
+.counter-editor{
+  min-width:0;
+  margin:0;
+}
+.counter-fields{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  align-items:end;
+}
+.counter-fields .field{
+  min-width:0;
+}
+.counter-fields .field input,
+.counter-fields .field select{
+  min-width:0;
+  width:100%;
+}
+.counter-fields .check-field{
+  grid-column:1/-1;
+}
+@media(max-width:760px){
+  .daily-settings-grid{
+    grid-template-columns:1fr;
+  }
+  .counter-fields{
+    grid-template-columns:1fr;
+  }
+  .counter-fields .check-field{
+    grid-column:auto;
+  }
+}
+
+.water-gauge .seg-body,
+.water-gauge .seg-body:before,
+.water-gauge .seg-body:after,
+.water-gauge .seg-body i{
+  display:none!important;
+}
