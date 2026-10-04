@@ -49,7 +49,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.5">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.6">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -107,9 +107,9 @@ _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
 const customImg=(night?g.night_image:g.day_image)||"";const img=customImg||(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
 const callouts=[
-  this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[
-    [this._t("voltage"),o.solar&&o.solar.voltage],
-    [this._t("current"),o.solar&&o.solar.current]
+  this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[],"solar"),
+  this._callout("mppt","MPPT","mdi:battery-charging",o.solar&&o.solar.current,[
+    [this._t("voltage"),o.solar&&o.solar.voltage]
   ],"solar"),
   this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[
     [this._t("state"),o.water_heater&&o.water_heater.status]
@@ -131,11 +131,7 @@ const callouts=[
   this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[
     [this._t("voltage"),o.battery&&o.battery.voltage],
     [this._t("power"),o.battery&&o.battery.power]
-  ],"battery"),
-  this._callout("vent",this._t("ventilation"),o.ventilation&&o.ventilation.icon,o.ventilation&&o.ventilation.speed,[
-    [this._t("power"),o.ventilation&&o.ventilation.power],
-    [this._t("currentTemp"),o.ventilation&&o.ventilation.current_temp]
-  ],"vent")
+  ],"battery")
 ].filter(Boolean);
 
 const counters=(this._config.daily_counters||[]).filter(x=>x.entity);
@@ -149,6 +145,7 @@ return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
     +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
       +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
     +'</section>'
+    +(callouts.length?'<div class="mobile-callouts">'+callouts.join("")+'</div>':'')
     +bottom
   +'</div>'
   +(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
