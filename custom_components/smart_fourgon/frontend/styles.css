@@ -258,7 +258,7 @@ button{cursor:pointer}
   border-radius:0;
   background:transparent;
   box-shadow:none;
-  color:#fff;
+  color:var(--call-color,#fff);
   text-shadow:
     -2px -2px 2px rgba(0,0,0,.95),
      2px -2px 2px rgba(0,0,0,.95),
@@ -275,7 +275,7 @@ button{cursor:pointer}
 }
 .call-head ha-icon{
   --mdc-icon-size:16px;
-  color:#f4fbff;
+  color:inherit;
   filter:drop-shadow(0 1px 2px #000);
 }
 .callout.on .call-head ha-icon{color:var(--red)}
@@ -286,7 +286,7 @@ button{cursor:pointer}
   white-space:nowrap;
   font-size:10px;
   font-weight:900;
-  color:#fff;
+  color:inherit;
 }
 .call-head i{display:none}
 .call-primary{
@@ -295,7 +295,7 @@ button{cursor:pointer}
   padding:0;
   margin:0 0 2px;
   background:transparent;
-  color:var(--cyan);
+  color:inherit;
   font-size:29px;
   line-height:1;
   font-weight:1000;
@@ -307,16 +307,12 @@ button{cursor:pointer}
      2px  2px 2px #000,
      0 0 9px rgba(0,0,0,.95);
 }
-.callout.solar .call-primary,.callout.mppt .call-primary{color:var(--yellow)}
-.callout.battery .call-primary{color:var(--green)}
-.callout.water .call-primary,.callout.temp .call-primary{color:#20dbff}
-.callout.heating.on .call-primary,.callout.waterheater.on .call-primary{color:var(--red)}
 .call-row{
   width:100%;
   border:0;
   padding:1px 0;
   background:transparent;
-  color:#fff;
+  color:inherit;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -324,26 +320,35 @@ button{cursor:pointer}
   font-size:9px;
   text-shadow:-1px -1px 2px #000,1px -1px 2px #000,-1px 1px 2px #000,1px 1px 2px #000;
 }
-.call-row span{color:#fff}
-.call-row b{white-space:nowrap;color:#fff}
+.call-row span{color:inherit}
+.call-row b{white-space:nowrap;color:inherit}
 .callout:before,.callout:after{display:none}
 
-/* Four hero values only */
+/* Main picture values: section colour applies to all text */
 .callout.solar{
+  --call-color:var(--yellow);
   left:25%;
   top:35%;
 }
 .callout.consumption{
+  --call-color:#25d8ff;
   left:52%;
   top:25%;
 }
 .callout.inverter{
+  --call-color:#25d8ff;
   right:12%;
   top:58%;
 }
 .callout.battery{
+  --call-color:var(--green);
   left:48%;
   bottom:6%;
+}
+.callout.water{
+  --call-color:#25d8ff;
+  left:4%;
+  bottom:8%;
 }
 .mobile-callouts{display:none}
 
@@ -866,4 +871,16 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   .scroll-page{
     padding-right:12px;
   }
+}
+
+.entity-card{
+  --c:var(--cyan)!important;
+  border-color:rgba(80,190,250,.28)!important;
+}
+.entity-card.active{
+  border-color:rgba(80,190,250,.28)!important;
+}
+.entity-card .entity-head ha-icon,
+.entity-card .entity-value{
+  color:var(--cyan)!important;
 }
