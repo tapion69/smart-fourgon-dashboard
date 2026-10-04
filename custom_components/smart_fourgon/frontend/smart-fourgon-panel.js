@@ -49,7 +49,7 @@ const customTabs=(this._config.tabs||[]).map(t=>'<button data-page="tab:'+this._
 const groups=this._sidebarGroups();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.2.6">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.3.0">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -163,11 +163,9 @@ const cfgKey=key==="waterheater"?"water_heater":key;
 const active=(key==="heating"||key==="waterheater"||key==="vent")
   ?this._active((this._config.overview[cfgKey]||{}).status)
   :false;
-const ref=primary||(rows.find(x=>x[1])||[])[1]||"";
 return '<article class="callout '+cls+' '+(active?"on":"")+'">'
   +'<div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'
   +p+r
-  +'<div class="call-link">'+this._icon("mdi:link-variant")+'<small>'+this._e(ref)+'</small></div>'
 +'</article>'
 }
 _categoryTabs(){
@@ -320,9 +318,66 @@ _typeLabel(x){const m={auto:"auto",read:"read",sensor:"sensor",binary_sensor:"bi
 _datalist(){return '<datalist id="sf-entities">'+Object.keys((this._hass&&this._hass.states)||{}).sort().map(x=>'<option value="'+this._ea(x)+'"></option>').join("")+'</datalist>'}
 _sync(){const q=id=>this.shadowRoot.getElementById(id),g=this._config.general||{};g.title=(q("sf-title")||{}).value||"SMART FOURGON";g.language=(q("sf-lang")||{}).value||"fr";g.theme_mode=(q("sf-theme")||{}).value||"auto";g.day_image=(q("sf-day")||{}).value||"";g.night_image=(q("sf-night")||{}).value||"";this._config.general=g;const defs={solar:["power","voltage","current","energy_today","energy_month","energy_year"],battery:["soc","power","voltage","current"],water:["percent","liters"],heating:["status","target_temp","current_temp"],water_heater:["status","temperature"],inverter:["status","power","voltage","frequency","current"],ventilation:["status","current_temp","target_temp","power","speed"]};Object.entries(defs).forEach(([k,fs])=>{const c=this._config.overview[k];c.enabled=!!(q("base-"+k+"-enabled")||{}).checked;c.icon=(q("base-"+k+"-icon")||{}).value||c.icon;fs.forEach(f=>c[f]=(q("base-"+k+"-"+f)||{}).value||"")});(this._config.daily_counters||[]).forEach((c,i)=>c.entity=(q("counter-"+i)||{}).value||"");(this._config.tabs||[]).forEach((t,ti)=>{t.name=(q("tab-"+ti+"-name")||{}).value||t.name;t.icon=(q("tab-"+ti+"-icon")||{}).value||"mdi:folder-outline";t.image=(q("tab-"+ti+"-image")||{}).value||"";(t.items||[]).forEach((it,ii)=>{it.label=(q("it-"+ti+"-"+ii+"-label")||{}).value||"";it.entity=(q("it-"+ti+"-"+ii+"-entity")||{}).value||"";it.status_entity=(q("it-"+ti+"-"+ii+"-status")||{}).value||"";it.type=(q("it-"+ti+"-"+ii+"-type")||{}).value||"auto";it.icon=(q("it-"+ti+"-"+ii+"-icon")||{}).value||"";it.image=(q("it-"+ti+"-"+ii+"-image")||{}).value||"";it.unit_override=(q("it-"+ti+"-"+ii+"-unit")||{}).value||"";it.color_on=(q("it-"+ti+"-"+ii+"-on")||{}).value||"#ff654c";it.color_off=(q("it-"+ti+"-"+ii+"-off")||{}).value||"#26d8ff"})})}
 _historyModal(){if(!this._hist)return '<div class="modal" id="hist"></div>';return '<div class="modal open" id="hist"><div class="modal-card"><div class="modal-head"><div><h2>'+this._t("history")+'</h2><small>'+this._e(this._hist.entity)+'</small></div><button id="hist-close">×</button></div><div class="periods">'+[6,24,168,720].map(h=>'<button data-hours="'+h+'" class="'+(this._hours===h?"active":"")+'">'+(h===168?"7j":h===720?"30j":h+"h")+'</button>').join("")+'</div><div id="hist-body">'+(this._hist.html||'<div class="empty">'+this._t("loading")+'</div>')+'</div></div></div>'}
-async _openHistory(e){if(!e||this._num(e)===null)return;this._hist={entity:e,html:'<div class="empty">'+this._t("loading")+'</div>'};this._render();await this._loadHistory(e,this._hours)}
-async _loadHistory(e,h){let d=[];const end=new Date(),start=new Date(end.getTime()-h*3600000);try{d=await this._ws({type:"history/history_during_period",start_time:start.toISOString(),end_time:end.toISOString(),entity_ids:[e],minimal_response:false,no_attributes:true,significant_changes_only:false})}catch(x){}const raw=Array.isArray(d)&&Array.isArray(d[0])?d[0]:Array.isArray(d)?d:[];const s=raw.map(x=>{const v="state" in (x||{})?x.state:(x.s??x.value),tr=x.last_changed||x.last_updated||x.lc||x.lu,ts=typeof tr==="number"?(tr<1e12?tr*1000:tr):new Date(tr).getTime();return[ts,Number(String(v).replace(",","."))]}).filter(x=>Number.isFinite(x[0])&&Number.isFinite(x[1])).sort((a,b)=>a[0]-b[0]);if(!this._hist||this._hist.entity!==e)return;this._hist.html=s.length>1?this._chart(e,s):'<div class="empty">'+this._t("noData")+'</div>';this._render()}
-_chart(e,s){const vals=s.map(x=>x[1]),a=(this._state(e)||{}).attributes||{},num=v=>Number.isFinite(Number(v))?Number(v):null;let min=num(a.min)??num(a.min_value)??num(a.native_min_value),max=num(a.max)??num(a.max_value)??num(a.native_max_value);const amin=min,amax=max;if(min===null)min=Math.min(...vals);if(max===null)max=Math.max(...vals);if(min===max){const p=Math.max(Math.abs(max)*.1,1);min-=p;max+=p}if(amin===null){const p=(max-min)*.06;min-=p}if(amax===null){const p=(max-min)*.06;max+=p}const w=900,h=340,pl=60,pr=20,pt=20,pb=42,span=Math.max(.0001,max-min),t0=s[0][0],t1=s[s.length-1][0],ts=Math.max(1,t1-t0),pts=s.map(x=>[pl+(x[0]-t0)/ts*(w-pl-pr),pt+(max-x[1])/span*(h-pt-pb)]),path=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" "),u=this._attr(e,"unit_of_measurement")||"",f=v=>Number(v).toLocaleString(this._lang(),{maximumFractionDigits:2})+(u?" "+u:"");return '<div class="stats"><div><span>'+this._t("now")+'</span><b>'+f(vals[vals.length-1])+'</b></div><div><span>'+this._t("min")+'</span><b>'+f(min)+'</b></div><div><span>'+this._t("max")+'</span><b>'+f(max)+'</b></div></div><div class="chart"><svg viewBox="0 0 '+w+" "+h+'"><path d="'+path+'" fill="none" stroke="#26d8ff" stroke-width="3"/><line x1="'+pl+'" y1="'+(h-pb)+'" x2="'+(w-pr)+'" y2="'+(h-pb)+'" stroke="#7aa6bc"/></svg></div>'}
+_openMoreInfo(e){
+if(!e)return;
+this.dispatchEvent(new CustomEvent("hass-more-info",{detail:{entityId:e},bubbles:true,composed:true}))
+}
+async _openHistory(e){
+if(!e)return;
+if(this._num(e)===null){this._openMoreInfo(e);return}
+this._hist={entity:e,html:'<div class="empty">'+this._t("loading")+'</div>'};
+this._render();
+await this._loadHistory(e,this._hours)
+}
+async _loadHistory(e,h){
+const end=new Date(),start=new Date(end.getTime()-h*3600000);
+let d={};
+try{
+  d=await this._ws({
+    type:"history/history_during_period",
+    start_time:start.toISOString(),
+    end_time:end.toISOString(),
+    entity_ids:[e],
+    minimal_response:true,
+    no_attributes:true,
+    significant_changes_only:false
+  })
+}catch(x){
+  if(this._hist&&this._hist.entity===e){
+    this._hist.html='<div class="empty">'+this._e(String(x&&x.message?x.message:x))+'</div>';
+    this._render()
+  }
+  return
+}
+const raw=Array.isArray(d)
+  ?(Array.isArray(d[0])?d[0]:d)
+  :((d&&Array.isArray(d[e]))?d[e]:[]);
+const s=raw.map(x=>{
+  const v=x&&("state" in x)?x.state:(x&&(x.s??x.value));
+  const tr=x&&(x.last_changed||x.last_updated||x.lc||x.lu);
+  const ts=typeof tr==="number"?(tr<1e12?tr*1000:tr):new Date(tr).getTime();
+  return[ts,Number(String(v).replace(",", "."))]
+}).filter(x=>Number.isFinite(x[0])&&Number.isFinite(x[1])).sort((a,b)=>a[0]-b[0]);
+if(!this._hist||this._hist.entity!==e)return;
+this._hist.html=s.length>1?this._chart(e,s):'<div class="empty">'+this._t("noData")+'</div>';
+this._render()
+}
+_chart(e,s){
+const vals=s.map(x=>x[1]),a=(this._state(e)||{}).attributes||{},num=v=>Number.isFinite(Number(v))?Number(v):null;
+let min=num(a.min)??num(a.min_value)??num(a.native_min_value),max=num(a.max)??num(a.max_value)??num(a.native_max_value);
+const amin=min,amax=max;
+if(min===null)min=Math.min(...vals);
+if(max===null)max=Math.max(...vals);
+if(min===max){const p=Math.max(Math.abs(max)*.1,1);min-=p;max+=p}
+if(amin===null){const p=(max-min)*.06;min-=p}
+if(amax===null){const p=(max-min)*.06;max+=p}
+const w=900,h=340,pl=60,pr=20,pt=20,pb=42,span=Math.max(.0001,max-min),t0=s[0][0],t1=s[s.length-1][0],ts=Math.max(1,t1-t0);
+const pts=s.map(x=>[pl+(x[0]-t0)/ts*(w-pl-pr),pt+(max-x[1])/span*(h-pt-pb)]);
+const path=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+const u=this._attr(e,"unit_of_measurement")||"",fmt=v=>Number(v).toLocaleString(this._lang(),{maximumFractionDigits:2})+(u?" "+u:"");
+return '<div class="stats"><div><span>'+this._t("now")+'</span><b>'+fmt(vals[vals.length-1])+'</b></div><div><span>'+this._t("min")+'</span><b>'+fmt(min)+'</b></div><div><span>'+this._t("max")+'</span><b>'+fmt(max)+'</b></div></div>'
++'<div class="chart"><svg viewBox="0 0 '+w+' '+h+'"><path d="'+path+'" fill="none" stroke="#26d8ff" stroke-width="3"/><line x1="'+pl+'" y1="'+(h-pb)+'" x2="'+(w-pr)+'" y2="'+(h-pb)+'" stroke="#7aa6bc"/></svg></div>'
+}
 async _service(domain,service,e,data){const d=Object.assign({},data||{}, {entity_id:e});try{await this._hass.callService(domain,service,d)}catch(x){this._toast(String(x),true)}}
 _bind(){this.shadowRoot.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{this._editing=false;this._page=b.dataset.page;this._render()});this.shadowRoot.querySelectorAll("[data-category]").forEach(b=>b.onclick=()=>{this._category=b.dataset.category;this._render()});this.shadowRoot.querySelectorAll("[data-history]").forEach(b=>b.onclick=()=>this._openHistory(b.dataset.history));const tc=this.shadowRoot.getElementById("theme-cycle");if(tc)tc.onclick=async()=>{const g=this._config.general,m=g.theme_mode||"auto";g.theme_mode=m==="auto"?"day":m==="day"?"night":"auto";try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config})}catch(x){}this._render()};const hc=this.shadowRoot.getElementById("hist-close");if(hc)hc.onclick=()=>{this._hist=null;this._render()};const hm=this.shadowRoot.getElementById("hist");if(hm)hm.onclick=e=>{if(e.target===hm){this._hist=null;this._render()}};this.shadowRoot.querySelectorAll("[data-hours]").forEach(b=>b.onclick=()=>{this._hours=Number(b.dataset.hours);if(this._hist)this._loadHistory(this._hist.entity,this._hours)});this.shadowRoot.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>this._service(b.dataset.domain,this._active(b.dataset.toggle)?"turn_off":"turn_on",b.dataset.toggle));this.shadowRoot.querySelectorAll("[data-press]").forEach(b=>b.onclick=()=>this._service("button","press",b.dataset.press));this.shadowRoot.querySelectorAll("[data-select]").forEach(s=>s.onchange=()=>this._service("select","select_option",s.dataset.select,{option:s.value}));this.shadowRoot.querySelectorAll("[data-number-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-number="'+CSS.escape(b.dataset.numberSet)+'"]');this._service("number","set_value",b.dataset.numberSet,{value:Number(i.value)})});this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>{const i=this.shadowRoot.querySelector('[data-climate="'+CSS.escape(b.dataset.climateSet)+'"]');this._service("climate","set_temperature",b.dataset.climateSet,{temperature:Number(i.value)})});if(this._page==="settings")this._bindSettings()}
 _bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",image:"",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),label:"",entity:"",status_entity:"",type:"auto",icon:"",image:"",unit_override:"",color_on:"#ff654c",color_off:"#26d8ff"});this._render()});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render()});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render()});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
