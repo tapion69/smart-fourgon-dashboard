@@ -33,11 +33,18 @@ def default_config() -> dict:
                 "enabled": True,
                 "icon": "mdi:battery-high",
                 "soc": "", "power": "", "voltage": "", "current": "",
+                "temperature": "", "charge_today": "", "discharge_today": "",
             },
             "inverter": {
                 "enabled": True,
                 "icon": "mdi:power-plug",
                 "status": "", "power": "", "voltage": "", "frequency": "", "current": "",
+                "temperature": "",
+            },
+            "water": {
+                "enabled": True,
+                "icon": "mdi:water",
+                "percent": "", "liters": "", "consumed_today": "",
             },
         },
         "daily_counters": [
