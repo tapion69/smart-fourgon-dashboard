@@ -24,11 +24,6 @@ def default_config() -> dict:
                 "power": "", "voltage": "", "current": "",
                 "energy_today": "", "energy_month": "", "energy_year": "",
             },
-            "mppt": {
-                "enabled": True,
-                "icon": "mdi:battery-charging",
-                "power": "", "voltage": "", "current": "",
-            },
             "consumption": {
                 "enabled": True,
                 "icon": "mdi:van-utility",
@@ -39,35 +34,10 @@ def default_config() -> dict:
                 "icon": "mdi:battery-high",
                 "soc": "", "power": "", "voltage": "", "current": "",
             },
-            "water": {
-                "enabled": True,
-                "icon": "mdi:water",
-                "percent": "", "liters": "",
-            },
-            "heating": {
-                "enabled": True,
-                "icon": "mdi:radiator",
-                "status": "", "target_temp": "", "current_temp": "",
-            },
-            "temperature": {
-                "enabled": True,
-                "icon": "mdi:thermometer",
-                "current_temp": "", "target_temp": "",
-            },
-            "water_heater": {
-                "enabled": True,
-                "icon": "mdi:water-boiler",
-                "status": "", "temperature": "",
-            },
             "inverter": {
                 "enabled": True,
                 "icon": "mdi:power-plug",
                 "status": "", "power": "", "voltage": "", "frequency": "", "current": "",
-            },
-            "ventilation": {
-                "enabled": True,
-                "icon": "mdi:fan",
-                "status": "", "current_temp": "", "target_temp": "", "power": "", "speed": "",
             },
         },
         "daily_counters": [
