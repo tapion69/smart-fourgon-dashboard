@@ -35,3 +35,210 @@
 @media(max-width:760px){
   .hero-photo{background-position:50% center}
 }
+
+/* =========================================================
+   0.2.6 - desktop composition + clean mobile hero
+   ========================================================= */
+.app{
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+}
+.main,.page,.dash-layout,.dash-center,.dash-right{
+  min-width:0;
+}
+.main{
+  width:100%;
+  max-width:100%;
+}
+.page{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.dash-layout{
+  width:100%;
+  max-width:100%;
+  grid-template-columns:minmax(0,1fr) minmax(390px,34%);
+  gap:7px;
+}
+.dash-right{
+  overflow:hidden;
+}
+.category-tabs{
+  min-width:0;
+}
+.category-tabs button{
+  min-width:0;
+  overflow:hidden;
+}
+.category-tabs button span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Photo: van larger and a little more to the right, like the reference */
+.hero-photo{
+  background-size:122% auto;
+  background-position:60% center;
+}
+.dash-layout.no-right .hero-photo{
+  background-size:116% auto;
+  background-position:58% center;
+}
+
+/* Reference-style desktop positions */
+.callout{
+  width:205px;
+}
+.callout.solar{
+  left:22%;
+  top:5%;
+  width:205px;
+}
+.callout.mppt{
+  left:50%;
+  top:5%;
+  width:205px;
+}
+.callout.waterheater{
+  left:3.5%;
+  top:28%;
+  width:205px;
+}
+.callout.heating{
+  left:3.5%;
+  top:46%;
+  width:205px;
+}
+.callout.temp{
+  right:1.2%;
+  top:31%;
+  width:205px;
+}
+.callout.inverter{
+  right:1.2%;
+  top:58%;
+  width:205px;
+}
+.callout.water{
+  left:5%;
+  bottom:6%;
+  width:205px;
+}
+.callout.battery{
+  left:58%;
+  bottom:6%;
+  width:205px;
+}
+
+/* MPPT connector */
+.callout.mppt:after{
+  left:50%;
+  top:100%;
+  width:2px;
+  height:48px;
+}
+.callout.mppt:before{
+  left:calc(50% - 3px);
+  top:calc(100% + 44px);
+}
+
+/* Desktop/tablet uses callouts on the photo */
+.mobile-callouts{
+  display:none;
+}
+
+@media(max-width:1450px){
+  .dash-layout{
+    grid-template-columns:minmax(0,1fr) minmax(360px,35%);
+  }
+  .hero-photo{
+    background-size:120% auto;
+    background-position:59% center;
+  }
+  .callout{
+    width:185px;
+  }
+  .callout.solar,.callout.mppt,.callout.waterheater,.callout.heating,
+  .callout.temp,.callout.inverter,.callout.water,.callout.battery{
+    width:185px;
+  }
+}
+
+@media(max-width:1180px){
+  .dash-layout{
+    grid-template-columns:1fr;
+  }
+  .dash-right{
+    grid-template-columns:1fr 1fr;
+  }
+  .hero-photo{
+    background-size:116% auto;
+    background-position:57% center;
+  }
+}
+
+/* Smartphone: the photo stays fully visible. Cards are BELOW it. */
+@media(max-width:760px){
+  .page{
+    overflow-x:hidden;
+  }
+  .dash-layout{
+    display:block;
+  }
+  .hero-photo,
+  .dash-layout.no-right .hero-photo{
+    width:100%;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:16/9;
+    padding:0!important;
+    background-size:cover!important;
+    background-position:center center!important;
+    background-repeat:no-repeat;
+    overflow:hidden;
+  }
+  .hero-photo .callout-layer{
+    display:none!important;
+  }
+  .mobile-callouts{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+    margin-top:6px;
+  }
+  .mobile-callouts .callout{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    width:auto!important;
+    min-width:0;
+    margin:0!important;
+  }
+  .mobile-callouts .callout:after,
+  .mobile-callouts .callout:before{
+    display:none!important;
+  }
+  .mobile-callouts .call-link small{
+    max-width:100%;
+  }
+  .dash-right{
+    display:grid;
+    grid-template-columns:1fr;
+    margin-top:6px;
+  }
+  .bottom-strip{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:480px){
+  .mobile-callouts{
+    grid-template-columns:1fr;
+  }
+}
