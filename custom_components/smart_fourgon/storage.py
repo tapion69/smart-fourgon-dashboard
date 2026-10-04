@@ -14,8 +14,6 @@ def default_config() -> dict:
             "title": "SMART FOURGON",
             "language": "fr",
             "theme_mode": "auto",
-            "day_image": "",
-            "night_image": "",
         },
         "overview": {
             "solar": {
