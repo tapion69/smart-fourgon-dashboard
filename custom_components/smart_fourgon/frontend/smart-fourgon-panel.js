@@ -495,6 +495,7 @@ Object.entries(defs).forEach(([k,fs])=>{
 
 (this._config.tabs||[]).forEach((t,ti)=>{
   t.enabled=!!(q("tab-"+ti+"-enabled")||{}).checked;
+  t.show_right=!!(q("tab-"+ti+"-right")||{}).checked;
   t.name=(q("tab-"+ti+"-name")||{}).value||t.name;
   t.icon=(q("tab-"+ti+"-icon")||{}).value||"mdi:folder-outline";
   t.image="";
@@ -510,6 +511,14 @@ Object.entries(defs).forEach(([k,fs])=>{
     it.color_on="";
     it.color_off=""
   })
+
+this._config.quick_status=this._config.quick_status||[];
+(this._config.quick_status||[]).forEach((x,qi)=>{
+  x.enabled=!!(q("quick-"+qi+"-enabled")||{}).checked;
+  x.label=(q("quick-"+qi+"-label")||{}).value||"";
+  x.entity=(q("quick-"+qi+"-entity")||{}).value||"";
+  x.icon=(q("quick-"+qi+"-icon")||{}).value||""
+});
 })
 }
 _historyModal(){if(!this._hist)return '<div class="modal" id="hist"></div>';return '<div class="modal open" id="hist"><div class="modal-card"><div class="modal-head"><div><h2>'+this._t("history")+'</h2><small>'+this._e(this._attr(this._hist.entity,"friendly_name")||this._hist.entity)+'</small></div><button id="hist-close">×</button></div><div class="periods">'+[6,24,168,720].map(h=>'<button data-hours="'+h+'" class="'+(this._hours===h?"active":"")+'">'+(h===168?"7j":h===720?"30j":h+"h")+'</button>').join("")+'</div><div id="hist-body">'+(this._hist.html||'<div class="empty">'+this._t("loading")+'</div>')+'</div></div></div>'}
