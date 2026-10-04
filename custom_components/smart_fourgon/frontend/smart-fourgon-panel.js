@@ -702,7 +702,76 @@ this.shadowRoot.querySelectorAll("[data-climate-set]").forEach(b=>b.onclick=()=>
 });
 if(this._page==="settings")this._bindSettings()
 }
-_bindSettings(){const add=this.shadowRoot.getElementById("add-tab");if(add)add.onclick=()=>{this._sync();const n=this.shadowRoot.getElementById("new-tab-name").value.trim();if(!n)return;this._config.tabs.push({id:this._uid(),enabled:true,name:n,icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",items:[]});this._render()};this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{this._sync();const t=this._config.tabs[Number(b.dataset.addItem)];t.items=t.items||[];t.items.push({id:this._uid(),enabled:true,label:"",entity:"",status_entity:"",type:"auto",icon:""});this._render(true)});this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{this._sync();this._config.tabs.splice(Number(b.dataset.delTab),1);this._render(true)});this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{this._sync();const p=b.dataset.delItem.split(":").map(Number);this._config.tabs[p[0]].items.splice(p[1],1);this._render(true)});const save=this.shadowRoot.getElementById("save");if(save)save.onclick=async()=>{this._sync();try{this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});this._editing=false;this._render();this._toast(this._t("saved"))}catch(x){this._toast(String(x),true)}};const reset=this.shadowRoot.getElementById("reset");if(reset)reset.onclick=async()=>{if(!confirm(this._t("reset")+" ?"))return;this._config=await this._ws({type:"smart_fourgon/config/reset"});this._editing=false;this._render()}}
+_bindSettings(){
+const add=this.shadowRoot.getElementById("add-tab");
+if(add)add.onclick=()=>{
+  this._sync();
+  const n=this.shadowRoot.getElementById("new-tab-name").value.trim();
+  if(!n)return;
+  this._config.tabs.push({
+    id:this._uid(),
+    enabled:true,
+    show_right:false,
+    name:n,
+    icon:this.shadowRoot.getElementById("new-tab-icon").value.trim()||"mdi:folder-outline",
+    items:[]
+  });
+  this._render()
+};
+
+this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  const t=this._config.tabs[Number(b.dataset.addItem)];
+  t.items=t.items||[];
+  t.items.push({id:this._uid(),enabled:true,label:"",entity:"",status_entity:"",type:"auto",icon:""});
+  this._render(true)
+});
+
+this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  this._config.tabs.splice(Number(b.dataset.delTab),1);
+  this._render(true)
+});
+
+this.shadowRoot.querySelectorAll("[data-del-item]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  const p=b.dataset.delItem.split(":").map(Number);
+  this._config.tabs[p[0]].items.splice(p[1],1);
+  this._render(true)
+});
+
+const aq=this.shadowRoot.getElementById("add-quick");
+if(aq)aq.onclick=()=>{
+  this._sync();
+  this._config.quick_status=this._config.quick_status||[];
+  this._config.quick_status.push({id:this._uid(),enabled:true,label:"",entity:"",icon:""});
+  this._render(true)
+};
+this.shadowRoot.querySelectorAll("[data-del-quick]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  this._config.quick_status.splice(Number(b.dataset.delQuick),1);
+  this._render(true)
+});
+
+const save=this.shadowRoot.getElementById("save");
+if(save)save.onclick=async()=>{
+  this._sync();
+  try{
+    this._config=await this._ws({type:"smart_fourgon/config/save",config:this._config});
+    this._editing=false;
+    this._render();
+    this._toast(this._t("saved"))
+  }catch(x){this._toast(String(x),true)}
+};
+
+const reset=this.shadowRoot.getElementById("reset");
+if(reset)reset.onclick=async()=>{
+  if(!confirm(this._t("reset")+" ?"))return;
+  this._config=await this._ws({type:"smart_fourgon/config/reset"});
+  this._editing=false;
+  this._render()
+}
+}
 _toast(m,err){const t=this.shadowRoot.getElementById("toast");if(!t)return;t.textContent=m;t.style.background=err?"#672834":"#154e37";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 }
 if(!customElements.get("smart-fourgon-panel"))customElements.define("smart-fourgon-panel",SmartFourgonPanel);
