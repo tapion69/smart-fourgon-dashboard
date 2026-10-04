@@ -315,23 +315,47 @@ _type(i){if(i.type&&i.type!=="auto")return i.type;const d=String(i.entity||"").s
 _entityCard(i){
 const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity);
 const label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity);
+const icon=i.icon||this._attr(i.entity,"icon")||"mdi:circle";
+
+if(type==="climate"){
+  const at=s&&s.attributes?s.attributes:{};
+  const min=Number(at.min_temp??5),max=Number(at.max_temp??35),step=Number(at.target_temp_step??0.5);
+  const current=at.current_temperature;
+  const target=at.temperature;
+  const modes=Array.isArray(at.hvac_modes)?at.hvac_modes:[];
+  const state=s?s.state:"—";
+  const modeSelect=modes.length
+    ?'<select data-climate-mode="'+this._ea(i.entity)+'">'+modes.map(m=>'<option value="'+this._ea(m)+'" '+(String(m)===String(state)?"selected":"")+'>'+this._e(m)+'</option>').join("")+'</select>'
+    :"";
+  return '<article class="entity-card thermostat-card '+(active?"active":"")+'">'
+    +'<div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b><small data-climate-state="'+this._ea(i.entity)+'">'+this._e(state)+'</small></div></div>'
+    +'<div class="thermostat-display">'
+      +'<div><span>'+this._t("currentTemp")+'</span><b data-climate-current="'+this._ea(i.entity)+'">'+this._e(current!=null?current+" °C":"—")+'</b></div>'
+      +'<div><span>'+this._t("target")+'</span><b data-climate-target-value="'+this._ea(i.entity)+'">'+this._e(target!=null?target+" °C":"—")+'</b></div>'
+    +'</div>'
+    +'<div class="thermostat-controls">'
+      +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+(-step)+'" data-min="'+min+'" data-max="'+max+'">−</button>'
+      +'<strong data-climate-target-value="'+this._ea(i.entity)+'">'+this._e(target!=null?target+" °C":"—")+'</strong>'
+      +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
+    +'</div>'
+    +(modeSelect?'<div class="climate-mode"><span>'+this._t("mode")+'</span>'+modeSelect+'</div>':"")
+    +'</article>'
+}
+
 let ctrl="";
 if(type==="switch"||type==="light"||type==="fan"){
   const domain=type==="fan"?"fan":type;
-  ctrl='<div class="control"><button data-toggle="'+this._ea(i.entity)+'" data-domain="'+domain+'" data-live-toggle="'+this._ea(i.entity)+'" class="'+(active?"on":"")+'">'+(active?"ON":"OFF")+'</button></div>'
+  ctrl='<div class="control"><button class="toggle-switch '+(active?"on":"")+'" data-toggle="'+this._ea(i.entity)+'" data-domain="'+domain+'" data-switch-control="'+this._ea(i.entity)+'"><span>'+(active?"ON":"OFF")+'</span><i></i></button></div>'
 }else if(type==="button"){
-  ctrl='<div class="control"><button data-press="'+this._ea(i.entity)+'">'+this._t("button")+'</button></div>'
+  ctrl='<div class="control"><button class="action-button" data-press="'+this._ea(i.entity)+'">'+this._icon("mdi:gesture-tap-button")+'<span>'+this._t("button")+'</span></button></div>'
 }else if(type==="number"){
   const min=s&&s.attributes?s.attributes.min:0,max=s&&s.attributes?s.attributes.max:100,step=s&&s.attributes?s.attributes.step:1;
   ctrl='<div class="control"><input type="number" data-number="'+this._ea(i.entity)+'" value="'+this._ea(this._num(i.entity)??min)+'" min="'+this._ea(min)+'" max="'+this._ea(max)+'" step="'+this._ea(step)+'"><button data-number-set="'+this._ea(i.entity)+'">OK</button></div>'
 }else if(type==="select"){
   const opts=s&&s.attributes&&Array.isArray(s.attributes.options)?s.attributes.options:[];
   ctrl='<div class="control"><select data-select="'+this._ea(i.entity)+'">'+opts.map(o=>'<option '+(String(o)===String(s.state)?"selected":"")+'>'+this._e(o)+'</option>').join("")+'</select></div>'
-}else if(type==="climate"){
-  const at=s&&s.attributes?s.attributes:{},min=at.min_temp??5,max=at.max_temp??35,step=at.target_temp_step??.5;
-  ctrl='<div class="control"><input type="number" data-climate="'+this._ea(i.entity)+'" value="'+this._ea(at.temperature??"")+'" min="'+min+'" max="'+max+'" step="'+step+'"><button data-climate-set="'+this._ea(i.entity)+'">OK</button></div>'
 }
-return '<article class="entity-card '+(active?"active":"")+'"><div class="entity-head">'+this._icon(i.icon||this._attr(i.entity,"icon")||"mdi:circle")+'<div><b>'+this._e(label)+'</b></div></div>'
+return '<article class="entity-card '+(active?"active":"")+'"><div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b></div></div>'
   +'<button class="entity-value" data-history="'+this._ea(i.entity)+'" data-live="'+this._ea(i.entity)+'">'+this._e(val)+'</button>'
   +(i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"")
   +ctrl+'</article>'
