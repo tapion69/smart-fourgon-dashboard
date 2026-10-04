@@ -45,6 +45,7 @@ def default_config() -> dict:
                 "percent": "", "liters": "", "consumed_today": "",
             },
         },
+        "quick_status": [],
         "daily_counters": [
             {"id":"solar_day","label_fr":"Solaire","label_en":"Solar","icon":"mdi:white-balance-sunny","entity":"","enabled":True},
             {"id":"consumption_day","label_fr":"Conso fourgon","label_en":"Van consumption","icon":"mdi:van-utility","entity":"","enabled":True},
