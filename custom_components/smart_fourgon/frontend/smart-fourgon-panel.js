@@ -4,18 +4,37 @@ en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick 
 };
 const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
-["mdi:folder-outline","📁 Dossier"],["mdi:home","🏠 Maison"],["mdi:lightning-bolt","⚡ Énergie"],
-["mdi:solar-panel-large","☀️ Panneaux solaires"],["mdi:battery-charging","⚡ MPPT"],["mdi:battery-high","🔋 Batterie"],
-["mdi:power-plug","🔌 Convertisseur / prise"],["mdi:water","💧 Eau"],["mdi:water-boiler","🚿 Chauffe-eau"],
-["mdi:radiator","♨️ Chauffage"],["mdi:fire","🔥 Chaleur"],["mdi:fan","🌀 Ventilation"],["mdi:air-conditioner","❄️ Climatisation"],
-["mdi:thermometer","🌡️ Température"],["mdi:water-percent","💧 Humidité"],["mdi:pump","⚙️ Pompe"],
-["mdi:engine","🚐 Alternateur / moteur"],["mdi:fridge-outline","🧊 Réfrigérateur"],["mdi:lightbulb","💡 Éclairage"],
-["mdi:usb-port","🔌 USB"],["mdi:television","📺 Télévision"],["mdi:cctv","📷 Caméra"],["mdi:door","🚪 Porte"],
-["mdi:gas-cylinder","🧯 Gaz"],["mdi:shower","🚿 Douche"],["mdi:faucet","🚰 Robinet"],["mdi:gauge","📟 Jauge"],
-["mdi:chart-line","📈 Statistiques"],["mdi:counter","🔢 Compteur"],["mdi:cog","⚙️ Réglages"],["mdi:car-electric","🚗 Véhicule"],
-["mdi:weather-sunny","☀️ Soleil"],["mdi:weather-night","🌙 Nuit"],["mdi:snowflake","❄️ Froid"],["mdi:alert","⚠️ Alerte"],
-["mdi:shield-check","🛡️ Sécurité"],["mdi:information-outline","ℹ️ Information"],["mdi:toggle-switch","🔘 Commande"]
-];
+["mdi:folder-outline","📁 Dossier"],["mdi:home","🏠 Maison"],["mdi:van-utility","🚐 Fourgon"],["mdi:caravan","🏕️ Camping-car / caravane"],
+["mdi:road-variant","🛣️ Route"],["mdi:map-marker-radius","📍 Emplacement"],["mdi:map","🗺️ Carte"],["mdi:compass-outline","🧭 Boussole"],
+["mdi:campfire","🔥 Feu de camp"],["mdi:tent","⛺ Camping"],["mdi:pine-tree","🌲 Nature"],["mdi:weather-sunset","🌅 Coucher de soleil"],
+
+["mdi:lightning-bolt","⚡ Énergie"],["mdi:solar-panel-large","☀️ Panneaux solaires"],["mdi:solar-power","☀️ Solaire"],["mdi:battery-charging","⚡ MPPT"],
+["mdi:battery-high","🔋 Batterie"],["mdi:battery-charging-high","🔋 Batterie en charge"],["mdi:power-plug","🔌 Convertisseur / prise"],
+["mdi:power-socket-eu","🔌 Prise 230 V"],["mdi:usb-port","🔌 USB"],["mdi:ev-station","⚡ Recharge véhicule"],["mdi:engine","🚐 Alternateur / moteur"],
+
+["mdi:water","💧 Eau"],["mdi:water-outline","💧 Réservoir d’eau"],["mdi:cup-water","🥤 Eau potable"],["mdi:water-pump","⚙️ Pompe à eau"],
+["mdi:faucet","🚰 Robinet"],["mdi:shower","🚿 Douche"],["mdi:water-boiler","🚿 Chauffe-eau"],["mdi:water-thermometer","🌡️ Température eau"],
+["mdi:water-percent","💧 Niveau / humidité"],["mdi:waves","🌊 Eaux usées"],
+
+["mdi:radiator","♨️ Chauffage"],["mdi:fire","🔥 Chaleur"],["mdi:thermostat","🌡️ Thermostat"],["mdi:heat-wave","🔥 Air chaud"],
+["mdi:fan","🌀 Ventilation"],["mdi:fan-speed-1","🌀 Ventilation faible"],["mdi:fan-speed-2","🌀 Ventilation moyenne"],["mdi:fan-speed-3","🌀 Ventilation forte"],
+["mdi:air-conditioner","❄️ Climatisation"],["mdi:thermometer","🌡️ Température"],["mdi:weather-windy","💨 Vent"],["mdi:snowflake","❄️ Froid"],
+
+["mdi:fridge-outline","🧊 Réfrigérateur"],["mdi:stove","🍳 Cuisine / réchaud"],["mdi:microwave","🍽️ Micro-ondes"],["mdi:coffee-maker","☕ Cafetière"],
+["mdi:food-fork-drink","🍴 Cuisine / repas"],["mdi:gas-cylinder","🧯 Gaz"],["mdi:bed-queen-outline","🛏️ Lit"],["mdi:toilet","🚽 WC"],
+["mdi:lightbulb","💡 Éclairage"],["mdi:ceiling-light","💡 Plafonnier"],["mdi:led-strip-variant","💡 Ruban LED"],
+
+["mdi:television","📺 Télévision"],["mdi:speaker","🔊 Audio"],["mdi:music","🎵 Musique"],["mdi:wifi","📶 Wi-Fi"],["mdi:router-wireless","📡 Routeur"],
+["mdi:bluetooth","🔵 Bluetooth"],["mdi:access-point","📶 Point d’accès"],
+
+["mdi:cctv","📷 Caméra"],["mdi:motion-sensor","👁️ Détecteur"],["mdi:door","🚪 Porte"],["mdi:door-open","🚪 Porte ouverte"],["mdi:lock","🔒 Serrure"],
+["mdi:shield-check","🛡️ Sécurité"],["mdi:alarm-light","🚨 Alarme"],["mdi:alert","⚠️ Alerte"],
+
+["mdi:bicycle","🚲 Vélo"],["mdi:dog-side","🐕 Chien"],["mdi:car-electric","🚗 Véhicule"],["mdi:gas-station","⛽ Carburant"],
+
+["mdi:gauge","📟 Jauge"],["mdi:chart-line","📈 Statistiques"],["mdi:counter","🔢 Compteur"],["mdi:cog","⚙️ Réglages"],
+["mdi:weather-sunny","☀️ Soleil"],["mdi:weather-night","🌙 Nuit"],["mdi:information-outline","ℹ️ Information"],["mdi:toggle-switch","🔘 Commande"]
+]
 const ACTIVE=new Set(["on","open","opening","active","heat","heating","cool","cooling","fan_only","dry","true","home"]);
 
 class SmartFourgonPanel extends HTMLElement{
@@ -46,7 +65,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=1.0.1",{cache:"no-store"});
+    const r=await fetch(path+"?v=1.0.2",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -148,7 +167,7 @@ const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.1">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.2">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -237,9 +256,14 @@ return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
 _segGauge(kind,entity){
 if(!entity)return "";
 const raw=this._num(entity),pct=Math.max(0,Math.min(100,raw===null?0:raw)),filled=Math.ceil(pct/20);
-return '<div class="seg-gauge '+kind+'-gauge" data-seg-gauge="'+this._ea(entity)+'" aria-label="'+Math.round(pct)+'%">'
+if(kind==="water"){
+  return '<div class="seg-gauge water-gauge" data-seg-gauge="'+this._ea(entity)+'" aria-label="'+Math.round(pct)+'%">'
+    +[1,2,3,4,5].map(n=>'<ha-icon icon="mdi:water" class="'+(n<=filled?"filled":"")+'" data-seg="'+n+'"></ha-icon>').join("")
+  +'</div>'
+}
+return '<div class="seg-gauge battery-gauge" data-seg-gauge="'+this._ea(entity)+'" aria-label="'+Math.round(pct)+'%">'
   +'<div class="seg-body">'+[1,2,3,4,5].map(n=>'<i class="'+(n<=filled?"filled":"")+'" data-seg="'+n+'"></i>').join("")+'</div>'
-  +(kind==="battery"?'<span class="seg-cap"></span>':"")
+  +'<span class="seg-cap"></span>'
 +'</div>'
 }
 _callout(cls,title,icon,primary,rows,key){
@@ -255,9 +279,12 @@ const cfg=(this._config.overview||{})[cfgKey]||{};
 const active=(key==="heating"||key==="waterheater"||key==="vent")?this._active(cfg.status):false;
 const activeEnt=(key==="heating"||key==="waterheater"||key==="vent")?(cfg.status||""):"";
 const gauge=key==="battery"?this._segGauge("battery",cfg.soc):key==="water"?this._segGauge("water",cfg.percent):"";
+const waterPct=(key==="water"&&cfg.percent)
+  ?'<button class="water-percent-value" data-history="'+this._ea(cfg.percent)+'" data-live="'+this._ea(cfg.percent)+'">'+this._e(this._fmt(cfg.percent))+'</button>'
+  :"";
 return '<article class="callout '+cls+' '+(active?"on":"")+'" '+(activeEnt?'data-live-active="'+this._ea(activeEnt)+'"':"")+'>'
   +'<div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'
-  +p+gauge+r
+  +p+gauge+waterPct+r
 +'</article>'
 }
 _rightTabMenu(){
@@ -297,9 +324,17 @@ return list.filter(x=>x.enabled!==false&&x.entity)
 }
 _dailyCounters(counters){
 if(!counters.length)return "";
+const cls=id=>({
+  solar_day:"solar",
+  consumption_day:"consumption",
+  battery_charge_day:"charge",
+  battery_discharge_day:"discharge",
+  alternator_day:"alternator",
+  water_day:"water"
+}[id]||"default");
 return '<section class="side-card counters-card daily-only"><h3>'+this._icon("mdi:counter")+'<span>'+this._t("daily")+'</span></h3>'
   +'<div class="counter-grid">'
-  +counters.map(x=>'<button class="counter" data-history="'+this._ea(x.entity)+'">'
+  +counters.map(x=>'<button class="counter counter-'+cls(x.id)+'" data-history="'+this._ea(x.entity)+'">'
     +this._icon(x.icon||"mdi:counter")
     +'<span>'+this._e(this._config.general.language==="en"?(x.label_en||x.label_fr):(x.label_fr||x.label_en))+'</span>'
     +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
@@ -426,7 +461,7 @@ const defs=[
 const sections=defs.map(d=>this._sectionEditor(d[0],d[1],d[3],d[2])).join("");
 
 const counters=(this._config.daily_counters||[]).map((x,i)=>
-  '<div class="item-editor"><div class="item-top"><b>#'+(i+1)+'</b></div><div class="grid">'
+  '<div class="item-editor counter-editor"><div class="item-top"><b>#'+(i+1)+'</b></div><div class="counter-fields">'
   +'<label class="field check-field"><span>'+this._t("section")+'</span><input type="checkbox" id="counter-'+i+'-enabled" '+(x.enabled!==false?"checked":"")+'></label>'
   +this._field("counter-"+i+"-fr","Nom FR",x.label_fr||x.id)
   +this._field("counter-"+i+"-en","Name EN",x.label_en||x.label_fr||x.id)
@@ -469,7 +504,7 @@ return '<div class="settings">'
     +this._e(this._config.general.language==="en"
       ?"Only checked counters with an entity are displayed on Overview. Battery charge/discharge counters can use the entities entered in the Battery section automatically."
       :"Seuls les compteurs cochés avec une entité apparaissent dans Vue générale. Les compteurs Charge batt. et Décharge batt. peuvent reprendre automatiquement les entités renseignées dans la section Batterie.")
-    +'</p><div class="grid">'+counters+'</div></section>'
+    +'</p><div class="daily-settings-grid">'+counters+'</div></section>'
 
   +'<div class="actions"><button class="btn danger" id="reset">'+this._t("reset")+'</button><button class="btn" id="save">'+this._t("save")+'</button></div>'
   +this._datalist()
