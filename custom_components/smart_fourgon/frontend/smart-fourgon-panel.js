@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.6.0",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.6.1",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.6.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.6.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
