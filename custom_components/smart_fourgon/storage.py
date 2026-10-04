@@ -26,13 +26,15 @@ def default_config() -> dict:
             "consumption": {
                 "enabled": True,
                 "icon": "mdi:van-utility",
-                "power": "", "energy_today": "",
+                "power": "", "energy_today": "", "energy_month": "", "energy_year": "",
             },
             "battery": {
                 "enabled": True,
                 "icon": "mdi:battery-high",
                 "soc": "", "power": "", "voltage": "", "current": "",
-                "temperature": "", "charge_today": "", "discharge_today": "",
+                "temperature": "",
+                "charge_today": "", "charge_month": "", "charge_year": "",
+                "discharge_today": "", "discharge_month": "", "discharge_year": "",
             },
             "inverter": {
                 "enabled": True,
@@ -43,7 +45,8 @@ def default_config() -> dict:
             "water": {
                 "enabled": True,
                 "icon": "mdi:water",
-                "percent": "", "liters": "", "consumed_today": "",
+                "percent": "", "liters": "",
+                "consumed_today": "", "consumed_month": "", "consumed_year": "",
             },
         },
         "quick_status": [],
