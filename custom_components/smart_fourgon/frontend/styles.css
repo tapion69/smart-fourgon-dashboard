@@ -1181,3 +1181,135 @@ summary{cursor:pointer;padding:9px;font-weight:800}
 .quick-editor{
   border-color:rgba(37,216,255,.20);
 }
+
+/* =========================================================
+   1.0.1 - overview readability and compact quick status
+   ========================================================= */
+
+/* Larger title/icon on the main picture */
+@media(min-width:761px){
+  .hero-photo .call-head{
+    gap:7px;
+    margin-bottom:3px;
+  }
+  .hero-photo .call-head ha-icon{
+    --mdc-icon-size:21px;
+  }
+  .hero-photo .call-head span{
+    font-size:12px;
+    font-weight:1000;
+  }
+  .hero-photo .call-row{
+    font-size:10.5px;
+    line-height:1.15;
+  }
+}
+
+/* Fresh water: tank/cistern silhouette, filled from the bottom in 20% steps */
+.water-gauge{
+  margin:6px 0 3px;
+  width:62px;
+  justify-content:center;
+}
+.water-gauge .seg-body{
+  position:relative;
+  width:54px;
+  height:62px;
+  box-sizing:border-box;
+  padding:7px 6px 6px;
+  border:3px solid currentColor;
+  border-radius:15px 15px 9px 9px;
+  display:flex;
+  flex-direction:column-reverse;
+  gap:3px;
+  background:rgba(2,31,46,.42);
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.05),
+    0 2px 5px rgba(0,0,0,.55);
+}
+.water-gauge .seg-body:before{
+  content:"";
+  position:absolute;
+  top:-10px;
+  left:16px;
+  width:17px;
+  height:8px;
+  border:3px solid currentColor;
+  border-bottom:0;
+  border-radius:5px 5px 0 0;
+  background:rgba(2,31,46,.75);
+}
+.water-gauge .seg-body:after{
+  content:"";
+  position:absolute;
+  left:-6px;
+  right:-6px;
+  bottom:8px;
+  height:4px;
+  border-left:4px solid currentColor;
+  border-right:4px solid currentColor;
+  opacity:.9;
+}
+.water-gauge .seg-body i{
+  width:100%;
+  min-height:0;
+  flex:1 1 0;
+  border:0;
+  border-radius:3px;
+  background:rgba(39,217,255,.08);
+  box-shadow:inset 0 0 0 1px rgba(201,248,255,.20);
+}
+.water-gauge .seg-body i.filled{
+  background:linear-gradient(180deg,#49e6ff,#13bfe8);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 0 6px rgba(39,217,255,.40);
+}
+
+/* Quick status: compact square tiles like Smart Voltronic */
+.quick-status{
+  padding:7px 9px 8px;
+}
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(82px,92px));
+  justify-content:start;
+  align-items:stretch;
+  gap:6px;
+}
+.quick-grid button{
+  width:100%;
+  min-width:0;
+  height:68px;
+  min-height:68px;
+  padding:5px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  text-align:center;
+  border:1px solid rgba(120,200,255,.18);
+  border-radius:6px;
+  background:rgba(3,18,29,.48);
+}
+.quick-grid button ha-icon{
+  --mdc-icon-size:18px;
+  color:var(--cyan);
+}
+.quick-grid button span{
+  width:100%;
+  color:#a9bfcc;
+  font-size:7px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.quick-grid button b{
+  width:100%;
+  font-size:11px;
+  line-height:1.05;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
