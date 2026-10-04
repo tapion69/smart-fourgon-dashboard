@@ -177,16 +177,26 @@ const callouts=[
 ].filter(Boolean);
 
 const counters=this._resolvedDailyCounters(o);
-const rightContent=this._dailyCounters(counters);
+const rightContent=this._rightTabMenu()+this._dailyCounters(counters);
+const quick=this._quickStatus();
 
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
-  +'<div class="dash-center">'
+  +'<div class="dash-center '+(quick?"has-quick":"")+'">'
     +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
       +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
     +'</section>'
     +(callouts.length?'<div class="mobile-callouts">'+callouts.join("")+'</div>':'')
+    +quick
   +'</div>'
   +(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
++'</div>'
+}
+_segGauge(kind,entity){
+if(!entity)return "";
+const raw=this._num(entity),pct=Math.max(0,Math.min(100,raw===null?0:raw)),filled=Math.ceil(pct/20);
+return '<div class="seg-gauge '+kind+'-gauge" data-seg-gauge="'+this._ea(entity)+'" aria-label="'+Math.round(pct)+'%">'
+  +'<div class="seg-body">'+[1,2,3,4,5].map(n=>'<i class="'+(n<=filled?"filled":"")+'" data-seg="'+n+'"></i>').join("")+'</div>'
+  +(kind==="battery"?'<span class="seg-cap"></span>':"")
 +'</div>'
 }
 _callout(cls,title,icon,primary,rows,key){
@@ -198,14 +208,34 @@ const r=rows.filter(x=>x[1]).map(x=>
   '<button class="call-row" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'">'+this._e(this._fmt(x[1]))+'</b></button>'
 ).join("");
 const cfgKey=key==="waterheater"?"water_heater":key;
-const active=(key==="heating"||key==="waterheater"||key==="vent")
-  ?this._active((this._config.overview[cfgKey]||{}).status)
-  :false;
-const activeEnt=(key==="heating"||key==="waterheater"||key==="vent")?((this._config.overview[cfgKey]||{}).status||""):"";
+const cfg=(this._config.overview||{})[cfgKey]||{};
+const active=(key==="heating"||key==="waterheater"||key==="vent")?this._active(cfg.status):false;
+const activeEnt=(key==="heating"||key==="waterheater"||key==="vent")?(cfg.status||""):"";
+const gauge=key==="battery"?this._segGauge("battery",cfg.soc):key==="water"?this._segGauge("water",cfg.percent):"";
 return '<article class="callout '+cls+' '+(active?"on":"")+'" '+(activeEnt?'data-live-active="'+this._ea(activeEnt)+'"':"")+'>'
   +'<div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'
-  +p+r
+  +p+gauge+r
 +'</article>'
+}
+_rightTabMenu(){
+const tabs=(this._config.tabs||[]).filter(t=>t.enabled!==false&&t.show_right===true);
+if(!tabs.length)return "";
+return '<section class="right-tab-menu">'
+  +tabs.map(t=>'<button data-page="tab:'+this._ea(t.id)+'" class="'+(this._page==="tab:"+t.id?"active":"")+'">'
+    +this._icon(t.icon||"mdi:folder-outline")+'<span>'+this._e(t.name)+'</span>'
+  +'</button>').join("")
++'</section>'
+}
+_quickStatus(){
+const items=(this._config.quick_status||[]).filter(x=>x.enabled!==false&&x.entity);
+if(!items.length)return "";
+return '<section class="quick-status"><h3>'+this._icon("mdi:view-grid-outline")+'<span>'+this._t("quick")+'</span></h3><div class="quick-grid">'
+  +items.map(x=>'<button data-history="'+this._ea(x.entity)+'">'
+    +this._icon(x.icon||this._attr(x.entity,"icon")||"mdi:circle")
+    +'<span>'+this._e(x.label||this._attr(x.entity,"friendly_name")||x.entity)+'</span>'
+    +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
+  +'</button>').join("")
++'</div></section>'
 }
 _resolvedDailyCounters(o){
 const list=(this._config.daily_counters||[]).map(x=>Object.assign({},x));
