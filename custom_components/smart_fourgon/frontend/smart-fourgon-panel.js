@@ -353,12 +353,13 @@ _entityCard(i){
 const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity);
 const label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity);
 const icon=i.icon||this._attr(i.entity,"icon")||"mdi:circle";
+const head='<div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b></div></div>';
+const status=i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"";
 
 if(type==="climate"){
   const at=s&&s.attributes?s.attributes:{};
   const min=Number(at.min_temp??5),max=Number(at.max_temp??35),step=Number(at.target_temp_step??0.5);
-  const current=at.current_temperature;
-  const target=at.temperature;
+  const current=at.current_temperature,target=at.temperature;
   const modes=Array.isArray(at.hvac_modes)?at.hvac_modes:[];
   const state=s?s.state:"—";
   const modeSelect=modes.length
@@ -376,26 +377,33 @@ if(type==="climate"){
       +'<button data-climate-step="'+this._ea(i.entity)+'" data-delta="'+step+'" data-min="'+min+'" data-max="'+max+'">+</button>'
     +'</div>'
     +(modeSelect?'<div class="climate-mode"><span>'+this._t("mode")+'</span>'+modeSelect+'</div>':"")
-    +'</article>'
+    +status+'</article>'
+}
+
+if(type==="button"){
+  return '<article class="entity-card action-card">'+head
+    +'<div class="control action-only"><button class="action-button" data-press="'+this._ea(i.entity)+'">'+this._icon("mdi:gesture-tap-button")+'<span>'+this._e(label)+'</span></button></div>'
+    +status+'</article>'
+}
+
+if(type==="switch"||type==="light"||type==="fan"){
+  const domain=type==="fan"?"fan":type;
+  return '<article class="entity-card switch-card '+(active?"active":"")+'">'+head
+    +'<div class="control switch-only"><button class="toggle-switch '+(active?"on":"")+'" data-toggle="'+this._ea(i.entity)+'" data-domain="'+domain+'" data-switch-control="'+this._ea(i.entity)+'"><span>'+(active?"ON":"OFF")+'</span><i></i></button></div>'
+    +status+'</article>'
 }
 
 let ctrl="";
-if(type==="switch"||type==="light"||type==="fan"){
-  const domain=type==="fan"?"fan":type;
-  ctrl='<div class="control"><button class="toggle-switch '+(active?"on":"")+'" data-toggle="'+this._ea(i.entity)+'" data-domain="'+domain+'" data-switch-control="'+this._ea(i.entity)+'"><span>'+(active?"ON":"OFF")+'</span><i></i></button></div>'
-}else if(type==="button"){
-  ctrl='<div class="control"><button class="action-button" data-press="'+this._ea(i.entity)+'">'+this._icon("mdi:gesture-tap-button")+'<span>'+this._t("button")+'</span></button></div>'
-}else if(type==="number"){
+if(type==="number"){
   const min=s&&s.attributes?s.attributes.min:0,max=s&&s.attributes?s.attributes.max:100,step=s&&s.attributes?s.attributes.step:1;
   ctrl='<div class="control"><input type="number" data-number="'+this._ea(i.entity)+'" value="'+this._ea(this._num(i.entity)??min)+'" min="'+this._ea(min)+'" max="'+this._ea(max)+'" step="'+this._ea(step)+'"><button data-number-set="'+this._ea(i.entity)+'">OK</button></div>'
 }else if(type==="select"){
   const opts=s&&s.attributes&&Array.isArray(s.attributes.options)?s.attributes.options:[];
   ctrl='<div class="control"><select data-select="'+this._ea(i.entity)+'">'+opts.map(o=>'<option '+(String(o)===String(s.state)?"selected":"")+'>'+this._e(o)+'</option>').join("")+'</select></div>'
 }
-return '<article class="entity-card '+(active?"active":"")+'"><div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b></div></div>'
+return '<article class="entity-card '+(active?"active":"")+'">'+head
   +'<button class="entity-value" data-history="'+this._ea(i.entity)+'" data-live="'+this._ea(i.entity)+'">'+this._e(val)+'</button>'
-  +(i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"")
-  +ctrl+'</article>'
+  +status+ctrl+'</article>'
 }
 _field(id,l,v,p){return '<label class="field"><span>'+this._e(l)+'</span><input id="'+id+'" value="'+this._ea(v||"")+'" placeholder="'+this._ea(p||"")+'"></label>'}
 _settings(){
