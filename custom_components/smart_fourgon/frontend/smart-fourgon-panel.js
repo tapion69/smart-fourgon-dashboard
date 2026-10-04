@@ -385,6 +385,7 @@ const counters=(this._config.daily_counters||[]).map((x,i)=>
 ).join("");
 
 const tabs=(this._config.tabs||[]).map((t,i)=>this._tabEditor(t,i)).join("");
+const quick=(this._config.quick_status||[]).map((x,i)=>this._quickEditor(x,i)).join("");
 
 return '<div class="settings">'
   +'<section class="settings-card"><h2>'+this._t("general")+'</h2><div class="grid">'
@@ -401,10 +402,16 @@ return '<div class="settings">'
 
   +'<section class="settings-card custom-tabs-settings"><h2>'+this._t("tabs")+'</h2><p class="hint">'
     +this._e(this._config.general.language==="en"
-      ?"Create any menu you want. Its entities are only visible inside that menu page, never underneath the menu in the left sidebar."
-      :"Crée les menus que tu veux. Les entités configurées sont visibles uniquement dans la page de cet onglet, jamais sous l’onglet dans le menu de gauche.")
+      ?"Create any menu you want. Its entities are only visible inside that menu page. For each tab you can also choose whether it appears in the menu to the right of the main image."
+      :"Crée les menus que tu veux. Les entités configurées sont visibles uniquement dans la page de cet onglet. Pour chaque onglet tu peux aussi choisir s’il apparaît dans le menu à droite de l’image principale.")
     +'</p><div class="grid">'+this._field("new-tab-name",this._t("tabName"),"")+this._iconSelect("new-tab-icon",this._t("icon"),"mdi:folder-outline")+'</div>'
     +'<p><button class="btn" id="add-tab">'+this._t("addTab")+'</button></p>'+tabs+'</section>'
+
+  +'<section class="settings-card quick-settings"><h2>'+this._t("quick")+'</h2><p class="hint">'
+    +this._e(this._config.general.language==="en"
+      ?"Build the Quick status strip shown under the main image. Add only the entities you want, with your own label and icon."
+      :"Configure entièrement la bande État rapide affichée sous l’image principale. Ajoute uniquement les entités que tu veux, avec ton propre nom et ton icône.")
+    +'</p><p><button class="btn" id="add-quick">'+this._t("addQuick")+'</button></p>'+quick+'</section>'
 
   +'<section class="settings-card"><h2>'+this._t("daily")+'</h2><p class="hint">'
     +this._e(this._config.general.language==="en"
