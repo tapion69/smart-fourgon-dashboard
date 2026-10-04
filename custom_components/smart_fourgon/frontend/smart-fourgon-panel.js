@@ -65,7 +65,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=1.0.3",{cache:"no-store"});
+    const r=await fetch(path+"?v=1.0.4",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -180,7 +180,7 @@ const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.3">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.4">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -252,7 +252,8 @@ const callouts=[
 ].filter(Boolean);
 
 const counters=this._resolvedDailyCounters(o);
-const rightContent=this._rightTabMenu()+this._dailyCounters(counters);
+const extraCounters=counters.filter(x=>!["solar_day","consumption_day","battery_charge_day","battery_discharge_day","water_day"].includes(x.id));
+const rightContent=this._rightTabMenu()+this._rightEnergySummary(o)+this._dailyCounters(extraCounters);
 const quick=this._quickStatus();
 
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
@@ -319,6 +320,58 @@ return '<section class="quick-status"><h3>'+this._icon("mdi:view-grid-outline")+
     +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
   +'</button>').join("")
 +'</div></section>'
+}
+_summaryCard(cls,title,icon,primary,rows){
+const vals=rows.filter(x=>x[1]);
+if(!primary&&!vals.length)return "";
+return '<section class="energy-summary summary-'+cls+'">'
+  +'<h3>'+this._icon(icon||"mdi:counter")+'<span>'+this._e(title)+'</span></h3>'
+  +'<div class="energy-summary-body">'
+    +(primary?'<button class="summary-primary" data-history="'+this._ea(primary)+'" data-live="'+this._ea(primary)+'">'+this._e(this._fmt(primary))+'</button>':"")
+    +'<div class="summary-rows">'+vals.map(x=>'<button data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'">'+this._e(this._fmt(x[1]))+'</b></button>').join("")+'</div>'
+  +'</div>'
++'</section>'
+}
+_rightEnergySummary(o){
+const fr=this._config.general.language!=="en";
+const s=o.solar||{},cn=o.consumption||{},b=o.battery||{},w=o.water||{};
+const cards=[];
+cards.push(this._summaryCard(
+  "solar",
+  fr?"Production solaire":"Solar production",
+  s.icon||"mdi:solar-panel-large",
+  s.power,
+  [[fr?"Aujourd’hui":"Today",s.energy_today],[fr?"Ce mois":"This month",s.energy_month],[fr?"Cette année":"This year",s.energy_year]]
+));
+cards.push(this._summaryCard(
+  "consumption",
+  fr?"Consommation fourgon":"Van consumption",
+  cn.icon||"mdi:van-utility",
+  cn.power,
+  [[fr?"Aujourd’hui":"Today",cn.energy_today],[fr?"Ce mois":"This month",cn.energy_month],[fr?"Cette année":"This year",cn.energy_year]]
+));
+cards.push(this._summaryCard(
+  "charge",
+  fr?"Charge batterie":"Battery charge",
+  "mdi:battery-charging-high",
+  b.charge_today,
+  [[fr?"Ce mois":"This month",b.charge_month],[fr?"Cette année":"This year",b.charge_year]]
+));
+cards.push(this._summaryCard(
+  "discharge",
+  fr?"Décharge batterie":"Battery discharge",
+  "mdi:battery-minus",
+  b.discharge_today,
+  [[fr?"Ce mois":"This month",b.discharge_month],[fr?"Cette année":"This year",b.discharge_year]]
+));
+cards.push(this._summaryCard(
+  "water",
+  fr?"Eau consommée":"Water used",
+  "mdi:water-minus",
+  w.consumed_today,
+  [[fr?"Ce mois":"This month",w.consumed_month],[fr?"Cette année":"This year",w.consumed_year]]
+));
+return cards.filter(Boolean).join("")
 }
 _resolvedDailyCounters(o){
 const list=(this._config.daily_counters||[]).map(x=>Object.assign({},x));
@@ -531,10 +584,10 @@ const g=this._config.general||{},o=this._config.overview||{};
 
 const defs=[
   ["solar",this._t("solar"),["power","voltage","current","energy_today","energy_month","energy_year"],o.solar||{}],
-  ["consumption",this._t("vanConsumption"),["power","energy_today"],o.consumption||{}],
-  ["battery",this._t("battery"),["soc","power","voltage","current","temperature","charge_today","discharge_today"],o.battery||{}],
+  ["consumption",this._t("vanConsumption"),["power","energy_today","energy_month","energy_year"],o.consumption||{}],
+  ["battery",this._t("battery"),["soc","power","voltage","current","temperature","charge_today","charge_month","charge_year","discharge_today","discharge_month","discharge_year"],o.battery||{}],
   ["inverter",this._t("inverter"),["status","power","voltage","frequency","current","temperature"],o.inverter||{}],
-  ["water",this._t("water"),["percent","liters","consumed_today"],o.water||{}]
+  ["water",this._t("water"),["percent","liters","consumed_today","consumed_month","consumed_year"],o.water||{}]
 ];
 const sections=defs.map(d=>this._sectionEditor(d[0],d[1],d[3],d[2])).join("");
 
@@ -595,7 +648,7 @@ const opts=SF_ICONS.slice();
 if(value&&!opts.some(x=>x[0]===value))opts.unshift([value,"★ "+value]);
 return this._select(id,l,opts,value)
 }
-_sectionEditor(k,title,c,fields){const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:"Charge batterie aujourd’hui",discharge_today:"Décharge batterie aujourd’hui",consumed_today:"Eau consommée aujourd’hui"};return '<details class="section-editor" open><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
+_sectionEditor(k,title,c,fields){const en=this._config.general.language==="en";const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:en?"Battery charge today":"Charge batterie aujourd’hui",charge_month:en?"Battery charge this month":"Charge batterie ce mois",charge_year:en?"Battery charge this year":"Charge batterie cette année",discharge_today:en?"Battery discharge today":"Décharge batterie aujourd’hui",discharge_month:en?"Battery discharge this month":"Décharge batterie ce mois",discharge_year:en?"Battery discharge this year":"Décharge batterie cette année",consumed_today:en?"Water used today":"Eau consommée aujourd’hui",consumed_month:en?"Water used this month":"Eau consommée ce mois",consumed_year:en?"Water used this year":"Eau consommée cette année"};return '<details class="section-editor" open><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
 _tabEditor(t,ti){
 const items=(t.items||[]).map((it,ii)=>this._itemEditor(ti,ii,it)).join("");
 return '<details class="tab-editor" open><summary>'+this._icon(t.icon||"mdi:folder-outline")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'
@@ -638,10 +691,10 @@ this._config.general=g;
 
 const defs={
   solar:["power","voltage","current","energy_today","energy_month","energy_year"],
-  consumption:["power","energy_today"],
-  battery:["soc","power","voltage","current","temperature","charge_today","discharge_today"],
+  consumption:["power","energy_today","energy_month","energy_year"],
+  battery:["soc","power","voltage","current","temperature","charge_today","charge_month","charge_year","discharge_today","discharge_month","discharge_year"],
   inverter:["status","power","voltage","frequency","current","temperature"],
-  water:["percent","liters","consumed_today"]
+  water:["percent","liters","consumed_today","consumed_month","consumed_year"]
 };
 this._config.overview=this._config.overview||{};
 Object.entries(defs).forEach(([k,fs])=>{
@@ -923,7 +976,13 @@ this.shadowRoot.querySelectorAll("[data-add-item]").forEach(b=>b.onclick=()=>{
 
 this.shadowRoot.querySelectorAll("[data-del-tab]").forEach(b=>b.onclick=()=>{
   this._sync();
-  this._config.tabs.splice(Number(b.dataset.delTab),1);
+  const idx=Number(b.dataset.delTab);
+  const tab=this._config.tabs[idx];
+  if(!tab)return;
+  const fr=this._config.general.language!=="en";
+  const msg=fr?'Supprimer l’onglet "'+tab.name+'" ?\nCette action supprimera aussi toutes les entités configurées dans cet onglet.':'Delete tab "'+tab.name+'"?\nThis will also delete all entities configured in this tab.';
+  if(!confirm(msg))return;
+  this._config.tabs.splice(idx,1);
   this._render(true)
 });
 
