@@ -535,19 +535,15 @@ Object.entries(defs).forEach(([k,fs])=>{
   t.show_right=!!(q("tab-"+ti+"-right")||{}).checked;
   t.name=(q("tab-"+ti+"-name")||{}).value||t.name;
   t.icon=(q("tab-"+ti+"-icon")||{}).value||"mdi:folder-outline";
-  t.image="";
   (t.items||[]).forEach((it,ii)=>{
     it.enabled=!!(q("it-"+ti+"-"+ii+"-enabled")||{}).checked;
     it.label=(q("it-"+ti+"-"+ii+"-label")||{}).value||"";
     it.entity=(q("it-"+ti+"-"+ii+"-entity")||{}).value||"";
     it.status_entity=(q("it-"+ti+"-"+ii+"-status")||{}).value||"";
     it.type=(q("it-"+ti+"-"+ii+"-type")||{}).value||"auto";
-    it.icon=(q("it-"+ti+"-"+ii+"-icon")||{}).value||"";
-    it.image="";
-    it.unit_override="";
-    it.color_on="";
-    it.color_off=""
+    it.icon=(q("it-"+ti+"-"+ii+"-icon")||{}).value||""
   })
+});
 
 this._config.quick_status=this._config.quick_status||[];
 (this._config.quick_status||[]).forEach((x,qi)=>{
@@ -555,7 +551,6 @@ this._config.quick_status=this._config.quick_status||[];
   x.label=(q("quick-"+qi+"-label")||{}).value||"";
   x.entity=(q("quick-"+qi+"-entity")||{}).value||"";
   x.icon=(q("quick-"+qi+"-icon")||{}).value||""
-});
 })
 }
 _historyModal(){if(!this._hist)return '<div class="modal" id="hist"></div>';return '<div class="modal open" id="hist"><div class="modal-card"><div class="modal-head"><div><h2>'+this._t("history")+'</h2><small>'+this._e(this._attr(this._hist.entity,"friendly_name")||this._hist.entity)+'</small></div><button id="hist-close">×</button></div><div class="periods">'+[6,24,168,720].map(h=>'<button data-hours="'+h+'" class="'+(this._hours===h?"active":"")+'">'+(h===168?"7j":h===720?"30j":h+"h")+'</button>').join("")+'</div><div id="hist-body">'+(this._hist.html||'<div class="empty">'+this._t("loading")+'</div>')+'</div></div></div>'}
