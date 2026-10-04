@@ -1,8 +1,8 @@
 :host{
   display:block;
   width:100%;
-  height:100%;
-  min-height:0;
+  height:100dvh;
+  min-height:100dvh;
   overflow:hidden;
   --bg:#06111f;
   --nav:#031728;
@@ -22,8 +22,8 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 .app{
   width:100%;
-  height:100%;
-  min-height:0;
+  height:100dvh;
+  min-height:100dvh;
   display:grid;
   grid-template-columns:218px minmax(0,1fr);
   background:var(--bg);
@@ -187,7 +187,7 @@ button{cursor:pointer}
   min-width:0;
   min-height:0;
   width:100%;
-  height:100%;
+  height:calc(100dvh - 66px);
   padding:5px 7px 7px;
   overflow:hidden;
   overflow-anchor:none;
@@ -227,7 +227,7 @@ button{cursor:pointer}
 .hero-photo{
   position:relative;
   min-width:0;
-  min-height:0;
+  min-height:420px;
   width:100%;
   height:100%;
   overflow:hidden;
@@ -381,14 +381,16 @@ button{cursor:pointer}
    ========================= */
 .bottom-strip{
   min-width:0;
+  height:108px;
   display:grid;
   grid-template-columns:1.15fr 1fr 1fr;
   gap:6px;
 }
 .bottom-card{
   min-width:0;
-  min-height:104px;
-  max-height:118px;
+  height:108px;
+  min-height:108px;
+  max-height:108px;
   padding:7px;
   overflow:hidden;
 }
@@ -646,7 +648,9 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   .counter-grid{grid-template-columns:1fr}
 }
 @media(max-width:1020px){
-  .page{overflow:auto}
+  :host{height:auto;min-height:100vh}
+  .app{height:auto;min-height:100vh}
+  .page{height:auto;overflow:auto}
   .dash-layout{
     height:auto;
     min-height:100%;
@@ -658,6 +662,7 @@ summary{cursor:pointer;padding:9px;font-weight:800}
   }
   .hero-photo{
     height:auto;
+    min-height:0;
     aspect-ratio:16/9;
   }
   .dash-right{height:auto;margin-top:6px}
