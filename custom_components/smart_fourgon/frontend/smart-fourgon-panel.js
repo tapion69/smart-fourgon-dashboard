@@ -1,6 +1,6 @@
 const SF_T={
-fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode"},
-en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode"}
+fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode",locationEntity:"Entité localisation"},
+en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode",locationEntity:"Location entity"}
 };
 const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=1.0.0",{cache:"no-store"});
+    const r=await fetch(path+"?v=1.0.1",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -118,6 +118,11 @@ this.shadowRoot.querySelectorAll("[data-climate-mode]").forEach(el=>{
   if(s&&el.value!==String(s.state))el.value=String(s.state)
 });
 
+this.shadowRoot.querySelectorAll("[data-location-live]").forEach(el=>{
+  const ent=el.dataset.locationLive;
+  if(ent)el.textContent=this._fmt(ent)
+});
+
 this.shadowRoot.querySelectorAll("[data-status-dot]").forEach(el=>{
   const ent=el.dataset.statusDot;
   el.classList.toggle("off",!this._state(ent))
@@ -137,11 +142,13 @@ if(!this._loaded)return;
 const oldPage=this.shadowRoot.querySelector(".page");
 const oldTop=preserveScroll&&oldPage?oldPage.scrollTop:0;
 const oldLeft=preserveScroll&&oldPage?oldPage.scrollLeft:0;
-const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMART FOURGON");
+const night=this._night(),g=this._config.general||{},rawTitle=g.title||"SMART FOURGON";
+const locEntity=g.location_entity||"";
+const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.1">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -155,7 +162,7 @@ this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.cs
 +'<header class="topbar">'
 +'<div class="top-left">'
 +'<div class="weather-box">'+this._icon(night?"mdi:weather-night":"mdi:weather-partly-cloudy")+'<div><b>'+this._e(night?this._t("night"):this._t("day"))+'</b><small>'+this._e(this._pageTitle())+'</small></div></div>'
-+'<div class="location-box">'+this._icon("mdi:map-marker")+'<span>'+title+'</span></div>'
++'<div class="location-box">'+this._icon("mdi:map-marker")+'<span '+(locEntity?'data-location-live="'+this._ea(locEntity)+'"':'')+'>'+this._e(locationText)+'</span></div>'
 +'</div>'
 +'<div class="top-actions">'
 +'<button class="square-chip" data-page="overview" title="'+this._t("overview")+'">'+this._icon("mdi:home")+'</button>'
@@ -190,7 +197,6 @@ const s=o.solar||{},b=o.battery||{},i=o.inverter||{},cn=o.consumption||{},w=o.wa
 
 const waterPrimary=w.liters||w.percent;
 const waterRows=[];
-if(w.liters&&w.percent)waterRows.push(["%",w.percent]);
 
 const callouts=[
   s.enabled!==false?this._callout("solar",this._t("solar"),s.icon,s.power,[
@@ -437,6 +443,7 @@ return '<div class="settings">'
     +this._field("sf-title",this._t("title"),g.title)
     +this._select("sf-lang",this._t("language"),[["fr","Français"],["en","English"]],g.language||"fr")
     +this._select("sf-theme",this._t("theme"),[["auto",this._t("auto")],["day",this._t("day")],["night",this._t("night")]],g.theme_mode||"auto")
+    +'<label class="field"><span>'+this._t("locationEntity")+'</span><input list="sf-entities" id="sf-location-entity" value="'+this._ea(g.location_entity||"")+'" placeholder="sensor..."></label>'
   +'</div></section>'
 
   +'<section class="settings-card"><h2>'+this._t("base")+'</h2><p class="hint">'
@@ -511,6 +518,7 @@ const q=id=>this.shadowRoot.getElementById(id),g=this._config.general||{};
 g.title=(q("sf-title")||{}).value||"SMART FOURGON";
 g.language=(q("sf-lang")||{}).value||"fr";
 g.theme_mode=(q("sf-theme")||{}).value||"auto";
+g.location_entity=(q("sf-location-entity")||{}).value||"";
 g.day_image="";
 g.night_image="";
 this._config.general=g;
