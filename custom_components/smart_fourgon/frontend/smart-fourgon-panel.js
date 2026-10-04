@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.7.0",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.8.0",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.7.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.8.0">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -126,7 +126,7 @@ this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.cs
 +'<div class="date-box">'+this._icon("mdi:calendar-month")+'<span>'+new Date().toLocaleDateString(this._lang(),{weekday:"short",day:"2-digit",month:"long",year:"numeric"})+'</span></div>'
 +'<div class="clock"><b>'+new Date().toLocaleTimeString(this._lang(),{hour:"2-digit",minute:"2-digit"})+'</b></div>'
 +'</div></header>'
-+'<section class="page">'+body+'</section>'
++'<section class="page '+(this._page==="overview"?"overview-page":"scroll-page")+'">'+body+'</section>'
 +'</main>'+this._historyModal()+'<div id="toast" class="toast"></div></div>';
 this._bind();
 if(preserveScroll){
@@ -157,28 +157,34 @@ const o=this._config.overview||{},g=this._config.general||{};
 const customImg=(night?g.night_image:g.day_image)||"";
 const img=customImg||(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
 const s=o.solar||{},b=o.battery||{},i=o.inverter||{},cn=o.consumption||{};
+
 const callouts=[
-  s.enabled!==false?this._callout("solar",this._t("solar"),s.icon,s.power,[],"solar"):"",
+  s.enabled!==false?this._callout("solar",this._t("solar"),s.icon,s.power,[
+    [this._t("voltage"),s.voltage],
+    [this._t("current"),s.current]
+  ],"solar"):"",
   cn.enabled!==false?this._callout("consumption",this._t("vanConsumption"),cn.icon,cn.power,[],"consumption"):"",
   i.enabled!==false?this._callout("inverter",this._t("inverter"),i.icon,i.power||i.status,[
     [this._t("voltage"),i.voltage],
-    [this._t("frequency"),i.frequency]
+    [this._t("frequency"),i.frequency],
+    [this._t("current"),i.current]
   ],"inverter"):"",
   b.enabled!==false?this._callout("battery",this._t("battery"),b.icon,b.soc,[
     [this._t("voltage"),b.voltage],
+    [this._t("current"),b.current],
     [this._t("power"),b.power]
   ],"battery"):""
 ].filter(Boolean);
+
 const counters=this._resolvedDailyCounters(o);
 const rightContent=this._dailyCounters(counters);
-const bottom=this._bottomPanels(o);
+
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
   +'<div class="dash-center">'
     +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
       +(callouts.length?'<div class="callout-layer">'+callouts.join("")+'</div>':'')
     +'</section>'
     +(callouts.length?'<div class="mobile-callouts">'+callouts.join("")+'</div>':'')
-    +bottom
   +'</div>'
   +(rightContent?'<aside class="dash-right">'+rightContent+'</aside>':'')
 +'</div>'
@@ -276,29 +282,17 @@ _kv(l,e){return e?'<button class="metric" data-history="'+this._ea(e)+'"><span>'
 _quick(o){const a=[];const p=(l,i,e,ac)=>{if(e)a.push('<button data-history="'+this._ea(e)+'">'+this._icon(i)+'<span>'+this._e(l)+'</span><b>'+this._e(this._fmt(e))+'</b></button>')};p(this._t("battery"),o.battery&&o.battery.icon,o.battery&&(o.battery.soc||o.battery.voltage));p(this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power);p(this._t("water"),o.water&&o.water.icon,o.water&&(o.water.percent||o.water.liters));p(this._t("heating"),o.heating&&o.heating.icon,o.heating&&(o.heating.current_temp||o.heating.target_temp));p(this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature);return a.length?'<section class="card quick"><h3>'+this._t("quick")+'</h3><div class="quick-grid">'+a.join("")+'</div></section>':""}
 _tab(id){const t=(this._config.tabs||[]).find(x=>x.id===id&&x.enabled!==false);if(!t)return '<div class="empty">'+this._t("noConfig")+'</div>';const items=(t.items||[]).filter(i=>i.enabled!==false&&i.entity);return '<div><div class="tab-head">'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+'<h2>'+this._e(t.name)+'</h2></div>'+(items.length?'<div class="entity-grid">'+items.map(i=>this._entityCard(i)).join("")+'</div>':'<div class="empty">'+this._t("noConfig")+'</div>')+'</div>'}
 _type(i){if(i.type&&i.type!=="auto")return i.type;const d=String(i.entity||"").split(".")[0];return SF_TYPES.includes(d)?d:"read"}
-_entityCard(i){const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity),color=active?(i.color_on||"#ff654c"):(i.color_off||"#26d8ff"),label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity,i.unit_override||"");let ctrl="";if(type==="switch"||type==="light")ctrl='<div class="control"><button data-toggle="'+this._ea(i.entity)+'" data-domain="'+type+'" data-live-toggle="'+this._ea(i.entity)+'" class="'+(active?"on":"")+'">'+(active?"ON":"OFF")+'</button></div>';else if(type==="button")ctrl='<div class="control"><button data-press="'+this._ea(i.entity)+'">'+this._t("button")+'</button></div>';else if(type==="number"){const min=s&&s.attributes?s.attributes.min:0,max=s&&s.attributes?s.attributes.max:100,step=s&&s.attributes?s.attributes.step:1;ctrl='<div class="control"><input type="number" data-number="'+this._ea(i.entity)+'" value="'+this._ea(this._num(i.entity)??min)+'" min="'+this._ea(min)+'" max="'+this._ea(max)+'" step="'+this._ea(step)+'"><button data-number-set="'+this._ea(i.entity)+'">OK</button></div>'}else if(type==="select"){const opts=s&&s.attributes&&Array.isArray(s.attributes.options)?s.attributes.options:[];ctrl='<div class="control"><select data-select="'+this._ea(i.entity)+'">'+opts.map(o=>'<option '+(String(o)===String(s.state)?"selected":"")+'>'+this._e(o)+'</option>').join("")+'</select></div>'}else if(type==="climate"){const at=s&&s.attributes?s.attributes:{},min=at.min_temp??5,max=at.max_temp??35,step=at.target_temp_step??.5;ctrl='<div class="control"><input type="number" data-climate="'+this._ea(i.entity)+'" value="'+this._ea(at.temperature??"")+'" min="'+min+'" max="'+max+'" step="'+step+'"><button data-climate-set="'+this._ea(i.entity)+'">OK</button></div>'}return '<article class="entity-card" style="--c:'+this._ea(color)+'"><div class="entity-head">'+this._icon(i.icon||this._attr(i.entity,"icon")||"mdi:circle",i.image||"")+'<div><b>'+this._e(label)+'</b></div></div><button class="entity-value" data-history="'+this._ea(i.entity)+'" data-live="'+this._ea(i.entity)+'" '+(i.unit_override?'data-unit="'+this._ea(i.unit_override)+'"':"")+'>'+this._e(val)+'</button>'+(i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"")+ctrl+'</article>'}
+_entityCard(i){const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity),color=active?(i.color_on||"#ff654c"):(i.color_off||"#26d8ff"),label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity,i.unit_override||"");let ctrl="";if(type==="switch"||type==="light"||type==="fan")ctrl='<div class="control"><button data-toggle="'+this._ea(i.entity)+'" data-domain="'+type+'" data-live-toggle="'+this._ea(i.entity)+'" class="'+(active?"on":"")+'">'+(active?"ON":"OFF")+'</button></div>';else if(type==="button")ctrl='<div class="control"><button data-press="'+this._ea(i.entity)+'">'+this._t("button")+'</button></div>';else if(type==="number"){const min=s&&s.attributes?s.attributes.min:0,max=s&&s.attributes?s.attributes.max:100,step=s&&s.attributes?s.attributes.step:1;ctrl='<div class="control"><input type="number" data-number="'+this._ea(i.entity)+'" value="'+this._ea(this._num(i.entity)??min)+'" min="'+this._ea(min)+'" max="'+this._ea(max)+'" step="'+this._ea(step)+'"><button data-number-set="'+this._ea(i.entity)+'">OK</button></div>'}else if(type==="select"){const opts=s&&s.attributes&&Array.isArray(s.attributes.options)?s.attributes.options:[];ctrl='<div class="control"><select data-select="'+this._ea(i.entity)+'">'+opts.map(o=>'<option '+(String(o)===String(s.state)?"selected":"")+'>'+this._e(o)+'</option>').join("")+'</select></div>'}else if(type==="climate"){const at=s&&s.attributes?s.attributes:{},min=at.min_temp??5,max=at.max_temp??35,step=at.target_temp_step??.5;ctrl='<div class="control"><input type="number" data-climate="'+this._ea(i.entity)+'" value="'+this._ea(at.temperature??"")+'" min="'+min+'" max="'+max+'" step="'+step+'"><button data-climate-set="'+this._ea(i.entity)+'">OK</button></div>'}return '<article class="entity-card" style="--c:'+this._ea(color)+'"><div class="entity-head">'+this._icon(i.icon||this._attr(i.entity,"icon")||"mdi:circle",i.image||"")+'<div><b>'+this._e(label)+'</b></div></div><button class="entity-value" data-history="'+this._ea(i.entity)+'" data-live="'+this._ea(i.entity)+'" '+(i.unit_override?'data-unit="'+this._ea(i.unit_override)+'"':"")+'>'+this._e(val)+'</button>'+(i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"")+ctrl+'</article>'}
 _field(id,l,v,p){return '<label class="field"><span>'+this._e(l)+'</span><input id="'+id+'" value="'+this._ea(v||"")+'" placeholder="'+this._ea(p||"")+'"></label>'}
 _settings(){
 this._editing=true;
 const g=this._config.general||{},o=this._config.overview||{};
-const mp=Object.assign({},o.mppt||{}),tp=Object.assign({},o.temperature||{});
-if(!mp.power)mp.power=(o.solar||{}).power||"";
-if(!mp.voltage)mp.voltage=(o.solar||{}).voltage||"";
-if(!mp.current)mp.current=(o.solar||{}).current||"";
-if(!tp.current_temp)tp.current_temp=(o.heating||{}).current_temp||"";
-if(!tp.target_temp)tp.target_temp=(o.heating||{}).target_temp||"";
 
 const defs=[
-  ["solar",this._t("solar"),["power","energy_today","energy_month","energy_year"],o.solar||{}],
+  ["solar",this._t("solar"),["power","voltage","current","energy_today","energy_month","energy_year"],o.solar||{}],
   ["consumption",this._t("vanConsumption"),["power","energy_today"],o.consumption||{}],
   ["battery",this._t("battery"),["soc","power","voltage","current"],o.battery||{}],
-  ["inverter",this._t("inverter"),["status","power","voltage","frequency","current"],o.inverter||{}],
-  ["mppt","MPPT",["power","voltage","current"],mp],
-  ["water",this._t("water"),["percent","liters"],o.water||{}],
-  ["heating",this._t("heating"),["status","target_temp","current_temp"],o.heating||{}],
-  ["water_heater",this._t("waterHeater"),["status","temperature"],o.water_heater||{}],
-  ["temperature",this._t("currentTemp"),["current_temp","target_temp"],tp],
-  ["ventilation",this._t("ventilation"),["status","current_temp","target_temp","power","speed"],o.ventilation||{}]
+  ["inverter",this._t("inverter"),["status","power","voltage","frequency","current"],o.inverter||{}]
 ];
 const sections=defs.map(d=>this._sectionEditor(d[0],d[1],d[3],d[2])).join("");
 
@@ -313,6 +307,7 @@ const counters=(this._config.daily_counters||[]).map((x,i)=>
 ).join("");
 
 const tabs=(this._config.tabs||[]).map((t,i)=>this._tabEditor(t,i)).join("");
+
 return '<div class="settings">'
   +'<section class="settings-card"><h2>'+this._t("general")+'</h2><div class="grid">'
     +this._field("sf-title",this._t("title"),g.title)
@@ -321,20 +316,26 @@ return '<div class="settings">'
     +this._field("sf-day",this._t("dayImage"),g.day_image,"/local/...")
     +this._field("sf-night",this._t("nightImage"),g.night_image,"/local/...")
   +'</div><p class="hint">'+this._t("hint")+'</p></section>'
+
   +'<section class="settings-card"><h2>'+this._t("base")+'</h2><p class="hint">'
     +this._e(this._config.general.language==="en"
-      ?"Solar, van consumption, inverter and battery are displayed on the van picture. MPPT, heating, water heater, water, interior temperature and ventilation are displayed in the blocks below. Uncheck any section to hide it."
-      :"Solaire, Conso fourgon, Convertisseur et Batterie sont affichés sur l’image du fourgon. MPPT, Chauffage, Chauffe-eau, Eau propre, Température et Clim/Ventilation sont affichés dans les blocs en dessous. Décoche une section pour la masquer.")
+      ?"Only Solar, Van consumption, Battery and Inverter are fixed on the main picture. Solar includes power, voltage and current. Everything else is created below as a custom menu/page."
+      :"Seuls Solaire, Conso fourgon, Batterie et Convertisseur sont fixes sur l’image principale. Solaire comprend puissance, volts et ampères. Tout le reste se crée ci-dessous sous forme d’onglet/page personnalisée.")
     +'</p>'+sections+'</section>'
-  +'<section class="settings-card"><h2>'+this._t("daily")+'</h2><p class="hint">'
-    +this._e(this._config.general.language==="en"?"Only enabled counters with an entity are shown in the right column.":"Seuls les compteurs cochés avec une entité renseignée apparaissent dans la colonne de droite.")
-    +'</p><div class="grid">'+counters+'</div></section>'
-  +'<section class="settings-card"><h2>'+this._t("tabs")+'</h2><p class="hint">'
+
+  +'<section class="settings-card custom-tabs-settings"><h2>'+this._t("tabs")+'</h2><p class="hint">'
     +this._e(this._config.general.language==="en"
-      ?"Create the menus displayed directly under Overview. Each menu can contain any Home Assistant entities. Choose the entity type, icon, label, optional status entity and colours for each item."
-      :"Crée ici les menus affichés directement sous Vue générale. Chaque menu peut contenir les entités Home Assistant de ton choix. Pour chaque élément, choisis le type d’entité, l’icône, le nom, une entité d’état optionnelle et les couleurs.")
-    +'</p><div class="grid">'+this._field("new-tab-name",this._t("tabName"),"")+this._iconSelect("new-tab-icon",this._t("icon"),"mdi:radiator")+'</div>'
+      ?"Create any menu you want: Heating, Water, MPPT, Fridge, Ventilation, etc. The new menu appears under Overview. Clicking it opens its own page containing exactly the Home Assistant entities you add here. Each entity has its own type, icon, name, optional status entity and colours."
+      :"Crée les menus que tu veux : Chauffage, Eau, MPPT, Frigo, Ventilation, etc. Le nouvel onglet apparaît sous Vue générale. Un clic dessus ouvre sa propre page avec exactement les entités Home Assistant que tu ajoutes ici. Chaque entité possède son type, son icône, son nom, une entité d’état optionnelle et ses couleurs.")
+    +'</p><div class="grid">'+this._field("new-tab-name",this._t("tabName"),"")+this._iconSelect("new-tab-icon",this._t("icon"),"mdi:folder-outline")+'</div>'
     +'<p><button class="btn" id="add-tab">'+this._t("addTab")+'</button></p>'+tabs+'</section>'
+
+  +'<section class="settings-card"><h2>'+this._t("daily")+'</h2><p class="hint">'
+    +this._e(this._config.general.language==="en"
+      ?"Only checked counters with an entity are displayed in the right column of Overview."
+      :"Seuls les compteurs cochés avec une entité renseignée apparaissent dans la colonne de droite de Vue générale.")
+    +'</p><div class="grid">'+counters+'</div></section>'
+
   +'<div class="actions"><button class="btn danger" id="reset">'+this._t("reset")+'</button><button class="btn" id="save">'+this._t("save")+'</button></div>'
   +this._datalist()
 +'</div>'
@@ -382,16 +383,10 @@ g.night_image=(q("sf-night")||{}).value||"";
 this._config.general=g;
 
 const defs={
-  solar:["power","energy_today","energy_month","energy_year"],
+  solar:["power","voltage","current","energy_today","energy_month","energy_year"],
   consumption:["power","energy_today"],
   battery:["soc","power","voltage","current"],
-  inverter:["status","power","voltage","frequency","current"],
-  mppt:["power","voltage","current"],
-  water:["percent","liters"],
-  heating:["status","target_temp","current_temp"],
-  water_heater:["status","temperature"],
-  temperature:["current_temp","target_temp"],
-  ventilation:["status","current_temp","target_temp","power","speed"]
+  inverter:["status","power","voltage","frequency","current"]
 };
 this._config.overview=this._config.overview||{};
 Object.entries(defs).forEach(([k,fs])=>{
