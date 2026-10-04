@@ -1790,3 +1790,214 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     max-width:none;
   }
 }
+
+/* =========================================================
+   1.0.5 - smartphone overview mirrors desktop hero
+   ========================================================= */
+@media(max-width:760px){
+  /* Main overview order:
+     1. Hero image with values
+     2. Quick status
+     3. Energy summaries / daily cards
+  */
+  .dash-layout{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+  }
+  .dash-center{
+    order:1!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+    width:100%!important;
+    overflow:visible!important;
+  }
+  .dash-right{
+    order:2!important;
+    width:100%!important;
+    margin-top:0!important;
+    overflow:visible!important;
+  }
+
+  /* Larger picture on phone, while keeping the van visible */
+  .hero-photo,
+  .dash-layout.no-right .hero-photo{
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:4/3!important;
+    background-size:cover!important;
+    background-position:center center!important;
+    overflow:hidden!important;
+  }
+
+  /* Do NOT move the main values below the picture anymore */
+  .hero-photo .callout-layer{
+    display:block!important;
+    position:absolute!important;
+    inset:0!important;
+  }
+  .mobile-callouts{
+    display:none!important;
+  }
+
+  /* All hero values scale with the phone width */
+  .hero-photo .callout{
+    width:clamp(105px,31vw,150px)!important;
+    min-width:0!important;
+    padding:1px 2px!important;
+    text-shadow:
+      -1px -1px 2px rgba(0,0,0,.98),
+       1px -1px 2px rgba(0,0,0,.98),
+      -1px  1px 2px rgba(0,0,0,.98),
+       1px  1px 2px rgba(0,0,0,.98),
+       0 0 6px rgba(0,0,0,.98)!important;
+  }
+  .hero-photo .call-head{
+    gap:3px!important;
+    margin-bottom:1px!important;
+  }
+  .hero-photo .call-head ha-icon{
+    --mdc-icon-size:clamp(13px,3.6vw,18px)!important;
+  }
+  .hero-photo .call-head span{
+    font-size:clamp(7px,2.25vw,10px)!important;
+    line-height:1.05!important;
+  }
+  .hero-photo .call-primary{
+    font-size:clamp(18px,6vw,28px)!important;
+    line-height:.98!important;
+    margin-bottom:2px!important;
+  }
+  .hero-photo .call-row{
+    gap:4px!important;
+    padding:1px 0!important;
+    font-size:clamp(6.5px,1.9vw,9px)!important;
+    line-height:1.05!important;
+  }
+  .hero-photo .call-row span,
+  .hero-photo .call-row b{
+    font-size:inherit!important;
+  }
+
+  /* Phone-specific positions around the van.
+     Percentages keep the layout proportional on different phone widths. */
+  .hero-photo .callout.solar{
+    left:28%!important;
+    right:auto!important;
+    top:25%!important;
+    bottom:auto!important;
+  }
+  .hero-photo .callout.consumption{
+    left:auto!important;
+    right:5%!important;
+    top:13%!important;
+    bottom:auto!important;
+  }
+  .hero-photo .callout.inverter{
+    left:4%!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:7%!important;
+  }
+  .hero-photo .callout.battery{
+    left:43%!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:4%!important;
+  }
+  .hero-photo .callout.water{
+    left:auto!important;
+    right:4%!important;
+    top:52%!important;
+    bottom:auto!important;
+  }
+
+  /* Compact gauges so they fit on the picture */
+  .hero-photo .battery-gauge{
+    margin:2px 0 3px!important;
+    gap:2px!important;
+  }
+  .hero-photo .battery-gauge .seg-body{
+    padding:2px!important;
+    gap:2px!important;
+    border-width:1.5px!important;
+  }
+  .hero-photo .battery-gauge .seg-body i{
+    width:clamp(10px,3.4vw,16px)!important;
+    height:clamp(9px,2.8vw,13px)!important;
+  }
+  .hero-photo .battery-gauge .seg-cap{
+    width:3px!important;
+    height:clamp(10px,3vw,14px)!important;
+  }
+  .hero-photo .water-gauge{
+    gap:1px!important;
+    margin:2px 0!important;
+  }
+  .hero-photo .water-gauge ha-icon{
+    --mdc-icon-size:clamp(12px,3.5vw,18px)!important;
+  }
+  .hero-photo .water-percent-value{
+    font-size:clamp(7px,2vw,9px)!important;
+  }
+
+  /* Quick status MUST be the first block below the picture */
+  .quick-status{
+    order:2!important;
+    margin:0!important;
+    width:100%!important;
+  }
+  .quick-grid{
+    grid-template-columns:repeat(auto-fill,minmax(72px,86px))!important;
+    gap:5px!important;
+  }
+  .quick-grid button{
+    height:64px!important;
+    min-height:64px!important;
+  }
+
+  /* Right-side desktop summaries become normal stacked blocks below Quick status */
+  .right-tab-menu,
+  .energy-summary,
+  .counters-card{
+    width:100%!important;
+  }
+  .energy-summary{
+    margin-bottom:7px!important;
+  }
+}
+
+/* Very narrow phones: tighten values slightly rather than moving them off-image */
+@media(max-width:430px){
+  .hero-photo,
+  .dash-layout.no-right .hero-photo{
+    aspect-ratio:1.18/1!important;
+  }
+  .hero-photo .callout{
+    width:clamp(96px,30vw,125px)!important;
+  }
+  .hero-photo .callout.solar{
+    left:25%!important;
+    top:24%!important;
+  }
+  .hero-photo .callout.consumption{
+    right:3%!important;
+    top:11%!important;
+  }
+  .hero-photo .callout.inverter{
+    left:3%!important;
+    bottom:6%!important;
+  }
+  .hero-photo .callout.battery{
+    left:42%!important;
+    bottom:3%!important;
+  }
+  .hero-photo .callout.water{
+    right:3%!important;
+    top:51%!important;
+  }
+}
