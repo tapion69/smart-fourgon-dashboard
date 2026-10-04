@@ -722,3 +722,134 @@ summary{cursor:pointer;padding:9px;font-weight:800}
 @media(max-width:480px){
   .mobile-callouts{grid-template-columns:1fr}
 }
+
+/* =========================================================
+   0.4.0 - user-defined navigation + daily-only right column
+   ========================================================= */
+.custom-nav-group{
+  padding-top:4px;
+}
+.custom-parent{
+  min-height:38px!important;
+  height:38px!important;
+  border-radius:7px!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
+.custom-parent>ha-icon:last-child{
+  --mdc-icon-size:15px;
+  color:#b7c8d4;
+}
+.custom-nav-group .nav-sub{
+  padding-left:11px!important;
+}
+
+/* Right side is no longer a duplicate of the center scene */
+.dash-right{
+  grid-template-columns:1fr!important;
+  align-content:start;
+}
+.daily-only{
+  grid-column:1!important;
+  width:100%;
+}
+.daily-only .counter-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.daily-only .counter{
+  min-height:92px;
+}
+.daily-only .counter b{
+  color:#1bd7ff;
+  font-size:15px;
+}
+.daily-only .counter:nth-child(1) b{color:#ffd21e}
+.daily-only .counter:nth-child(3) b,
+.daily-only .counter:nth-child(4) b{color:#83ff28}
+
+/* History chart */
+.history-name{
+  margin:2px 0 9px;
+  color:#dceaf3;
+  font-size:13px;
+  font-weight:800;
+}
+.chart{
+  margin-top:10px;
+  overflow:auto;
+  border:1px solid rgba(95,190,245,.18);
+  border-radius:8px;
+  background:#041827;
+}
+.chart svg{
+  display:block;
+  width:100%;
+  min-width:680px;
+  height:auto;
+}
+.chart-grid{
+  stroke:rgba(132,184,214,.18);
+  stroke-width:1;
+}
+.chart-grid-x{
+  stroke:rgba(132,184,214,.10);
+}
+.chart-axis{
+  fill:#a9c1d1;
+  font-size:12px;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+.chart-unit{
+  fill:#8ea9bb;
+  font-size:12px;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+.chart-axis-line{
+  stroke:#7499ad;
+  stroke-width:1.2;
+}
+.chart-line{
+  fill:none;
+  stroke:#26d8ff;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.modal-card{
+  width:min(1040px,96vw);
+}
+
+/* The panel owns its own scroll area; HA must not get a second page height */
+html,body{
+  overscroll-behavior:none;
+}
+.page{
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+
+/* Icon/type/entity selectors */
+.field select{
+  cursor:pointer;
+}
+.item-editor .grid{
+  align-items:end;
+}
+
+@media(max-width:1280px){
+  .daily-only .counter-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:1020px){
+  .daily-only .counter-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:760px){
+  .custom-parent>ha-icon:last-child{display:none}
+  .daily-only .counter-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .chart svg{min-width:620px}
+}
