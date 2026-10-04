@@ -1,6 +1,6 @@
 const SF_T={
-fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État"},
-en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State"}
+fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État"},
+en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State"}
 };
 const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
@@ -137,8 +137,8 @@ if(preserveScroll){
 }
 }
 _customSidebar(){
-return (this._config.tabs||[]).map(t=>{
-  const items=(t.items||[]).filter(i=>i.entity);
+return (this._config.tabs||[]).filter(t=>t.enabled!==false).map(t=>{
+  const items=(t.items||[]).filter(i=>i.enabled!==false&&i.entity);
   return '<section class="nav-group custom-nav-group">'
     +'<button data-page="tab:'+this._ea(t.id)+'" class="nav-main custom-parent '+(this._page==="tab:"+t.id?"active":"")+'">'
       +this._icon(t.icon||"mdi:folder-outline",t.image||"")
@@ -154,39 +154,24 @@ return (this._config.tabs||[]).map(t=>{
 }
 _overview(night){
 const o=this._config.overview||{},g=this._config.general||{};
-const customImg=(night?g.night_image:g.day_image)||"";const img=customImg||(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
+const customImg=(night?g.night_image:g.day_image)||"";
+const img=customImg||(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
+const s=o.solar||{},b=o.battery||{},i=o.inverter||{},cn=o.consumption||{};
 const callouts=[
-  this._callout("solar",this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power,[],"solar"),
-  this._callout("mppt","MPPT","mdi:battery-charging",o.solar&&o.solar.current,[
-    [this._t("voltage"),o.solar&&o.solar.voltage]
-  ],"solar"),
-  this._callout("waterheater",this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature,[
-    [this._t("state"),o.water_heater&&o.water_heater.status]
-  ],"waterheater"),
-  this._callout("heating",this._t("heating"),o.heating&&o.heating.icon,o.heating&&o.heating.current_temp,[
-    [this._t("target"),o.heating&&o.heating.target_temp],
-    [this._t("state"),o.heating&&o.heating.status]
-  ],"heating"),
-  this._callout("temp",this._t("currentTemp"),"mdi:thermometer",o.heating&&o.heating.current_temp,[
-    [this._t("target"),o.heating&&o.heating.target_temp]
-  ],"temp"),
-  this._callout("inverter",this._t("inverter"),o.inverter&&o.inverter.icon,o.inverter&&o.inverter.power,[
-    [this._t("voltage"),o.inverter&&o.inverter.voltage],
-    [this._t("frequency"),o.inverter&&o.inverter.frequency]
-  ],"inverter"),
-  this._callout("water",this._t("water"),o.water&&o.water.icon,o.water&&o.water.liters,[
-    ["%",o.water&&o.water.percent]
-  ],"water"),
-  this._callout("battery",this._t("battery"),o.battery&&o.battery.icon,o.battery&&o.battery.soc,[
-    [this._t("voltage"),o.battery&&o.battery.voltage],
-    [this._t("power"),o.battery&&o.battery.power]
-  ],"battery")
+  s.enabled!==false?this._callout("solar",this._t("solar"),s.icon,s.power,[],"solar"):"",
+  cn.enabled!==false?this._callout("consumption",this._t("vanConsumption"),cn.icon,cn.power,[],"consumption"):"",
+  i.enabled!==false?this._callout("inverter",this._t("inverter"),i.icon,i.power||i.status,[
+    [this._t("voltage"),i.voltage],
+    [this._t("frequency"),i.frequency]
+  ],"inverter"):"",
+  b.enabled!==false?this._callout("battery",this._t("battery"),b.icon,b.soc,[
+    [this._t("voltage"),b.voltage],
+    [this._t("power"),b.power]
+  ],"battery"):""
 ].filter(Boolean);
-
 const counters=this._resolvedDailyCounters(o);
 const rightContent=this._dailyCounters(counters);
 const bottom=this._bottomPanels(o);
-
 return '<div class="dash-layout '+(rightContent?"":"no-right")+'">'
   +'<div class="dash-center">'
     +'<section class="hero-photo '+(night?"night-scene":"day-scene")+'" style="background-image:url(&quot;'+this._ea(img)+'&quot;)">'
@@ -220,16 +205,16 @@ _resolvedDailyCounters(o){
 const list=(this._config.daily_counters||[]).map(x=>Object.assign({},x));
 const fallback={
   solar_day:o.solar&&o.solar.energy_today,
+  consumption_day:o.consumption&&o.consumption.energy_today,
   battery_charge_day:o.battery&&o.battery.charge_today,
   battery_discharge_day:o.battery&&o.battery.discharge_today,
   water_day:o.water&&o.water.consumed_today,
-  consumption_day:o.inverter&&o.inverter.energy_today,
   alternator_day:o.alternator&&o.alternator.energy_today
 };
 for(const x of list){
   if(!x.entity&&fallback[x.id])x.entity=fallback[x.id]
 }
-return list.filter(x=>x.entity)
+return list.filter(x=>x.enabled!==false&&x.entity)
 }
 _dailyCounters(counters){
 if(!counters.length)return "";
@@ -244,33 +229,40 @@ return '<section class="side-card counters-card daily-only"><h3>'+this._icon("md
 }
 _bottomPanels(o){
 const items=[];
-const push=(title,icon,vals)=>{
+const push=(cfg,title,icon,vals,active=false)=>{
+  if(!cfg||cfg.enabled===false)return;
   const rows=vals.filter(x=>x[1]);
   if(!rows.length)return;
-  items.push('<section class="bottom-card"><h3>'+this._icon(icon)+'<span>'+this._e(title)+'</span></h3><div class="bottom-values">'
-  +rows.map(x=>'<button data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'">'+this._e(this._fmt(x[1]))+'</b></button>').join("")
-  +'</div></section>');
+  items.push('<section class="bottom-card '+(active?"active":"")+'"><h3>'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span></h3><div class="bottom-values">'
+    +rows.map(x=>'<button data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'">'+this._e(this._fmt(x[1]))+'</b></button>').join("")
+    +'</div></section>');
 };
-const s=o.solar||{},b=o.battery||{},i=o.inverter||{},w=o.water||{},h=o.heating||{},v=o.ventilation||{};
-push(this._t("quick"),"mdi:view-dashboard-outline",[
-  [this._t("battery"),b.soc],
-  [this._t("solar"),s.power],
-  [this._t("water"),w.percent||w.liters],
-  [this._t("heating"),h.current_temp],
-  [this._t("ventilation"),v.speed||v.power]
+const s=o.solar||{},m=Object.assign({},o.mppt||{}),w=o.water||{},h=o.heating||{},wh=o.water_heater||{},v=o.ventilation||{};
+const t=Object.assign({},o.temperature||{});
+if(!m.power)m.power=s.power||"";
+if(!m.voltage)m.voltage=s.voltage||"";
+if(!m.current)m.current=s.current||"";
+if(!t.current_temp)t.current_temp=h.current_temp||"";
+if(!t.target_temp)t.target_temp=h.target_temp||"";
+push(m,"MPPT",m.icon||"mdi:battery-charging",[
+  [this._t("power"),m.power],[this._t("voltage"),m.voltage],[this._t("current"),m.current]
 ]);
-push(this._config.general.language==="en"?"MPPT PRODUCTION":"PRODUCTION MPPT",s.icon||"mdi:solar-panel-large",[
-  [this._t("power"),s.power],
-  [this._t("voltage"),s.voltage],
-  [this._t("current"),s.current]
+push(h,this._t("heating"),h.icon||"mdi:radiator",[
+  [this._t("state"),h.status],[this._t("currentTemp"),h.current_temp],[this._t("target"),h.target_temp]
+],this._active(h.status));
+push(wh,this._t("waterHeater"),wh.icon||"mdi:water-boiler",[
+  [this._t("state"),wh.status],[this._t("temperature"),wh.temperature]
+],this._active(wh.status));
+push(w,this._t("water"),w.icon||"mdi:water",[
+  [this._t("liters"),w.liters],["%",w.percent]
 ]);
-push(this._t("inverter"),i.icon||"mdi:power-plug",[
-  [this._t("power"),i.power],
-  [this._t("voltage"),i.voltage],
-  [this._t("frequency"),i.frequency],
-  [this._t("current"),i.current]
+push(t,this._t("currentTemp"),t.icon||"mdi:thermometer",[
+  [this._t("currentTemp"),t.current_temp],[this._t("target"),t.target_temp]
 ]);
-return items.length?'<div class="bottom-strip">'+items.join("")+'</div>':""
+push(v,this._t("ventilation"),v.icon||"mdi:fan",[
+  [this._t("state"),v.status],[this._t("currentTemp"),v.current_temp],[this._t("target"),v.target_temp],[this._t("speed"),v.speed],[this._t("power"),v.power]
+],this._active(v.status)||(this._num(v.speed)||0)>0||(this._num(v.power)||0)>0);
+return items.length?'<div class="bottom-strip secondary-strip">'+items.join("")+'</div>':""
 }
 _mod(title,icon,active,primary,rows){const r=rows.filter(x=>x[1]).map(x=>'<button class="metric" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b>'+this._e(this._fmt(x[1]))+'</b></button>').join("");return '<article class="module '+(active?"active":"")+'"><div class="module-head">'+this._icon(icon)+'<span>'+this._e(title)+'</span></div><div class="primary">'+(primary?this._e(this._fmt(primary)):"—")+'</div>'+r+'</article>'}
 _solar(c={}){if(c.enabled===false||!this._has(c.power,c.voltage,c.current))return "";return this._mod(this._t("solar"),c.icon,false,c.power,[[this._t("power"),c.power],[this._t("voltage"),c.voltage],[this._t("current"),c.current]])}
