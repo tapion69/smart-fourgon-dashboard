@@ -14,6 +14,7 @@ def default_config() -> dict:
             "title": "SMART FOURGON",
             "language": "fr",
             "theme_mode": "auto",
+            "location_entity": "",
         },
         "overview": {
             "solar": {
