@@ -323,16 +323,16 @@ button{cursor:pointer}
 
 /* Four hero values only */
 .callout.solar{
-  left:24%;
-  top:31%;
+  left:25%;
+  top:35%;
 }
 .callout.consumption{
-  left:49%;
-  top:31%;
+  left:52%;
+  top:25%;
 }
 .callout.inverter{
-  right:13%;
-  top:57%;
+  right:12%;
+  top:58%;
 }
 .callout.battery{
   left:48%;
