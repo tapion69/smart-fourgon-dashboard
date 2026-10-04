@@ -46,7 +46,7 @@ async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"})
 async _loadHeroAssets(){
 const load=async(path)=>{
   try{
-    const r=await fetch(path+"?v=0.5.0",{cache:"no-store"});
+    const r=await fetch(path+"?v=0.6.0",{cache:"no-store"});
     if(!r.ok)return "";
     const b64=(await r.text()).replace(/\s+/g,"");
     return b64?"data:image/webp;base64,"+b64:"";
@@ -104,7 +104,7 @@ const night=this._night(),g=this._config.general||{},title=this._e(g.title||"SMA
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.5.0">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=0.6.0">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -183,7 +183,7 @@ const callouts=[
   ],"battery")
 ].filter(Boolean);
 
-const counters=(this._config.daily_counters||[]).filter(x=>x.entity);
+const counters=this._resolvedDailyCounters(o);
 const rightContent=this._dailyCounters(counters);
 const bottom=this._bottomPanels(o);
 
@@ -215,6 +215,21 @@ return '<article class="callout '+cls+' '+(active?"on":"")+'" '+(activeEnt?'data
   +'<div class="call-head">'+this._icon(icon||"mdi:circle")+'<span>'+this._e(title)+'</span><i></i></div>'
   +p+r
 +'</article>'
+}
+_resolvedDailyCounters(o){
+const list=(this._config.daily_counters||[]).map(x=>Object.assign({},x));
+const fallback={
+  solar_day:o.solar&&o.solar.energy_today,
+  battery_charge_day:o.battery&&o.battery.charge_today,
+  battery_discharge_day:o.battery&&o.battery.discharge_today,
+  water_day:o.water&&o.water.consumed_today,
+  consumption_day:o.inverter&&o.inverter.energy_today,
+  alternator_day:o.alternator&&o.alternator.energy_today
+};
+for(const x of list){
+  if(!x.entity&&fallback[x.id])x.entity=fallback[x.id]
+}
+return list.filter(x=>x.entity)
 }
 _dailyCounters(counters){
 if(!counters.length)return "";
