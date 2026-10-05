@@ -1,77 +1,89 @@
-# Publication d'une version HACS
+# Releasing Smart Fourgon Dashboard
 
-Ce document décrit la procédure de publication d'une version stable de Smart Fourgon Dashboard.
+This document describes how stable HACS versions are published.
 
-## Principe
+## Versioning
 
-Pendant le développement, les modifications sont poussées sur `main` sans créer de GitHub Release.
-
-Dans ce mode, HACS peut installer ou retélécharger le dépôt, mais il ne faut pas attendre une notification de mise à jour pour chaque commit.
-
-Les notifications de mise à jour HACS seront basées sur les **GitHub Releases**.
-
-## Avant de publier
-
-1. Vérifier le dashboard sur ordinateur et smartphone.
-2. Vérifier que les réglages sont sauvegardés correctement.
-3. Mettre le bon numéro de version dans :
-
-   ```text
-   custom_components/smart_fourgon/manifest.json
-   ```
-
-4. Mettre à jour `CHANGELOG.md`.
-5. Pousser les modifications sur `main`.
-6. Attendre que le workflow **Validate** soit entièrement vert.
-
-## Numérotation
-
-Utiliser Semantic Versioning :
+Use Semantic Versioning:
 
 ```text
 MAJOR.MINOR.PATCH
 ```
 
-Exemples :
+Examples:
 
-- `1.0.0` : première version stable ;
-- `1.1.0` : nouvelle fonctionnalité compatible ;
-- `1.1.1` : correction de bug ;
-- `2.0.0` : changement incompatible.
+- `1.0.7` — stable release;
+- `1.0.8` — compatible bug-fix release;
+- `1.1.0` — compatible feature release;
+- `2.0.0` — breaking release.
 
-## Publication automatique
+## Before releasing
 
-Le dépôt contient le workflow :
+1. Test the dashboard on desktop.
+2. Test the dashboard on smartphone.
+3. Verify existing settings still load correctly.
+4. Update `custom_components/smart_fourgon/manifest.json`.
+5. Update `CHANGELOG.md`.
+6. Push the changes to `main`.
+7. Make sure the **Validate** workflow is green.
+
+## Publishing a stable HACS release
+
+The repository contains:
 
 ```text
 .github/workflows/release.yml
 ```
 
-Pour publier :
+A stable release can be started in two ways:
 
-1. ouvrir l'onglet **Actions** du dépôt GitHub ;
-2. choisir **Publish HACS Release** ;
-3. cliquer **Run workflow** ;
-4. entrer le numéro exact présent dans `manifest.json`, par exemple `1.0.0` ;
-5. lancer le workflow.
+### Manual
 
-Le workflow :
+1. Open the repository **Actions** tab.
+2. Select **Publish HACS Release**.
+3. Select **Run workflow**.
+4. Enter the exact version found in `manifest.json`.
+5. Run the workflow.
 
-- vérifie que le numéro demandé correspond au `manifest.json` ;
-- refuse de remplacer un tag existant ;
-- crée le tag `vX.Y.Z` ;
-- crée la GitHub Release ;
-- génère automatiquement les notes de version.
+### Release trigger file
 
-## Côté HACS
+For automated publication, update:
 
-Après publication d'une nouvelle GitHub Release, HACS peut détecter cette version lors de son prochain rafraîchissement et proposer **Mettre à jour**.
+```text
+.github/release-trigger
+```
 
-Le numéro de version de la Release et celui du `manifest.json` doivent toujours correspondre.
+with the exact version to publish.
 
-## À ne pas faire
+The workflow validates the repository before creating anything.
 
-- ne pas publier une Release pour chaque test visuel ;
-- ne pas réutiliser un tag déjà publié ;
-- ne pas modifier rétroactivement le contenu d'une ancienne version ;
-- ne pas publier si le workflow **Validate** est rouge.
+## What the workflow does
+
+Before publishing, it checks that:
+
+- the requested version is valid;
+- the version matches `manifest.json`;
+- the tag does not already exist;
+- JSON files are valid;
+- Python syntax is valid;
+- frontend JavaScript syntax is valid;
+- HACS validation passes;
+- Hassfest validation passes.
+
+It then creates:
+
+- the `vX.Y.Z` Git tag;
+- the GitHub Release.
+
+## HACS updates
+
+HACS uses stable GitHub Releases to identify normal update versions.
+
+Development commits may continue to be pushed to `main`, but users should only expect normal HACS update notifications when a new stable Release is published.
+
+## Rules
+
+- Never reuse or overwrite a published version tag.
+- Do not publish a release when validation is failing.
+- Keep `manifest.json`, the Git tag and the Release version aligned.
+- Document user-visible changes in `CHANGELOG.md`.
