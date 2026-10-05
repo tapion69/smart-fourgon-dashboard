@@ -11,6 +11,22 @@
 
 It does not require any specific hardware brand. The dashboard uses entities that already exist in your Home Assistant instance and lets you decide what should be displayed.
 
+## Free and open source ❤️
+
+**Smart Fourgon Dashboard is completely free and open source.**
+
+There is no paid edition, no locked feature and no subscription required. Donations do **not** unlock extra features or change the licence.
+
+That said... developing, testing and maintaining the project takes a lot of personal time — so while Smart Fourgon stays free, I'm certainly not against a small Ko-fi ☕😄
+
+If you enjoy the project and would like to support its continued development, you can buy me a coffee here:
+
+[![Support me on Ko-fi](https://img.shields.io/badge/Support%20me%20on-Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/tapion69)
+
+**Ko-fi:** https://ko-fi.com/tapion69
+
+Thank you for using the project, reporting bugs and sharing ideas — that already helps a lot.
+
 ## Preview
 
 ![Smart Fourgon Dashboard overview](docs/dashboard-preview.jpg)
@@ -241,20 +257,6 @@ Every push to `main` and every Pull Request runs automated checks for:
 Smart Fourgon Dashboard reads entities from your own Home Assistant instance and stores its dashboard configuration in Home Assistant storage.
 
 It does not require an external cloud service to operate.
-
-## Free and open source
-
-**Smart Fourgon Dashboard is completely free and open source.**
-
-There is no paid edition, no locked feature and no subscription required. Donations do **not** unlock extra features or change the licence.
-
-Developing, testing and maintaining the project takes a significant amount of personal time. If you enjoy Smart Fourgon Dashboard and would like to support continued development, you can optionally buy me a coffee on Ko-fi:
-
-[![Support me on Ko-fi](https://img.shields.io/badge/Support%20me%20on-Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/tapion69)
-
-**Ko-fi:** https://ko-fi.com/tapion69
-
-Thank you for using the project, reporting bugs and sharing ideas — that already helps a lot.
 
 ## Contributing
 
