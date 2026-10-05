@@ -38,7 +38,18 @@ const SF_ICONS=[
 const ACTIVE=new Set(["on","open","opening","active","heat","heating","cool","cooling","fan_only","dry","true","home"]);
 
 class SmartFourgonPanel extends HTMLElement{
-constructor(){super();this.attachShadow({mode:"open"});this._hass=null;this._config=null;this._page="overview";this._category="energy";this._loaded=false;this._editing=false;this._hist=null;this._hours=24;this._heroDay="";this._heroNight="";this._renderQueued=false;}
+constructor(){
+super();
+this.attachShadow({mode:"open"});
+this._hass=null;this._config=null;this._page="overview";this._category="energy";
+this._loaded=false;this._editing=false;this._hist=null;this._hours=24;this._renderQueued=false;
+this._detailsState={};
+try{this._detailsState=JSON.parse(sessionStorage.getItem("smart_fourgon_details")||"{}")||{}}catch(e){}
+try{
+  this._heroDay=localStorage.getItem("smart_fourgon_hero_day")||"";
+  this._heroNight=localStorage.getItem("smart_fourgon_hero_night")||"";
+}catch(e){this._heroDay="";this._heroNight=""}
+}
 set hass(v){this._hass=v;if(!this._loaded)this._load();else if(!this._editing)this._refreshLive();}
 get hass(){return this._hass}
 set panel(v){this._panel=v}
@@ -55,26 +66,88 @@ _num(e){const s=this._state(e);if(!s)return null;const n=Number(String(s.state).
 _fmt(e,u){const s=this._state(e);if(!s)return "—";const n=this._num(e);const unit=u||this._attr(e,"unit_of_measurement")||"";if(n!==null){const d=Math.abs(n)>=100?0:Math.abs(n)>=10?1:2;return n.toLocaleString(this._lang(),{maximumFractionDigits:d})+(unit?" "+unit:"")}return String(s.state)}
 _lang(){return this._config&&this._config.general&&this._config.general.language==="en"?"en-US":"fr-FR"}
 _active(e){const s=this._state(e);if(!s)return false;const a=String((s.attributes||{}).hvac_action||"").toLowerCase();return ["heating","cooling","drying","fan"].includes(a)||ACTIVE.has(String(s.state||"").toLowerCase())}
+_detailOpen(key){return this._detailsState[key]!==false}
+_detailAttrs(key){return ' data-detail-key="'+this._ea(key)+'"'+(this._detailOpen(key)?" open":"")}
+_saveDetailState(){
+  try{sessionStorage.setItem("smart_fourgon_details",JSON.stringify(this._detailsState||{}))}catch(e){}
+}
+_tabAccent(t,index=0){
+  const s=(String(t&&t.name||"")+" "+String(t&&t.icon||"")).toLowerCase();
+  if(/chauff|heat|radiator|fire/.test(s))return "#ff704d";
+  if(/eau|water|shower|faucet/.test(s))return "#26d8ff";
+  if(/clim|fan|vent/.test(s))return "#63c8ff";
+  if(/sol|energy|énergie|lightning/.test(s))return "#ffd62e";
+  if(/batt/.test(s))return "#73ff2b";
+  const p=["#b58cff","#36d7b7","#ffb84d","#62b5ff","#ff7aa8","#78e08f"];
+  return p[index%p.length]
+}
+_isTempEntity(e){
+  if(!e)return false;
+  const dc=String(this._attr(e,"device_class")||"").toLowerCase();
+  const u=String(this._attr(e,"unit_of_measurement")||"").toLowerCase();
+  return dc==="temperature"||u.includes("°c")||u.includes("°f")
+}
+_tempProfile(e,label="",context=""){
+  if(["battery","inverter","water","ambient"].includes(context))return context;
+  const s=(String(e||"")+" "+String(label||"")).toLowerCase();
+  if(/battery|batterie|batt|\bbms\b|\bjk\b/.test(s))return "battery";
+  if(/inverter|convertisseur|onduleur|edecoa/.test(s))return "inverter";
+  if(/chauffe.?eau|water.?heater|boiler|eau|water/.test(s))return "water";
+  return "ambient"
+}
+_tempColorValue(value,unit,profile){
+  let v=Number(value);
+  if(!Number.isFinite(v))return "";
+  if(String(unit||"").toLowerCase().includes("°f"))v=(v-32)*5/9;
+  if(profile==="battery")return v<=30?"#73ff2b":v<=45?"#ff9f2d":"#ff554d";
+  if(profile==="inverter")return v<=35?"#73ff2b":v<=55?"#ff9f2d":"#ff554d";
+  if(profile==="water")return v<=30?"#27d9ff":v<=45?"#ff9f2d":"#ff554d";
+  return v<=15?"#27d9ff":v<=25?"#73ff2b":"#ff554d"
+}
+_tempColor(e,profile){
+  return this._tempColorValue(this._num(e),this._attr(e,"unit_of_measurement"),profile)
+}
+_tempAttrs(e,profile){
+  const col=this._tempColor(e,profile);
+  return ' class="dynamic-temp" data-temp-entity="'+this._ea(e)+'" data-temp-profile="'+this._ea(profile)+'"'+(col?' style="--temp-color:'+col+'"':"")
+}
 _has(){return Array.from(arguments).some(Boolean)}
 _icon(i,img){if(img)return '<img src="'+this._ea(img)+'" style="width:28px;height:28px;object-fit:contain;border-radius:5px">';return '<ha-icon icon="'+this._ea(i||"mdi:circle")+'"></ha-icon>'}
 _e(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 _ea(v){return this._e(v).replace(/\n/g," ")}
 _uid(){return Math.random().toString(36).slice(2,10)}
 async _ws(m){if(this._hass.callWS)return this._hass.callWS(m);const r=await this._hass.connection.sendMessagePromise(m);return r&&r.result!==undefined?r.result:r}
-async _load(){try{this._config=await this._ws({type:"smart_fourgon/config/get"});await this._loadHeroAssets();this._loaded=true;this._render()}catch(e){this.shadowRoot.innerHTML='<div style="padding:30px;background:#30151a;color:#fff">Smart Fourgon: '+this._e(e.message||e)+'</div>'}}
+async _load(){
+try{
+  this._config=await this._ws({type:"smart_fourgon/config/get"});
+  this._loaded=true;
+  this._render();
+  this._loadHeroAssets().then(changed=>{
+    if(changed&&this._loaded&&!this._editing)this._render(true)
+  })
+}catch(e){
+  this.shadowRoot.innerHTML='<div style="padding:30px;background:#30151a;color:#fff">Smart Fourgon: '+this._e(e.message||e)+'</div>'
+}
+}
 async _loadHeroAssets(){
-const load=async(path)=>{
+const load=async(path,current,storageKey)=>{
+  if(current)return {value:current,changed:false};
   try{
-    const r=await fetch(path+"?v=1.0.6",{cache:"no-store"});
-    if(!r.ok)return "";
+    const r=await fetch(path+"?v=hero-1",{cache:"force-cache"});
+    if(!r.ok)return {value:"",changed:false};
     const b64=(await r.text()).replace(/\s+/g,"");
-    return b64?"data:image/webp;base64,"+b64:"";
-  }catch(e){return ""}
+    const value=b64?"data:image/webp;base64,"+b64:"";
+    if(value){try{localStorage.setItem(storageKey,value)}catch(e){}}
+    return {value,changed:!!value}
+  }catch(e){return {value:"",changed:false}}
 };
-[this._heroDay,this._heroNight]=await Promise.all([
-  load("/smart_fourgon/assets/hero-day.b64"),
-  load("/smart_fourgon/assets/hero-night.b64")
+const [d,n]=await Promise.all([
+  load("/smart_fourgon/assets/hero-day.b64",this._heroDay,"smart_fourgon_hero_day"),
+  load("/smart_fourgon/assets/hero-night.b64",this._heroNight,"smart_fourgon_hero_night")
 ]);
+this._heroDay=d.value||this._heroDay;
+this._heroNight=n.value||this._heroNight;
+return d.changed||n.changed
 }
 _night(){const m=(this._config.general||{}).theme_mode||"auto";if(m==="night")return true;if(m==="day")return false;return (this._state("sun.sun")||{}).state==="below_horizon"}
 _pageTitle(){if(this._page==="overview")return this._t("overview");if(this._page==="settings")return this._t("settings");const id=this._page.replace("tab:","");const t=(this._config.tabs||[]).find(x=>x.id===id);return t?t.name:""}
@@ -150,6 +223,17 @@ this.shadowRoot.querySelectorAll("[data-climate-option]").forEach(el=>{
   if(v!=null&&el.value!==String(v))el.value=String(v)
 });
 
+this.shadowRoot.querySelectorAll("[data-temp-entity]").forEach(el=>{
+  const ent=el.dataset.tempEntity,profile=el.dataset.tempProfile||this._tempProfile(ent);
+  const col=this._tempColor(ent,profile);
+  if(col)el.style.setProperty("--temp-color",col)
+});
+this.shadowRoot.querySelectorAll("[data-temp-climate]").forEach(el=>{
+  const ent=el.dataset.tempClimate,at=(this._state(ent)||{}).attributes||{};
+  const col=this._tempColorValue(at.current_temperature,at.temperature_unit||"°C",el.dataset.tempProfile||"ambient");
+  if(col)el.style.setProperty("--temp-color",col)
+});
+
 this.shadowRoot.querySelectorAll("[data-location-live]").forEach(el=>{
   const ent=el.dataset.locationLive;
   if(ent)el.textContent=this._fmt(ent)
@@ -180,7 +264,7 @@ const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.6">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.7">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -213,14 +297,16 @@ if(preserveScroll){
 }
 }
 _customSidebar(){
-return (this._config.tabs||[]).filter(t=>t.enabled!==false).map(t=>
-  '<section class="nav-group custom-nav-group">'
+const tabs=(this._config.tabs||[]).filter(t=>t.enabled!==false);
+return tabs.map((t,idx)=>{
+  const color=this._tabAccent(t,idx);
+  return '<section class="nav-group custom-nav-group" style="--nav-color:'+color+'">'
     +'<button data-page="tab:'+this._ea(t.id)+'" class="nav-main custom-parent '+(this._page==="tab:"+t.id?"active":"")+'">'
       +this._icon(t.icon||"mdi:folder-outline")
       +'<span>'+this._e(t.name)+'</span>'
     +'</button>'
   +'</section>'
-).join("")
+}).join("")
 }
 _overview(night){
 const o=this._config.overview||{};
@@ -240,13 +326,13 @@ const callouts=[
     [this._t("voltage"),i.voltage],
     [this._t("frequency"),i.frequency],
     [this._t("current"),i.current],
-    [this._t("temperature"),i.temperature]
+    [this._t("temperature"),i.temperature,"inverter"]
   ],"inverter"):"",
   b.enabled!==false?this._callout("battery",this._t("battery"),b.icon,b.soc,[
     [this._t("voltage"),b.voltage],
     [this._t("current"),b.current],
     [this._t("power"),b.power],
-    [this._t("temperature"),b.temperature]
+    [this._t("temperature"),b.temperature,"battery"]
   ],"battery"):"",
   w.enabled!==false?this._callout("water",this._t("water"),w.icon,waterPrimary,waterRows,"water"):""
 ].filter(Boolean);
@@ -285,9 +371,10 @@ if(!primary&&!rows.some(x=>x[1]))return "";
 const p=primary
   ?'<button class="call-primary" data-history="'+this._ea(primary)+'" data-live="'+this._ea(primary)+'">'+this._e(this._fmt(primary))+'</button>'
   :"";
-const r=rows.filter(x=>x[1]).map(x=>
-  '<button class="call-row" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'">'+this._e(this._fmt(x[1]))+'</b></button>'
-).join("");
+const r=rows.filter(x=>x[1]).map(x=>{
+  const temp=x[2]?this._tempAttrs(x[1],x[2]):"";
+  return '<button class="call-row" data-history="'+this._ea(x[1])+'"><span>'+this._e(x[0])+'</span><b data-live="'+this._ea(x[1])+'"'+temp+'>'+this._e(this._fmt(x[1]))+'</b></button>'
+}).join("");
 const cfgKey=key==="waterheater"?"water_heater":key;
 const cfg=(this._config.overview||{})[cfgKey]||{};
 const active=(key==="heating"||key==="waterheater"||key==="vent")?this._active(cfg.status):false;
@@ -314,11 +401,17 @@ _quickStatus(){
 const items=(this._config.quick_status||[]).filter(x=>x.enabled!==false&&x.entity);
 if(!items.length)return "";
 return '<section class="quick-status"><h3>'+this._icon("mdi:view-grid-outline")+'<span>'+this._t("quick")+'</span></h3><div class="quick-grid">'
-  +items.map(x=>'<button data-history="'+this._ea(x.entity)+'">'
-    +this._icon(x.icon||this._attr(x.entity,"icon")||"mdi:circle")
-    +'<span>'+this._e(x.label||this._attr(x.entity,"friendly_name")||x.entity)+'</span>'
-    +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
-  +'</button>').join("")
+  +items.map(x=>{
+    const label=x.label||this._attr(x.entity,"friendly_name")||x.entity;
+    const isTemp=this._isTempEntity(x.entity);
+    const profile=isTemp?this._tempProfile(x.entity,label):"";
+    const col=isTemp?this._tempColor(x.entity,profile):"";
+    return '<button data-history="'+this._ea(x.entity)+'"'+(isTemp?' class="temp-tile" data-temp-entity="'+this._ea(x.entity)+'" data-temp-profile="'+profile+'" style="--temp-color:'+col+'"':"")+'>'
+      +this._icon(x.icon||this._attr(x.entity,"icon")||"mdi:circle")
+      +'<span>'+this._e(label)+'</span>'
+      +'<b data-live="'+this._ea(x.entity)+'">'+this._e(this._fmt(x.entity))+'</b>'
+    +'</button>'
+  }).join("")
 +'</div></section>'
 }
 _summaryCard(cls,title,icon,primary,rows){
@@ -454,7 +547,7 @@ _inverter(c={}){if(c.enabled===false||!this._has(c.status,c.power,c.voltage,c.fr
 _vent(c={}){if(c.enabled===false||!this._has(c.status,c.current_temp,c.target_temp,c.power,c.speed))return "";const a=this._active(c.status)||(this._num(c.power)||0)>1||(this._num(c.speed)||0)>0;return this._mod(this._t("ventilation"),c.icon,a,c.current_temp||c.speed||c.power,[[this._t("state"),c.status],[this._t("currentTemp"),c.current_temp],[this._t("target"),c.target_temp],[this._t("power"),c.power],[this._t("speed"),c.speed]])}
 _kv(l,e){return e?'<button class="metric" data-history="'+this._ea(e)+'"><span>'+this._e(l)+'</span><b>'+this._e(this._fmt(e))+'</b></button>':""}
 _quick(o){const a=[];const p=(l,i,e,ac)=>{if(e)a.push('<button data-history="'+this._ea(e)+'">'+this._icon(i)+'<span>'+this._e(l)+'</span><b>'+this._e(this._fmt(e))+'</b></button>')};p(this._t("battery"),o.battery&&o.battery.icon,o.battery&&(o.battery.soc||o.battery.voltage));p(this._t("solar"),o.solar&&o.solar.icon,o.solar&&o.solar.power);p(this._t("water"),o.water&&o.water.icon,o.water&&(o.water.percent||o.water.liters));p(this._t("heating"),o.heating&&o.heating.icon,o.heating&&(o.heating.current_temp||o.heating.target_temp));p(this._t("waterHeater"),o.water_heater&&o.water_heater.icon,o.water_heater&&o.water_heater.temperature);return a.length?'<section class="card quick"><h3>'+this._t("quick")+'</h3><div class="quick-grid">'+a.join("")+'</div></section>':""}
-_tab(id){const t=(this._config.tabs||[]).find(x=>x.id===id&&x.enabled!==false);if(!t)return '<div class="empty">'+this._t("noConfig")+'</div>';const items=(t.items||[]).filter(i=>i.enabled!==false&&i.entity);return '<div><div class="tab-head">'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+'<h2>'+this._e(t.name)+'</h2></div>'+(items.length?'<div class="entity-grid">'+items.map(i=>this._entityCard(i)).join("")+'</div>':'<div class="empty">'+this._t("noConfig")+'</div>')+'</div>'}
+_tab(id){const t=(this._config.tabs||[]).find(x=>x.id===id&&x.enabled!==false);if(!t)return '<div class="empty">'+this._t("noConfig")+'</div>';const items=(t.items||[]).filter(i=>i.enabled!==false&&i.entity);return '<div><div class="tab-head">'+this._icon(t.icon||"mdi:folder-outline",t.image||"")+'<h2>'+this._e(t.name)+'</h2></div>'+(items.length?'<div class="entity-grid">'+items.map(i=>this._entityCard(i,t.name)).join("")+'</div>':'<div class="empty">'+this._t("noConfig")+'</div>')+'</div>'}
 _type(i){if(i.type&&i.type!=="auto")return i.type;const d=String(i.entity||"").split(".")[0];return SF_TYPES.includes(d)?d:"read"}
 _climateLabel(kind,value){
 const raw=String(value??"");
@@ -476,10 +569,15 @@ const pair=(maps[kind]||{})[v];
 if(pair)return pair[fr?0:1];
 return raw.replace(/_/g," ").replace(/\b\w/g,m=>m.toUpperCase())
 }
-_entityCard(i){
+_entityCard(i,context=""){
 const s=this._state(i.entity),type=this._type(i),active=this._active(i.status_entity||i.entity);
 const label=i.label||this._attr(i.entity,"friendly_name")||i.entity,val=this._fmt(i.entity);
 const icon=i.icon||this._attr(i.entity,"icon")||"mdi:circle";
+const isTemp=this._isTempEntity(i.entity);
+const tempProfile=isTemp?this._tempProfile(i.entity,label+" "+context):"";
+const tempColor=isTemp?this._tempColor(i.entity,tempProfile):"";
+const tempCard=isTemp?' temp-card':"";
+const tempData=isTemp?' data-temp-entity="'+this._ea(i.entity)+'" data-temp-profile="'+tempProfile+'" style="--temp-color:'+tempColor+'"':"";
 const head='<div class="entity-head">'+this._icon(icon)+'<div><b>'+this._e(label)+'</b></div></div>';
 const status=i.status_entity?'<div class="metric"><span>'+this._t("state")+'</span><b data-live="'+this._ea(i.status_entity)+'">'+this._e((this._state(i.status_entity)||{}).state||"—")+'</b></div>':"";
 
@@ -526,7 +624,7 @@ if(type==="climate"){
   }else{
     targetControl='<div class="ha-thermostat-dial">'
       +'<div class="dial-ring">'
-        +'<div class="dial-current"><span>'+this._t("currentTemp")+'</span><b data-climate-current="'+this._ea(i.entity)+'">'+fmtTemp(current)+'</b></div>'
+        +'<div class="dial-current"><span>'+this._t("currentTemp")+'</span><b class="dynamic-temp" data-climate-current="'+this._ea(i.entity)+'" data-temp-climate="'+this._ea(i.entity)+'" data-temp-profile="ambient" style="--temp-color:'+this._tempColorValue(current,unit,"ambient")+'">'+fmtTemp(current)+'</b></div>'
         +'<div class="dial-target"><span>'+this._t("target")+'</span><strong data-climate-target-value="'+this._ea(i.entity)+'">'+fmtTemp(target)+'</strong></div>'
       +'</div>'
       +'<div class="dial-buttons">'
@@ -573,7 +671,7 @@ if(type==="number"){
   const opts=s&&s.attributes&&Array.isArray(s.attributes.options)?s.attributes.options:[];
   ctrl='<div class="control"><select data-select="'+this._ea(i.entity)+'">'+opts.map(o=>'<option '+(String(o)===String(s.state)?"selected":"")+'>'+this._e(o)+'</option>').join("")+'</select></div>'
 }
-return '<article class="entity-card '+(active?"active":"")+'">'+head
+return '<article class="entity-card '+(active?"active":"")+tempCard+'"'+tempData+'>'+head
   +'<button class="entity-value" data-history="'+this._ea(i.entity)+'" data-live="'+this._ea(i.entity)+'">'+this._e(val)+'</button>'
   +status+ctrl+'</article>'
 }
@@ -648,10 +746,10 @@ const opts=SF_ICONS.slice();
 if(value&&!opts.some(x=>x[0]===value))opts.unshift([value,"★ "+value]);
 return this._select(id,l,opts,value)
 }
-_sectionEditor(k,title,c,fields){const en=this._config.general.language==="en";const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:en?"Battery charge today":"Charge batterie aujourd’hui",charge_month:en?"Battery charge this month":"Charge batterie ce mois",charge_year:en?"Battery charge this year":"Charge batterie cette année",discharge_today:en?"Battery discharge today":"Décharge batterie aujourd’hui",discharge_month:en?"Battery discharge this month":"Décharge batterie ce mois",discharge_year:en?"Battery discharge this year":"Décharge batterie cette année",consumed_today:en?"Water used today":"Eau consommée aujourd’hui",consumed_month:en?"Water used this month":"Eau consommée ce mois",consumed_year:en?"Water used this year":"Eau consommée cette année"};return '<details class="section-editor" open><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
+_sectionEditor(k,title,c,fields){const en=this._config.general.language==="en";const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:en?"Battery charge today":"Charge batterie aujourd’hui",charge_month:en?"Battery charge this month":"Charge batterie ce mois",charge_year:en?"Battery charge this year":"Charge batterie cette année",discharge_today:en?"Battery discharge today":"Décharge batterie aujourd’hui",discharge_month:en?"Battery discharge this month":"Décharge batterie ce mois",discharge_year:en?"Battery discharge this year":"Décharge batterie cette année",consumed_today:en?"Water used today":"Eau consommée aujourd’hui",consumed_month:en?"Water used this month":"Eau consommée ce mois",consumed_year:en?"Water used this year":"Eau consommée cette année"};return '<details class="section-editor"'+this._detailAttrs("base:"+k)+'><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
 _tabEditor(t,ti){
 const items=(t.items||[]).map((it,ii)=>this._itemEditor(ti,ii,it)).join("");
-return '<details class="tab-editor" open><summary>'+this._icon(t.icon||"mdi:folder-outline")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'
+return '<details class="tab-editor"'+this._detailAttrs("tab:"+t.id)+'><summary>'+this._icon(t.icon||"mdi:folder-outline")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'
   +'<label class="field check-field"><span>'+this._t("section")+'</span><input type="checkbox" id="tab-'+ti+'-enabled" '+(t.enabled!==false?"checked":"")+'></label>'
   +'<label class="field check-field"><span>'+this._t("showRight")+'</span><input type="checkbox" id="tab-'+ti+'-right" '+(t.show_right===true?"checked":"")+'></label>'
   +this._field("tab-"+ti+"-name",this._t("tabName"),t.name)
@@ -950,6 +1048,12 @@ this.shadowRoot.querySelectorAll("[data-climate-option]").forEach(s=>s.onchange=
 if(this._page==="settings")this._bindSettings()
 }
 _bindSettings(){
+this.shadowRoot.querySelectorAll("details[data-detail-key]").forEach(d=>{
+  d.ontoggle=()=>{
+    this._detailsState[d.dataset.detailKey]=d.open;
+    this._saveDetailState()
+  }
+});
 const add=this.shadowRoot.getElementById("add-tab");
 if(add)add.onclick=()=>{
   this._sync();
