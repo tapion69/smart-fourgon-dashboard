@@ -1,5 +1,5 @@
 name: Bug report
-description: Signaler un problème avec Smart Fourgon Dashboard
+description: Report a problem with Smart Fourgon Dashboard
 title: "[Bug] "
 labels:
   - bug
@@ -7,75 +7,75 @@ body:
   - type: markdown
     attributes:
       value: |
-        Merci de fournir le maximum d'informations. Ne publiez jamais de mot de passe, token ou clé API.
+        Thanks for taking the time to report a bug. Never include passwords, tokens or API keys.
 
   - type: input
     id: version
     attributes:
-      label: Version Smart Fourgon
-      placeholder: "Ex. 1.0.7"
+      label: Smart Fourgon version
+      placeholder: "Example: 1.0.7"
     validations:
       required: true
 
   - type: input
     id: ha
     attributes:
-      label: Version Home Assistant
-      placeholder: "Ex. 2026.10.x"
+      label: Home Assistant version
+      placeholder: "Example: 2026.10.x"
     validations:
       required: true
 
   - type: dropdown
     id: device
     attributes:
-      label: Type d'appareil
+      label: Device type
       options:
-        - Ordinateur
+        - Desktop
         - Smartphone
-        - Tablette
-        - Autre
+        - Tablet
+        - Other
     validations:
       required: true
 
   - type: input
     id: browser
     attributes:
-      label: Navigateur / application
-      placeholder: "Chrome, Firefox, application Home Assistant..."
+      label: Browser / application
+      placeholder: "Chrome, Firefox, Home Assistant app..."
 
   - type: textarea
     id: problem
     attributes:
-      label: Description du problème
-      description: Décrivez ce qui se passe et ce que vous attendiez.
+      label: Problem description
+      description: Explain what happens and what you expected.
     validations:
       required: true
 
   - type: textarea
     id: reproduce
     attributes:
-      label: Étapes pour reproduire
+      label: Steps to reproduce
       placeholder: |
-        1. Ouvrir...
-        2. Cliquer...
-        3. Observer...
+        1. Open...
+        2. Click...
+        3. Observe...
     validations:
       required: true
 
   - type: textarea
     id: entities
     attributes:
-      label: Entités concernées
-      description: Indiquer uniquement les entity_id utiles.
+      label: Related entities
+      description: Include only the entity IDs that are useful for reproducing the issue.
 
   - type: textarea
     id: logs
     attributes:
-      label: Logs / console navigateur
+      label: Logs / browser console
       render: text
 
   - type: textarea
     id: screenshots
     attributes:
-      label: Captures d'écran
-      description: Vous pouvez glisser-déposer les captures ici.
+      label: Screenshots
+      description: Drag and drop screenshots here.
