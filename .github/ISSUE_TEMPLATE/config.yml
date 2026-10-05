@@ -2,4 +2,4 @@ blank_issues_enabled: true
 contact_links:
   - name: Documentation
     url: https://github.com/tapion69/smart-fourgon-dashboard#readme
-    about: Lire la documentation avant d'ouvrir une issue.
+    about: Read the documentation before opening an issue.
