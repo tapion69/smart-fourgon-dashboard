@@ -1,210 +1,269 @@
 # Smart Fourgon Dashboard
 
+[![Release](https://img.shields.io/github/v/release/tapion69/smart-fourgon-dashboard?display_name=tag)](https://github.com/tapion69/smart-fourgon-dashboard/releases)
 [![Validate](https://github.com/tapion69/smart-fourgon-dashboard/actions/workflows/validate.yml/badge.svg)](https://github.com/tapion69/smart-fourgon-dashboard/actions/workflows/validate.yml)
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://www.hacs.xyz/)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.5%2B-18BCF2.svg)](https://www.home-assistant.io/)
 [![License](https://img.shields.io/github/license/tapion69/smart-fourgon-dashboard)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20the%20project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/tapion69)
 
-**Smart Fourgon Dashboard** est un tableau de bord Home Assistant générique, configurable et responsive, pensé pour les fourgons aménagés, vans et camping-cars.
+**Smart Fourgon Dashboard** is a free, configurable and responsive Home Assistant dashboard designed for camper vans, motorhomes and RVs.
 
-Le projet n'impose pas de matériel particulier : les informations affichées proviennent des entités déjà présentes dans Home Assistant.
+It does not require any specific hardware brand. The dashboard uses entities that already exist in your Home Assistant instance and lets you decide what should be displayed.
 
-> Le projet est encore en phase de finalisation. La branche `main` contient la version de développement. La première Release HACS stable sera publiée lorsque l'interface et les fonctions seront suffisamment proches du résultat final.
+## Preview
 
-## Fonctionnalités
+![Smart Fourgon Dashboard overview](docs/dashboard-preview.jpg)
 
-### Vue générale
+## Highlights
 
-La vue principale s'adapte automatiquement aux entités configurées.
+- Dedicated **Smart Fourgon** panel in the Home Assistant sidebar.
+- Responsive layout for **desktop, tablet and smartphone**.
+- French and English dashboard UI.
+- **Day / Night / Automatic** visual modes.
+- Configurable van overview with only the sections you actually use.
+- Solar, van consumption, battery, inverter and fresh-water data directly on the main image.
+- Daily / monthly / yearly energy summaries.
+- Fully configurable **Quick status** tiles.
+- Unlimited custom pages such as Heating, Water, MaxxFan, Fridge, Lighting or Security.
+- Native-style controls for switches, buttons, numbers, selects, fans and climate entities.
+- Dynamic Home Assistant climate controls based on the capabilities exposed by each entity.
+- Built-in entity history.
+- Dynamic temperature colours.
+- Configuration stored in Home Assistant and shared between devices.
 
-Sur l'image du fourgon peuvent apparaître :
+## Main overview
 
-- **Solaire** : puissance, tension et courant ;
-- **Consommation fourgon** : puissance instantanée ;
-- **Batterie** : SOC, tension, courant, puissance, température et jauge 5 niveaux ;
-- **Convertisseur 12/230 V** : puissance/état, tension, fréquence, courant et température ;
-- **Eau propre** : litres, pourcentage et jauge par niveaux.
+The main image can display the following sections when configured.
 
-Une section disparaît automatiquement lorsqu'elle est désactivée ou qu'aucune entité utile n'est configurée.
+### Solar
 
-### Compteurs énergie
+- power;
+- voltage;
+- current;
+- energy today;
+- energy this month;
+- energy this year.
 
-La colonne de droite peut afficher des cartes par catégorie :
+### Van consumption
 
-- production solaire : instantané, jour, mois, année ;
-- consommation fourgon : instantané, jour, mois, année ;
-- charge batterie : jour, mois, année ;
-- décharge batterie : jour, mois, année ;
-- eau consommée : jour, mois, année.
+- live power;
+- energy today;
+- energy this month;
+- energy this year.
 
-Les couleurs reprennent la logique visuelle de la vue principale.
+### Battery
 
-### État rapide
+- state of charge;
+- power;
+- voltage;
+- current;
+- temperature;
+- 5-step battery gauge;
+- charge today / month / year;
+- discharge today / month / year.
 
-**État rapide** est entièrement configurable. Chaque tuile peut recevoir une entité Home Assistant, un nom et une icône.
+### 12/230 V inverter
 
-Un clic sur une valeur numérique ouvre son historique.
+- state or power;
+- voltage;
+- frequency;
+- current;
+- temperature.
 
-### Onglets personnalisés
+### Fresh water
 
-Il est possible de créer autant d'onglets que nécessaire, par exemple Chauffage, Eau, MaxxFan, Réfrigérateur, Éclairage, Sécurité ou Truma.
+- remaining litres;
+- percentage;
+- 5-step level indicator;
+- water used today / month / year.
 
-Chaque onglet peut recevoir ses propres entités et être affiché dans le menu gauche. Il peut aussi être ajouté au menu de droite de la vue générale.
+A section is hidden when it is disabled or when no useful Home Assistant entity is configured for it.
 
-Types pris en charge :
+## Energy summary cards
 
-- Auto ;
-- Lecture seule / Sensor ;
-- Binary Sensor ;
-- Switch ;
-- Number ;
-- Select ;
-- Button ;
-- Climate ;
-- Light ;
+On desktop, category cards can be displayed next to the main image:
+
+- **Solar production** — live, today, month, year;
+- **Van consumption** — live, today, month, year;
+- **Battery charge** — today, month, year;
+- **Battery discharge** — today, month, year;
+- **Water used** — today, month, year.
+
+On smartphones these cards move below the main image while the important live values remain over the van picture.
+
+## Quick status
+
+The **Quick status** area is fully configurable.
+
+Each tile can use:
+
+- any Home Assistant entity;
+- a custom label;
+- a Material Design icon.
+
+Numeric values can be opened directly in the built-in history view.
+
+## Custom pages
+
+Create as many custom pages as you need, for example:
+
+- Heating / Truma;
+- Water;
+- MaxxFan / ventilation;
+- Refrigerator;
+- Lighting;
+- Security;
+- Cameras;
+- Any other Home Assistant equipment.
+
+Each page can contain its own entities and can optionally be shown in additional dashboard navigation.
+
+Supported entity/control types include:
+
+- Auto;
+- Sensor / read only;
+- Binary Sensor;
+- Switch;
+- Number;
+- Select;
+- Button;
+- Climate;
+- Light;
 - Fan.
 
-### Thermostats Home Assistant
+## Home Assistant climate controls
 
-Les entités `climate` utilisent les capacités réellement exposées par Home Assistant :
+Climate entities are rendered from the capabilities actually exposed by Home Assistant.
 
-- température actuelle ;
-- consigne ;
-- mode HVAC ;
-- mode de ventilation ;
-- presets ;
-- swing ;
-- swing horizontal ;
-- consigne basse/haute lorsque disponible.
+Depending on the entity, Smart Fourgon can automatically show:
 
-### Températures dynamiques
+- current temperature;
+- target temperature;
+- HVAC mode;
+- fan mode;
+- presets;
+- swing mode;
+- horizontal swing;
+- low/high target temperatures.
 
-| Type | Zone 1 | Zone 2 | Zone 3 |
+This keeps the dashboard generic: a Truma heater, air conditioner or another thermostat can expose different controls without requiring a hard-coded page.
+
+## Dynamic temperature colours
+
+Recognised temperature entities can use dynamic colours.
+
+| Temperature type | Low / normal | Warning | High |
 | --- | --- | --- | --- |
-| Batterie | 0–30 °C vert | 31–45 °C orange | >45 °C rouge |
-| Convertisseur | 0–35 °C vert | 36–55 °C orange | >55 °C rouge |
-| Eau | 0–30 °C bleu | 31–45 °C orange | >45 °C rouge |
-| Ambiante | 0–15 °C bleu | 16–25 °C vert | >25 °C rouge |
+| Battery | 0–30 °C green | 31–45 °C orange | >45 °C red |
+| Inverter | 0–35 °C green | 36–55 °C orange | >55 °C red |
+| Water | 0–30 °C blue | 31–45 °C orange | >45 °C red |
+| Ambient | 0–15 °C blue | 16–25 °C green | >25 °C red |
 
-### Historique
+## History
 
-Un clic sur une valeur numérique ouvre un historique intégré sur 6 h, 24 h, 7 jours ou 30 jours.
+Clicking a numeric entity can open the integrated history view.
 
-### Jour / nuit
+Available periods:
 
-Trois modes sont disponibles : **Jour**, **Nuit** et **Automatique**. En automatique, le dashboard suit l'état de `sun.sun`.
+- 6 hours;
+- 24 hours;
+- 7 days;
+- 30 days.
 
-### Responsive
+## Day and night modes
 
-L'interface est conçue pour ordinateur, tablette et smartphone. Sur smartphone, les informations principales restent positionnées sur l'image du fourgon et les cartes récapitulatives sont placées en dessous.
+Three display modes are available:
 
-## Installation avec HACS
+- **Day**;
+- **Night**;
+- **Automatic**.
 
-Smart Fourgon Dashboard est actuellement installé comme **dépôt personnalisé HACS**.
+Automatic mode follows Home Assistant's `sun.sun` state.
 
-1. Ouvrir **HACS**.
-2. Ouvrir **Dépôts personnalisés**.
-3. Ajouter :
+## Installation with HACS
+
+Smart Fourgon Dashboard can be installed as a **custom HACS Integration repository**.
+
+1. Open **HACS**.
+2. Open **Custom repositories**.
+3. Add:
 
    ```text
    https://github.com/tapion69/smart-fourgon-dashboard
    ```
 
-4. Sélectionner la catégorie **Integration**.
-5. Installer **Smart Fourgon Dashboard**.
-6. Redémarrer Home Assistant.
-7. Aller dans **Paramètres → Appareils et services → Ajouter une intégration**.
-8. Rechercher **Smart Fourgon Dashboard**.
-9. Valider l'installation.
+4. Select **Integration** as the category.
+5. Install **Smart Fourgon Dashboard**.
+6. Restart Home Assistant.
+7. Go to **Settings → Devices & services → Add integration**.
+8. Search for **Smart Fourgon Dashboard**.
+9. Complete the setup.
 
-Le panneau **Smart Fourgon** apparaît ensuite dans la barre latérale Home Assistant.
+The **Smart Fourgon** panel will then appear in the Home Assistant sidebar.
 
-### Prérequis
+### Requirements
 
-- Home Assistant **2026.5.0 ou plus récent** ;
-- HACS pour l'installation simplifiée ;
-- au moins une entité Home Assistant à afficher.
+- Home Assistant **2026.5.0 or newer**;
+- HACS for the easiest installation method;
+- at least one Home Assistant entity to display.
 
-Aucune dépendance matérielle spécifique n'est imposée.
+No specific inverter, BMS, solar controller, heater or water-level system is required.
 
-## Configuration
+## Updating
 
-Ouvrir **Smart Fourgon → Réglages**.
-
-Les réglages permettent notamment de définir la langue, le mode jour/nuit, l'entité de localisation, les sections principales, les compteurs jour/mois/année, État rapide et les onglets personnalisés.
-
-La configuration est enregistrée côté Home Assistant et reste disponible sur les autres appareils utilisant la même instance.
-
-## Mises à jour
-
-### Pendant le développement
-
-La branche `main` évolue fréquemment et **n'est pas publiée comme Release à chaque correction**.
-
-Dans cette phase, HACS ne signale donc pas forcément une nouvelle version. Pour récupérer les derniers changements :
-
-**HACS → Smart Fourgon Dashboard → Retélécharger**, puis redémarrer Home Assistant si nécessaire.
-
-### Après la première Release stable
-
-Les versions stables seront publiées sous forme de **GitHub Releases** avec un tag `vX.Y.Z`.
-
-À partir de ce moment, HACS pourra détecter les nouvelles Releases et proposer normalement le bouton **Mettre à jour**.
-
-La procédure est décrite dans [RELEASING.md](RELEASING.md).
-
-## Validation automatique
-
-Chaque modification de `main` et chaque Pull Request lance des contrôles GitHub Actions :
-
-- validation JSON ;
-- syntaxe Python ;
-- syntaxe JavaScript ;
-- validation HACS ;
-- Hassfest Home Assistant.
-
-Une version stable ne doit être publiée que lorsque ces contrôles sont verts.
-
-## Structure du dépôt
+Stable versions are published as **GitHub Releases** using semantic version tags such as:
 
 ```text
-custom_components/
-└── smart_fourgon/
-    ├── frontend/
-    │   ├── assets/
-    │   ├── smart-fourgon-panel.js
-    │   └── styles.css
-    ├── translations/
-    ├── __init__.py
-    ├── config_flow.py
-    ├── manifest.json
-    ├── panel.py
-    ├── storage.py
-    └── websocket.py
+v1.0.7
+v1.0.8
+v1.1.0
 ```
 
-## Données et confidentialité
+HACS can detect new stable releases and offer the normal **Update** action.
 
-Smart Fourgon Dashboard utilise les entités de l'instance Home Assistant locale et enregistre sa configuration dans le stockage Home Assistant. Le projet n'a pas besoin d'un service cloud externe pour fonctionner.
+Development work may still be committed to `main` between releases. Those individual development commits are not intended to trigger HACS update notifications.
 
-## Développement et contributions
+See [RELEASING.md](RELEASING.md) for the release process.
 
-Les propositions, rapports de bugs et améliorations sont bienvenus.
+## Validation
 
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [CHANGELOG.md](CHANGELOG.md)
-- [RELEASING.md](RELEASING.md)
+Every push to `main` and every Pull Request runs automated checks for:
 
-## Licence
+- JSON files;
+- Python syntax;
+- frontend JavaScript syntax;
+- HACS repository requirements;
+- Home Assistant Hassfest validation.
 
-Distribué sous licence [MIT](LICENSE).
+## Privacy
 
----
+Smart Fourgon Dashboard reads entities from your own Home Assistant instance and stores its dashboard configuration in Home Assistant storage.
 
-## English
+It does not require an external cloud service to operate.
 
-Smart Fourgon Dashboard is a configurable Home Assistant dashboard for camper vans, motorhomes and RVs.
+## Free and open source
 
-It uses existing Home Assistant entities and provides a responsive overview, energy summaries, configurable quick-status tiles, custom pages, native-style climate controls, history and day/night themes.
+**Smart Fourgon Dashboard is completely free and open source.**
 
-Installation is currently done through HACS as a **custom Integration repository**. Stable HACS updates will use GitHub Releases once the first public release is published.
+There is no paid edition, no locked feature and no subscription required. Donations do **not** unlock extra features or change the licence.
+
+Developing, testing and maintaining the project takes a significant amount of personal time. If you enjoy Smart Fourgon Dashboard and would like to support continued development, you can optionally buy me a coffee on Ko-fi:
+
+[![Support me on Ko-fi](https://img.shields.io/badge/Support%20me%20on-Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/tapion69)
+
+**Ko-fi:** https://ko-fi.com/tapion69
+
+Thank you for using the project, reporting bugs and sharing ideas — that already helps a lot.
+
+## Contributing
+
+Bug reports, feature ideas and Pull Requests are welcome.
+
+- [Contributing guide](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
+- [Release process](RELEASING.md)
+
+## License
+
+Smart Fourgon Dashboard is released under the [MIT License](LICENSE).
