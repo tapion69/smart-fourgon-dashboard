@@ -2099,3 +2099,161 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     display:none;
   }
 }
+
+/* =========================================================
+   1.0.7 - PC readability, accents and dynamic temperatures
+   ========================================================= */
+
+/* Distinguish the three blue-ish overview families */
+.callout.consumption{
+  --call-color:#58b9ff!important;
+}
+.callout.inverter{
+  --call-color:#c58cff!important;
+}
+.callout.water{
+  --call-color:#25d8ff!important;
+}
+.summary-consumption,
+.summary-consumption h3,
+.summary-consumption h3 ha-icon,
+.summary-consumption .summary-primary,
+.summary-consumption .summary-rows b{
+  color:#58b9ff!important;
+}
+
+/* User-created tabs: stable colour accents in the left navigation */
+.custom-nav-group .custom-parent ha-icon,
+.custom-nav-group .custom-parent span{
+  color:var(--nav-color,#fff)!important;
+}
+.custom-nav-group .custom-parent{
+  border-color:transparent;
+}
+.custom-nav-group .custom-parent:hover{
+  border-color:var(--nav-color,#48cfff);
+  background:rgba(20,54,70,.55);
+}
+.custom-nav-group .custom-parent.active{
+  border-color:var(--nav-color,#73ff2b)!important;
+  box-shadow:inset 3px 0 0 var(--nav-color,#73ff2b);
+}
+
+/* Dynamic temperature colour; thresholds are calculated in JS */
+.dynamic-temp{
+  color:var(--temp-color,#fff)!important;
+}
+.temp-card .entity-head ha-icon,
+.temp-card .entity-value{
+  color:var(--temp-color,#25d8ff)!important;
+}
+.quick-grid button.temp-tile ha-icon,
+.quick-grid button.temp-tile b{
+  color:var(--temp-color,#25d8ff)!important;
+}
+.call-row .dynamic-temp{
+  font-weight:1000!important;
+}
+
+/* Desktop: make all important overview information easier to read */
+@media(min-width:1021px){
+  .dash-layout{
+    grid-template-columns:minmax(0,1fr) 320px;
+  }
+
+  .hero-photo .callout{
+    width:205px;
+  }
+  .hero-photo .call-head{
+    gap:7px;
+    margin-bottom:4px;
+  }
+  .hero-photo .call-head ha-icon{
+    --mdc-icon-size:23px;
+  }
+  .hero-photo .call-head span{
+    font-size:13.5px;
+    line-height:1.05;
+  }
+  .hero-photo .call-primary{
+    font-size:34px;
+    line-height:.98;
+    margin-bottom:4px;
+  }
+  .hero-photo .call-row{
+    font-size:11.5px;
+    line-height:1.15;
+    padding:2px 0;
+  }
+  .hero-photo .water-percent-value{
+    font-size:12px;
+  }
+
+  /* Right energy cards */
+  .energy-summary{
+    padding:11px 12px;
+    margin-bottom:8px;
+  }
+  .energy-summary h3{
+    font-size:11.5px;
+    gap:7px;
+    margin-bottom:8px;
+  }
+  .energy-summary h3 ha-icon{
+    --mdc-icon-size:21px;
+  }
+  .energy-summary-body{
+    grid-template-columns:minmax(92px,.85fr) minmax(0,1.15fr);
+    gap:10px;
+  }
+  .summary-primary{
+    font-size:27px;
+    font-weight:600;
+  }
+  .summary-rows button{
+    min-height:29px;
+  }
+  .summary-rows span{
+    font-size:9px;
+  }
+  .summary-rows b{
+    font-size:10.5px;
+  }
+
+  /* Quick status: larger square tiles and readable values */
+  .quick-status{
+    padding:9px 11px 10px;
+  }
+  .quick-status h3{
+    font-size:10.5px;
+    gap:7px;
+    margin-bottom:8px;
+  }
+  .quick-status h3 ha-icon{
+    --mdc-icon-size:20px;
+  }
+  .quick-grid{
+    grid-template-columns:repeat(auto-fill,minmax(96px,108px));
+    gap:7px;
+  }
+  .quick-grid button{
+    height:78px;
+    min-height:78px;
+    padding:7px;
+  }
+  .quick-grid button ha-icon{
+    --mdc-icon-size:22px;
+  }
+  .quick-grid button span{
+    font-size:8.5px;
+  }
+  .quick-grid button b{
+    font-size:13px;
+  }
+
+  /* Left navigation text slightly stronger as well */
+  .sidebar .nav-main span{
+    font-size:11px;
+    font-weight:900;
+  }
+}
