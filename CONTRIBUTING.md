@@ -1,53 +1,54 @@
-# Contribuer à Smart Fourgon Dashboard
+# Contributing to Smart Fourgon Dashboard
 
-Merci de l'intérêt porté au projet.
+Thanks for your interest in the project.
 
-## Signaler un bug
+## Reporting a bug
 
-Utiliser le modèle **Bug report** dans les Issues et fournir si possible :
+Please use the **Bug report** issue template and include, when possible:
 
-- version Home Assistant ;
-- version Smart Fourgon Dashboard ;
-- navigateur / appareil ;
-- ordinateur, tablette ou smartphone ;
-- capture d'écran ;
-- entités concernées ;
-- message de la console navigateur s'il y en a un ;
-- étapes permettant de reproduire le problème.
+- Home Assistant version;
+- Smart Fourgon Dashboard version;
+- browser or Home Assistant app;
+- desktop, tablet or smartphone;
+- screenshots;
+- affected Home Assistant entity IDs;
+- browser-console errors;
+- clear steps to reproduce the issue.
 
-Ne jamais publier de mot de passe, token, clé API ou URL contenant des identifiants privés.
+Never publish passwords, access tokens, API keys or private URLs.
 
-## Proposer une amélioration
+## Requesting a feature
 
-Utiliser le modèle **Feature request**.
+Use the **Feature request** issue template.
 
-Décrire :
+Please explain:
 
-- le besoin ;
-- le comportement souhaité ;
-- les entités Home Assistant concernées ;
-- l'intérêt pour un dashboard de fourgon générique.
+- the use case;
+- the expected behaviour;
+- relevant Home Assistant entities or domains;
+- why the feature is useful for a generic camper-van dashboard.
 
-## Principes du projet
+## Project principles
 
-Smart Fourgon doit rester :
+Smart Fourgon Dashboard should remain:
 
-- générique ;
-- utilisable avec des entités Home Assistant existantes ;
-- configurable sans modifier le code ;
-- responsive ;
-- compatible ordinateur et smartphone ;
-- lisible en français et en anglais ;
-- sans dépendance obligatoire à une marque de matériel.
+- generic;
+- configurable without editing source code;
+- based on existing Home Assistant entities;
+- responsive;
+- usable on desktop and smartphone;
+- friendly to international users;
+- independent of any mandatory hardware brand.
 
 ## Pull Requests
 
-Avant une Pull Request :
+Before opening a Pull Request:
 
-1. tester les changements ;
-2. vérifier que `manifest.json` et les fichiers JSON restent valides ;
-3. vérifier la syntaxe Python ;
-4. vérifier la syntaxe JavaScript ;
-5. laisser GitHub Actions terminer les validations HACS et Hassfest.
+1. test the change;
+2. validate JSON files;
+3. validate Python syntax;
+4. validate frontend JavaScript;
+5. test relevant responsive layouts;
+6. let HACS and Hassfest checks complete.
 
-Éviter de mélanger une refonte visuelle importante et une modification backend sans lien dans la même Pull Request.
+Please avoid mixing unrelated backend changes and large visual redesigns in the same Pull Request.
