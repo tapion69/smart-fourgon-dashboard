@@ -1,0 +1,91 @@
+name: Publish HACS Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, for example 1.0.0"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create tag and GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate requested version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${{ inputs.version }}"
+          VERSION="${VERSION#v}"
+
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid version: $VERSION"
+            exit 1
+          fi
+
+          MANIFEST_VERSION="$(python -c 'import json; print(json.load(open("custom_components/smart_fourgon/manifest.json", encoding="utf-8"))["version"])')"
+
+          if [ "$VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "Requested version: $VERSION"
+            echo "manifest.json version: $MANIFEST_VERSION"
+            echo "Update manifest.json before publishing."
+            exit 1
+          fi
+
+          TAG="v$VERSION"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Validate JSON
+        run: |
+          python -m json.tool hacs.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/manifest.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/strings.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/translations/fr.json >/dev/null
+          python -m json.tool custom_components/smart_fourgon/translations/en.json >/dev/null
+
+      - name: Validate Python syntax
+        run: python -m compileall -q custom_components/smart_fourgon
+
+      - name: Validate frontend JavaScript
+        run: node --check custom_components/smart_fourgon/frontend/smart-fourgon-panel.js
+
+      - name: Create tag
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Smart Fourgon Dashboard $TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$TAG" \
+            --title "Smart Fourgon Dashboard $VERSION" \
+            --generate-notes \
+            --verify-tag
