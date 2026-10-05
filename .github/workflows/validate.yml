@@ -2,14 +2,22 @@ name: Validate
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  validate:
+  syntax:
+    name: Syntax and JSON
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Validate JSON
         run: |
           python -m json.tool hacs.json >/dev/null
@@ -17,7 +25,31 @@ jobs:
           python -m json.tool custom_components/smart_fourgon/strings.json >/dev/null
           python -m json.tool custom_components/smart_fourgon/translations/fr.json >/dev/null
           python -m json.tool custom_components/smart_fourgon/translations/en.json >/dev/null
+
       - name: Validate Python syntax
         run: python -m compileall -q custom_components/smart_fourgon
+
       - name: Validate frontend JavaScript
         run: node --check custom_components/smart_fourgon/frontend/smart-fourgon-panel.js
+
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
+
+  hassfest:
+    name: Hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Hassfest validation
+        uses: home-assistant/actions/hassfest@master
