@@ -3,12 +3,12 @@
   "name": "Smart Fourgon Dashboard",
   "codeowners": ["@tapion69"],
   "config_flow": true,
-  "single_config_entry": true,
   "dependencies": ["frontend", "http", "websocket_api", "history"],
   "documentation": "https://github.com/tapion69/smart-fourgon-dashboard",
-  "issue_tracker": "https://github.com/tapion69/smart-fourgon-dashboard/issues",
   "integration_type": "service",
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/tapion69/smart-fourgon-dashboard/issues",
   "requirements": [],
+  "single_config_entry": true,
   "version": "1.0.7"
 }
