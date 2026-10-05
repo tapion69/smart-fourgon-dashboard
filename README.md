@@ -29,7 +29,7 @@ Thank you for using the project, reporting bugs and sharing ideas — that alrea
 
 ## Preview
 
-![Smart Fourgon Dashboard overview](docs/dashboard-preview.jpg)
+<p align="center">\n  <img src="https://raw.githubusercontent.com/tapion69/smart-fourgon-dashboard/main/docs/dashboard-preview.jpg" alt="Smart Fourgon Dashboard overview" width="100%">\n</p>\n\n[Open the full-size dashboard preview](https://github.com/tapion69/smart-fourgon-dashboard/blob/main/docs/dashboard-preview.jpg)
 
 ## Highlights
 
