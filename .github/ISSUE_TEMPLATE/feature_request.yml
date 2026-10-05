@@ -1,5 +1,5 @@
 name: Feature request
-description: Proposer une amélioration pour Smart Fourgon Dashboard
+description: Suggest an improvement for Smart Fourgon Dashboard
 title: "[Feature] "
 labels:
   - enhancement
@@ -7,34 +7,34 @@ body:
   - type: textarea
     id: need
     attributes:
-      label: Besoin
-      description: Quel problème ou usage souhaitez-vous améliorer ?
+      label: Use case
+      description: What problem or use case would you like to improve?
     validations:
       required: true
 
   - type: textarea
     id: proposal
     attributes:
-      label: Comportement souhaité
-      description: Décrivez le résultat attendu.
+      label: Expected behaviour
+      description: Describe how you would like the feature to work.
     validations:
       required: true
 
   - type: textarea
     id: entities
     attributes:
-      label: Entités Home Assistant concernées
-      description: Exemples d'entity_id ou de domaines si utile.
+      label: Related Home Assistant entities
+      description: Add example entity IDs or domains when useful.
 
   - type: dropdown
     id: target
     attributes:
-      label: Partie du dashboard
+      label: Dashboard area
       options:
-        - Vue générale
-        - État rapide
-        - Compteurs énergie
-        - Onglets personnalisés
-        - Réglages
+        - Main overview
+        - Quick status
+        - Energy counters
+        - Custom pages
+        - Settings
         - Smartphone
-        - Autre
+        - Other
