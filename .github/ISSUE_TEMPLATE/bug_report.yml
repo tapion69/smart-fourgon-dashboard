@@ -1,0 +1,81 @@
+name: Bug report
+description: Signaler un problème avec Smart Fourgon Dashboard
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de fournir le maximum d'informations. Ne publiez jamais de mot de passe, token ou clé API.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version Smart Fourgon
+      placeholder: "Ex. 1.0.7"
+    validations:
+      required: true
+
+  - type: input
+    id: ha
+    attributes:
+      label: Version Home Assistant
+      placeholder: "Ex. 2026.10.x"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Type d'appareil
+      options:
+        - Ordinateur
+        - Smartphone
+        - Tablette
+        - Autre
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Navigateur / application
+      placeholder: "Chrome, Firefox, application Home Assistant..."
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Description du problème
+      description: Décrivez ce qui se passe et ce que vous attendiez.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: |
+        1. Ouvrir...
+        2. Cliquer...
+        3. Observer...
+    validations:
+      required: true
+
+  - type: textarea
+    id: entities
+    attributes:
+      label: Entités concernées
+      description: Indiquer uniquement les entity_id utiles.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / console navigateur
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Captures d'écran
+      description: Vous pouvez glisser-déposer les captures ici.
