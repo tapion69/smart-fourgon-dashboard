@@ -1,40 +1,47 @@
 # Changelog
 
-Toutes les évolutions importantes de Smart Fourgon Dashboard sont documentées ici.
+All notable changes to Smart Fourgon Dashboard are documented in this file.
 
-Le projet suit autant que possible le principe Semantic Versioning :
-
-- **MAJOR** : changement incompatible ;
-- **MINOR** : nouvelle fonctionnalité compatible ;
-- **PATCH** : correction compatible.
+The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
-### Ajouté
+Changes currently being developed after the latest stable release.
 
-- tableau de bord Home Assistant dédié au fourgon aménagé ;
-- vue principale jour/nuit ;
-- affichage Solaire, Conso fourgon, Batterie, Convertisseur et Eau propre ;
-- compteurs énergie jour/mois/année ;
-- État rapide entièrement configurable ;
-- onglets personnalisés ;
-- support des types Sensor, Binary Sensor, Switch, Number, Select, Button, Climate, Light et Fan ;
-- contrôles `climate` dynamiques à partir des capacités Home Assistant ;
-- historique intégré 6 h / 24 h / 7 jours / 30 jours ;
-- jauges batterie et eau ;
-- couleurs de température dynamiques ;
-- interface responsive ordinateur/tablette/smartphone ;
-- français et anglais ;
-- mémorisation locale de l'état ouvert/fermé des sections de réglages ;
-- cache des ressources frontend pour accélérer l'ouverture du dashboard.
+## [1.0.7] - 2026-10-05
 
-### Modifié
+### Added
 
-- amélioration progressive de la lisibilité sur ordinateur ;
-- adaptation spécifique de la vue principale aux smartphones ;
-- couleurs distinctes pour Solaire, Conso fourgon, Batterie, Convertisseur et Eau ;
-- optimisation du chargement initial des images jour/nuit.
+- Dedicated Smart Fourgon panel in the Home Assistant sidebar.
+- Configurable day, night and automatic display modes.
+- Responsive desktop, tablet and smartphone layouts.
+- Main overview for Solar, Van consumption, Battery, Inverter and Fresh water.
+- Daily, monthly and yearly energy counters.
+- Fully configurable Quick status section.
+- User-created dashboard pages.
+- Support for Sensor, Binary Sensor, Switch, Number, Select, Button, Climate, Light and Fan controls.
+- Dynamic Home Assistant climate controls based on entity capabilities.
+- Integrated 6 h / 24 h / 7 d / 30 d history view.
+- Battery and water level indicators.
+- Dynamic temperature colours for battery, inverter, water and ambient temperatures.
+- French and English dashboard UI.
+- Configurable location entity.
+- Configurable icon catalogue with vanlife-oriented icons.
+- Confirmation before deleting a custom page.
+- Remembered open/closed state for settings sections.
 
-### Publication
+### Improved
 
-Aucune Release stable n'a encore été publiée. La branche `main` reste la branche de développement de la V1.
+- Desktop readability.
+- Smartphone overview layout with live values kept on the main image.
+- Distinct category colours.
+- Initial dashboard loading and browser caching.
+- Settings scrolling and navigation on smartphones.
+
+### HACS
+
+- Added HACS repository validation.
+- Added Home Assistant Hassfest validation.
+- Added automated GitHub Release workflow for stable HACS updates.
+
+[1.0.7]: https://github.com/tapion69/smart-fourgon-dashboard/releases/tag/v1.0.7
