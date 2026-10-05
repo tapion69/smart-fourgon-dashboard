@@ -1,22 +1,22 @@
 ## Description
 
-Décrire clairement le changement proposé.
+Clearly describe the proposed change.
 
-## Type de changement
+## Type of change
 
-- [ ] Correction de bug
-- [ ] Nouvelle fonctionnalité
-- [ ] Amélioration visuelle / responsive
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Visual / responsive improvement
 - [ ] Documentation
 - [ ] Maintenance / CI
 
-## Tests
+## Testing
 
-- [ ] Testé sur ordinateur
-- [ ] Testé sur smartphone si l'interface est concernée
-- [ ] Les réglages existants restent compatibles
-- [ ] Aucun secret, token ou donnée privée n'est inclus
+- [ ] Tested on desktop
+- [ ] Tested on smartphone when the UI is affected
+- [ ] Existing settings remain compatible
+- [ ] No secret, token or private data is included
 
-## Captures
+## Screenshots
 
-Ajouter des captures avant/après si le changement concerne l'interface.
+Add before/after screenshots when the change affects the interface.
