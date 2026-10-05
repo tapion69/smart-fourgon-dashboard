@@ -70,6 +70,14 @@ jobs:
       - name: Validate frontend JavaScript
         run: node --check custom_components/smart_fourgon/frontend/smart-fourgon-panel.js
 
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
+
+      - name: Hassfest validation
+        uses: home-assistant/actions/hassfest@master
+
       - name: Create tag
         env:
           TAG: ${{ steps.version.outputs.tag }}
