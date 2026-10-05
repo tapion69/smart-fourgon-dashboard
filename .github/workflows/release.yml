@@ -4,16 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to publish, for example 1.0.0"
+        description: "Version to publish, for example 1.0.7"
         required: true
         type: string
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/release-trigger"
 
 permissions:
   contents: write
 
 jobs:
   release:
-    name: Create tag and GitHub Release
+    name: Validate and create GitHub Release
     runs-on: ubuntu-latest
 
     steps:
@@ -23,13 +28,18 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Validate requested version
+      - name: Resolve and validate version
         id: version
         shell: bash
         run: |
           set -euo pipefail
 
-          VERSION="${{ inputs.version }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="$(tr -d '[:space:]' < .github/release-trigger)"
+          fi
+
           VERSION="${VERSION#v}"
 
           if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
