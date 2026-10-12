@@ -2257,3 +2257,88 @@ summary{cursor:pointer;padding:9px;font-weight:800}
     font-weight:900;
   }
 }
+
+/* =========================================================
+   1.0.8 - Gas + customizable overview information
+   ========================================================= */
+
+/* Gas gets its own visual identity on the hero image */
+.callout.gas{
+  --call-color:#ff9f2d!important;
+  right:4%;
+  top:38%;
+}
+.callout.gas .call-row{
+  font-weight:900;
+}
+.callout.gas .call-row b{
+  color:#ffbd66;
+}
+
+/* Additional overview entities in Settings */
+.overview-extras{
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid rgba(120,200,255,.14);
+}
+.overview-extras-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:7px;
+}
+.overview-extras-head b{
+  font-size:10px;
+  color:#d8e9f2;
+}
+.overview-extra-row{
+  display:grid;
+  grid-template-columns:minmax(160px,.8fr) minmax(220px,1.2fr) 34px;
+  gap:7px;
+  align-items:end;
+  margin-top:6px;
+}
+.overview-extra-delete{
+  width:34px;
+  min-width:34px;
+  padding:0!important;
+}
+.gas-editor{
+  border-color:rgba(255,159,45,.28);
+}
+.gas-editor>summary ha-icon{
+  color:#ff9f2d;
+}
+
+/* Keep extra rows compact on the main image */
+.hero-photo .callout .call-row{
+  min-height:17px;
+}
+
+/* Smartphone positioning for the optional Gas block */
+@media(max-width:760px){
+  .hero-photo .callout.gas{
+    left:3%!important;
+    right:auto!important;
+    top:48%!important;
+    bottom:auto!important;
+  }
+  .overview-extra-row{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+    padding:7px;
+    border:1px solid rgba(120,200,255,.10);
+    border-radius:7px;
+    background:rgba(3,18,29,.26);
+  }
+  .overview-extra-delete{
+    justify-self:end;
+  }
+}
+@media(max-width:430px){
+  .hero-photo .callout.gas{
+    left:3%!important;
+    top:47%!important;
+  }
+}
