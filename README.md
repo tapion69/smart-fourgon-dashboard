@@ -38,7 +38,7 @@ Thank you for using the project, reporting bugs and sharing ideas — that alrea
 - French and English dashboard UI.
 - **Day / Night / Automatic** visual modes.
 - Configurable van overview with only the sections you actually use.
-- Solar, van consumption, battery, inverter and fresh-water data directly on the main image.
+- Solar, van consumption, battery, inverter, fresh-water and optional gas-bottle data directly on the main image.
 - Daily / monthly / yearly energy summaries.
 - Fully configurable **Quick status** tiles.
 - Unlimited custom pages such as Heating, Water, MaxxFan, Fridge, Lighting or Security.
@@ -46,6 +46,7 @@ Thank you for using the project, reporting bugs and sharing ideas — that alrea
 - Dynamic Home Assistant climate controls based on the capabilities exposed by each entity.
 - Built-in entity history.
 - Dynamic temperature colours.
+- Extra Home Assistant entities can be added directly to every main overview section.
 - Configuration stored in Home Assistant and shared between devices.
 
 ## Main overview
@@ -93,6 +94,28 @@ The main image can display the following sections when configured.
 - percentage;
 - 5-step level indicator;
 - water used today / month / year.
+
+### Gas
+
+The optional Gas section supports up to **two gas bottles**.
+
+Each bottle has:
+
+- a custom label;
+- one Home Assistant entity for the value to display, for example percentage, remaining weight or another sensor value.
+
+### Additional information on the main image
+
+Every main overview section can display extra Home Assistant entities directly on the image:
+
+- Solar;
+- Van consumption;
+- Battery;
+- Inverter;
+- Fresh water;
+- Gas.
+
+For each extra value, configure a label and an entity. The unit is taken automatically from Home Assistant.
 
 A section is hidden when it is disabled or when no useful Home Assistant entity is configured for it.
 
@@ -224,7 +247,7 @@ The **Smart Fourgon** panel will then appear in the Home Assistant sidebar.
 - HACS for the easiest installation method;
 - at least one Home Assistant entity to display.
 
-No specific inverter, BMS, solar controller, heater or water-level system is required.
+No specific inverter, BMS, solar controller, heater, gas sensor or water-level system is required.
 
 ## Updating
 
