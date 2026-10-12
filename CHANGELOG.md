@@ -8,6 +8,29 @@ The project follows Semantic Versioning where practical.
 
 Changes currently being developed after the latest stable release.
 
+## [1.0.8] - 2026-10-12
+
+### Added
+
+- Optional **Gas** section on the main overview.
+- Support for up to **two gas bottles**, each with its own label and Home Assistant entity.
+- Configurable **additional information** for every base overview section:
+  - Solar;
+  - Van consumption;
+  - Battery;
+  - Inverter;
+  - Fresh water;
+  - Gas.
+- Additional overview values automatically use the unit exposed by Home Assistant.
+- Temperature entities added as extra information keep dynamic temperature colouring.
+
+### Improved
+
+- Gas has its own orange visual identity on desktop and smartphone.
+- Additional overview entities can be added or removed directly from Settings without editing source code.
+
+[1.0.8]: https://github.com/tapion69/smart-fourgon-dashboard/releases/tag/v1.0.8
+
 ## [1.0.7] - 2026-10-05
 
 ### Added
