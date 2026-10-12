@@ -56,9 +56,9 @@ def default_config() -> dict:
             "gas": {
                 "enabled": True,
                 "icon": "mdi:gas-cylinder",
-                "bottle1_label": "Bottle 1",
+                "bottle1_label": "",
                 "bottle1_entity": "",
-                "bottle2_label": "Bottle 2",
+                "bottle2_label": "",
                 "bottle2_entity": "",
                 "extras": [],
             },
