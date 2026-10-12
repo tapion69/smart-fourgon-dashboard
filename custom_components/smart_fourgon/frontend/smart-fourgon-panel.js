@@ -1,6 +1,6 @@
 const SF_T={
-fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode",locationEntity:"Entité localisation",fanMode:"Mode de ventilation",preset:"Préréglage",swing:"Oscillation",swingHorizontal:"Oscillation horizontale",lowTarget:"Consigne basse",highTarget:"Consigne haute"},
-en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode",locationEntity:"Location entity",fanMode:"Fan mode",preset:"Preset",swing:"Swing",swingHorizontal:"Horizontal swing",lowTarget:"Low target",highTarget:"High target"}
+fr:{overview:"Vue générale",settings:"Réglages",daily:"Compteurs journaliers",quick:"État rapide",solar:"Solaire",vanConsumption:"Conso fourgon",battery:"Batterie",water:"Eau propre",gas:"Gaz",bottle1:"Bouteille 1",bottle2:"Bouteille 2",extraInfo:"Infos supplémentaires",addInfo:"Ajouter une info",heating:"Chauffage",waterHeater:"Chauffe-eau",inverter:"Convertisseur 12 / 230 V",ventilation:"Clim / Ventilation",power:"Puissance",voltage:"Tension",current:"Courant",frequency:"Fréquence",soc:"SOC",liters:"Litres restants",target:"Consigne",temperature:"Température",currentTemp:"Température actuelle",speed:"Vitesse",today:"Aujourd’hui",month:"Ce mois",year:"Cette année",general:"Général",base:"Sections de base",tabs:"Onglets personnalisés",language:"Langue",theme:"Mode jour / nuit",auto:"Automatique",day:"Jour",night:"Nuit",title:"Titre du dashboard",dayImage:"Image de jour",nightImage:"Image de nuit",save:"Enregistrer",addTab:"Ajouter un onglet",tabName:"Nom de l’onglet",icon:"Icône",image:"Image",entity:"Entité",statusEntity:"Entité d’état",type:"Type",label:"Nom",addEntity:"Ajouter une entité",del:"Supprimer",history:"Historique",min:"Min",max:"Max",now:"Actuel",loading:"Chargement…",noData:"Pas de données",noConfig:"Aucune entité configurée",hint:"Les sections et valeurs ne s’affichent que lorsqu’une entité Home Assistant est renseignée.",saved:"Configuration enregistrée",reset:"Réinitialiser",section:"Section active",activeColor:"Couleur actif",inactiveColor:"Couleur inactif",unit:"Unité forcée",read:"Lecture seule",sensor:"Capteur",binary:"Binaire",switch:"Switch",number:"Nombre",select:"Liste",button:"Bouton",climate:"Thermostat",light:"Lumière",state:"État",showRight:"Afficher à droite",addQuick:"Ajouter un élément",mode:"Mode",locationEntity:"Entité localisation",fanMode:"Mode de ventilation",preset:"Préréglage",swing:"Oscillation",swingHorizontal:"Oscillation horizontale",lowTarget:"Consigne basse",highTarget:"Consigne haute"},
+en:{overview:"Overview",settings:"Settings",daily:"Daily counters",quick:"Quick status",solar:"Solar",vanConsumption:"Van consumption",battery:"Battery",water:"Fresh water",gas:"Gas",bottle1:"Bottle 1",bottle2:"Bottle 2",extraInfo:"Additional information",addInfo:"Add information",heating:"Heating",waterHeater:"Water heater",inverter:"12 / 230 V inverter",ventilation:"A/C / Ventilation",power:"Power",voltage:"Voltage",current:"Current",frequency:"Frequency",soc:"SOC",liters:"Liters remaining",target:"Target",temperature:"Temperature",currentTemp:"Current temperature",speed:"Speed",today:"Today",month:"This month",year:"This year",general:"General",base:"Base sections",tabs:"Custom tabs",language:"Language",theme:"Day / night mode",auto:"Automatic",day:"Day",night:"Night",title:"Dashboard title",dayImage:"Day image",nightImage:"Night image",save:"Save",addTab:"Add tab",tabName:"Tab name",icon:"Icon",image:"Image",entity:"Entity",statusEntity:"Status entity",type:"Type",label:"Label",addEntity:"Add entity",del:"Delete",history:"History",min:"Min",max:"Max",now:"Current",loading:"Loading…",noData:"No data",noConfig:"No entity configured",hint:"Sections and values are shown only when a Home Assistant entity is configured.",saved:"Configuration saved",reset:"Reset",section:"Section enabled",activeColor:"Active color",inactiveColor:"Inactive color",unit:"Unit override",read:"Read only",sensor:"Sensor",binary:"Binary",switch:"Switch",number:"Number",select:"Select",button:"Button",climate:"Climate",light:"Light",state:"State",showRight:"Show on right",addQuick:"Add item",mode:"Mode",locationEntity:"Location entity",fanMode:"Fan mode",preset:"Preset",swing:"Swing",swingHorizontal:"Horizontal swing",lowTarget:"Low target",highTarget:"High target"}
 };
 const SF_TYPES=["auto","read","sensor","binary_sensor","switch","number","select","button","climate","light","fan","visual"];
 const SF_ICONS=[
@@ -264,7 +264,7 @@ const locationText=locEntity?this._fmt(locEntity):rawTitle;
 const customTabs=this._customSidebar();
 let body=this._page==="settings"?this._settings():this._page.indexOf("tab:")===0?this._tab(this._page.slice(4)):this._overview(night);
 const themeIcon=night?"mdi:weather-night":"mdi:white-balance-sunny";
-this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.7">'
+this.shadowRoot.innerHTML='<link rel="stylesheet" href="/smart_fourgon/styles.css?v=1.0.8">'
 +'<div class="app">'
 +'<aside class="sidebar">'
 +'<div class="brand-mark"><div class="brand-logo">'+this._icon("mdi:van-utility")+'</div><div><b>SMART FOURGON</b><small>TABLEAU DE BORD<br>HOME ASSISTANT</small></div></div>'
@@ -308,10 +308,25 @@ return tabs.map((t,idx)=>{
   +'</section>'
 }).join("")
 }
+_extraRows(sec,context=""){
+return (sec&&Array.isArray(sec.extras)?sec.extras:[])
+  .filter(x=>x&&x.entity)
+  .map(x=>{
+    const label=(x.label||this._attr(x.entity,"friendly_name")||x.entity);
+    const profile=this._isTempEntity(x.entity)?this._tempProfile(x.entity,label,context):"";
+    return [label,x.entity,profile]
+  })
+}
+_gasRows(g){
+const rows=[];
+if(g&&g.bottle1_entity)rows.push([g.bottle1_label||this._t("bottle1"),g.bottle1_entity]);
+if(g&&g.bottle2_entity)rows.push([g.bottle2_label||this._t("bottle2"),g.bottle2_entity]);
+return rows.concat(this._extraRows(g,"gas"))
+}
 _overview(night){
 const o=this._config.overview||{};
 const img=(night?this._heroNight:this._heroDay)||"/smart_fourgon/assets/default-van.svg";
-const s=o.solar||{},b=o.battery||{},i=o.inverter||{},cn=o.consumption||{},w=o.water||{};
+const s=o.solar||{},b=o.battery||{},i=o.inverter||{},cn=o.consumption||{},w=o.water||{},g=o.gas||{};
 
 const waterPrimary=w.liters||w.percent;
 const waterRows=[];
@@ -319,22 +334,26 @@ const waterRows=[];
 const callouts=[
   s.enabled!==false?this._callout("solar",this._t("solar"),s.icon,s.power,[
     [this._t("voltage"),s.voltage],
-    [this._t("current"),s.current]
+    [this._t("current"),s.current],
+    ...this._extraRows(s,"solar")
   ],"solar"):"",
-  cn.enabled!==false?this._callout("consumption",this._t("vanConsumption"),cn.icon,cn.power,[],"consumption"):"",
+  cn.enabled!==false?this._callout("consumption",this._t("vanConsumption"),cn.icon,cn.power,this._extraRows(cn,"consumption"),"consumption"):"",
   i.enabled!==false?this._callout("inverter",this._t("inverter"),i.icon,i.power||i.status,[
     [this._t("voltage"),i.voltage],
     [this._t("frequency"),i.frequency],
     [this._t("current"),i.current],
-    [this._t("temperature"),i.temperature,"inverter"]
+    [this._t("temperature"),i.temperature,"inverter"],
+    ...this._extraRows(i,"inverter")
   ],"inverter"):"",
   b.enabled!==false?this._callout("battery",this._t("battery"),b.icon,b.soc,[
     [this._t("voltage"),b.voltage],
     [this._t("current"),b.current],
     [this._t("power"),b.power],
-    [this._t("temperature"),b.temperature,"battery"]
+    [this._t("temperature"),b.temperature,"battery"],
+    ...this._extraRows(b,"battery")
   ],"battery"):"",
-  w.enabled!==false?this._callout("water",this._t("water"),w.icon,waterPrimary,waterRows,"water"):""
+  w.enabled!==false?this._callout("water",this._t("water"),w.icon,waterPrimary,waterRows.concat(this._extraRows(w,"water")),"water"):"",
+  g.enabled!==false?this._callout("gas",this._t("gas"),g.icon||"mdi:gas-cylinder","",this._gasRows(g),"gas"):""
 ].filter(Boolean);
 
 const counters=this._resolvedDailyCounters(o);
@@ -687,7 +706,7 @@ const defs=[
   ["inverter",this._t("inverter"),["status","power","voltage","frequency","current","temperature"],o.inverter||{}],
   ["water",this._t("water"),["percent","liters","consumed_today","consumed_month","consumed_year"],o.water||{}]
 ];
-const sections=defs.map(d=>this._sectionEditor(d[0],d[1],d[3],d[2])).join("");
+const sections=defs.map(d=>this._sectionEditor(d[0],d[1],d[3],d[2])).join("")+this._gasEditor(o.gas||{});
 
 const counters=(this._config.daily_counters||[]).map((x,i)=>
   '<div class="item-editor counter-editor"><div class="item-top"><b>#'+(i+1)+'</b></div><div class="counter-fields">'
@@ -712,8 +731,8 @@ return '<div class="settings">'
 
   +'<section class="settings-card"><h2>'+this._t("base")+'</h2><p class="hint">'
     +this._e(this._config.general.language==="en"
-      ?"Solar, Van consumption, Battery and Inverter are the main fixed elements. Water is optional and is only shown when configured. Battery can also provide temperature plus daily charge/discharge counters; Inverter can provide temperature."
-      :"Solaire, Conso fourgon, Batterie et Convertisseur sont les éléments principaux fixes. Eau est optionnel et ne s’affiche que s’il est configuré. Batterie peut aussi fournir la température ainsi que les compteurs journaliers de charge/décharge ; Convertisseur peut fournir sa température.")
+      ?"Solar, Van consumption, Battery and Inverter are the main fixed elements. Water and Gas are optional and only appear when configured. Gas supports up to two bottles. Every base section can also display additional Home Assistant entities directly on the main image."
+      :"Solaire, Conso fourgon, Batterie et Convertisseur sont les éléments principaux fixes. Eau et Gaz sont optionnels et ne s’affichent que s’ils sont configurés. Gaz accepte jusqu’à deux bouteilles. Chaque section de base peut aussi afficher des entités Home Assistant supplémentaires directement sur l’image principale.")
     +'</p>'+sections+'</section>'
 
   +'<section class="settings-card custom-tabs-settings"><h2>'+this._t("tabs")+'</h2><p class="hint">'
@@ -746,7 +765,35 @@ const opts=SF_ICONS.slice();
 if(value&&!opts.some(x=>x[0]===value))opts.unshift([value,"★ "+value]);
 return this._select(id,l,opts,value)
 }
-_sectionEditor(k,title,c,fields){const en=this._config.general.language==="en";const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:en?"Battery charge today":"Charge batterie aujourd’hui",charge_month:en?"Battery charge this month":"Charge batterie ce mois",charge_year:en?"Battery charge this year":"Charge batterie cette année",discharge_today:en?"Battery discharge today":"Décharge batterie aujourd’hui",discharge_month:en?"Battery discharge this month":"Décharge batterie ce mois",discharge_year:en?"Battery discharge this year":"Décharge batterie cette année",consumed_today:en?"Water used today":"Eau consommée aujourd’hui",consumed_month:en?"Water used this month":"Eau consommée ce mois",consumed_year:en?"Water used this year":"Eau consommée cette année"};return '<details class="section-editor"'+this._detailAttrs("base:"+k)+'><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div></div></details>'}
+_extraEditor(k,c){
+const extras=Array.isArray(c&&c.extras)?c.extras:[];
+const items=extras.map((x,idx)=>
+  '<div class="overview-extra-row">'
+    +this._field("extra-"+k+"-"+idx+"-label",this._t("label"),x.label||"")
+    +'<label class="field"><span>'+this._t("entity")+'</span><input list="sf-entities" id="extra-'+k+'-'+idx+'-entity" value="'+this._ea(x.entity||"")+'" placeholder="sensor..."></label>'
+    +'<button type="button" class="btn tiny danger overview-extra-delete" data-del-extra="'+this._ea(k)+':'+idx+'">×</button>'
+  +'</div>'
+).join("");
+return '<div class="overview-extras"><div class="overview-extras-head"><b>'+this._t("extraInfo")+'</b><button type="button" class="btn tiny" data-add-extra="'+this._ea(k)+'">'+this._t("addInfo")+'</button></div>'+items+'</div>'
+}
+_sectionEditor(k,title,c,fields){
+const en=this._config.general.language==="en";
+const labels={power:this._t("power"),voltage:this._t("voltage"),current:this._t("current"),soc:this._t("soc"),percent:"%",liters:this._t("liters"),status:this._t("state"),target_temp:this._t("target"),current_temp:this._t("currentTemp"),temperature:this._t("temperature"),frequency:this._t("frequency"),speed:this._t("speed"),energy_today:this._t("today"),energy_month:this._t("month"),energy_year:this._t("year"),charge_today:en?"Battery charge today":"Charge batterie aujourd’hui",charge_month:en?"Battery charge this month":"Charge batterie ce mois",charge_year:en?"Battery charge this year":"Charge batterie cette année",discharge_today:en?"Battery discharge today":"Décharge batterie aujourd’hui",discharge_month:en?"Battery discharge this month":"Décharge batterie ce mois",discharge_year:en?"Battery discharge this year":"Décharge batterie cette année",consumed_today:en?"Water used today":"Eau consommée aujourd’hui",consumed_month:en?"Water used this month":"Eau consommée ce mois",consumed_year:en?"Water used this year":"Eau consommée cette année"};
+return '<details class="section-editor"'+this._detailAttrs("base:"+k)+'><summary>'+this._icon(c.icon||"mdi:circle")+' '+this._e(title)+'</summary><div class="editor-body"><div class="grid"><label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-'+k+'-enabled" '+(c.enabled!==false?"checked":"")+'></label>'+this._iconSelect("base-"+k+"-icon",this._t("icon"),c.icon)+fields.map(f=>'<label class="field"><span>'+this._e(labels[f]||f)+'</span><input list="sf-entities" id="base-'+k+'-'+f+'" value="'+this._ea(c[f]||"")+'" placeholder="sensor..."></label>').join("")+'</div>'+this._extraEditor(k,c)+'</div></details>'
+}
+_gasEditor(g){
+return '<details class="section-editor gas-editor"'+this._detailAttrs("base:gas")+'><summary>'+this._icon(g.icon||"mdi:gas-cylinder")+' '+this._t("gas")+'</summary><div class="editor-body">'
+  +'<div class="grid">'
+    +'<label class="field"><span>'+this._t("section")+'</span><input type="checkbox" id="base-gas-enabled" '+(g.enabled!==false?"checked":"")+'></label>'
+    +this._iconSelect("base-gas-icon",this._t("icon"),g.icon||"mdi:gas-cylinder")
+    +this._field("base-gas-bottle1-label",this._t("bottle1"),g.bottle1_label||this._t("bottle1"))
+    +'<label class="field"><span>'+this._t("bottle1")+' — '+this._t("entity")+'</span><input list="sf-entities" id="base-gas-bottle1-entity" value="'+this._ea(g.bottle1_entity||"")+'" placeholder="sensor..."></label>'
+    +this._field("base-gas-bottle2-label",this._t("bottle2"),g.bottle2_label||this._t("bottle2"))
+    +'<label class="field"><span>'+this._t("bottle2")+' — '+this._t("entity")+'</span><input list="sf-entities" id="base-gas-bottle2-entity" value="'+this._ea(g.bottle2_entity||"")+'" placeholder="sensor..."></label>'
+  +'</div>'
+  +this._extraEditor("gas",g)
++'</div></details>'
+}
 _tabEditor(t,ti){
 const items=(t.items||[]).map((it,ii)=>this._itemEditor(ti,ii,it)).join("");
 return '<details class="tab-editor"'+this._detailAttrs("tab:"+t.id)+'><summary>'+this._icon(t.icon||"mdi:folder-outline")+' '+this._e(t.name)+'</summary><div class="editor-body"><div class="grid">'
@@ -800,6 +847,24 @@ Object.entries(defs).forEach(([k,fs])=>{
   sec.enabled=!!(q("base-"+k+"-enabled")||{}).checked;
   sec.icon=(q("base-"+k+"-icon")||{}).value||sec.icon||"mdi:circle";
   fs.forEach(name=>sec[name]=(q("base-"+k+"-"+name)||{}).value||"")
+});
+
+const gas=this._config.overview.gas||(this._config.overview.gas={extras:[]});
+gas.enabled=!!(q("base-gas-enabled")||{}).checked;
+gas.icon=(q("base-gas-icon")||{}).value||gas.icon||"mdi:gas-cylinder";
+gas.bottle1_label=(q("base-gas-bottle1-label")||{}).value||this._t("bottle1");
+gas.bottle1_entity=(q("base-gas-bottle1-entity")||{}).value||"";
+gas.bottle2_label=(q("base-gas-bottle2-label")||{}).value||this._t("bottle2");
+gas.bottle2_entity=(q("base-gas-bottle2-entity")||{}).value||"";
+
+["solar","consumption","battery","inverter","water","gas"].forEach(k=>{
+  const sec=this._config.overview[k]||(this._config.overview[k]={});
+  const extras=Array.isArray(sec.extras)?sec.extras:[];
+  sec.extras=extras.map((x,idx)=>({
+    id:x.id||this._uid(),
+    label:(q("extra-"+k+"-"+idx+"-label")||{}).value||"",
+    entity:(q("extra-"+k+"-"+idx+"-entity")||{}).value||""
+  }))
 });
 
 (this._config.daily_counters||[]).forEach((x,i)=>{
@@ -1054,6 +1119,27 @@ this.shadowRoot.querySelectorAll("details[data-detail-key]").forEach(d=>{
     this._saveDetailState()
   }
 });
+this.shadowRoot.querySelectorAll("[data-add-extra]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  const k=b.dataset.addExtra;
+  const sec=this._config.overview[k]||(this._config.overview[k]={});
+  sec.extras=Array.isArray(sec.extras)?sec.extras:[];
+  sec.extras.push({id:this._uid(),label:"",entity:""});
+  this._detailsState["base:"+k]=true;
+  this._saveDetailState();
+  this._render(true)
+});
+this.shadowRoot.querySelectorAll("[data-del-extra]").forEach(b=>b.onclick=()=>{
+  this._sync();
+  const parts=b.dataset.delExtra.split(":");
+  const k=parts[0],idx=Number(parts[1]);
+  const sec=this._config.overview[k];
+  if(sec&&Array.isArray(sec.extras))sec.extras.splice(idx,1);
+  this._detailsState["base:"+k]=true;
+  this._saveDetailState();
+  this._render(true)
+});
+
 const add=this.shadowRoot.getElementById("add-tab");
 if(add)add.onclick=()=>{
   this._sync();
